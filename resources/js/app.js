@@ -4,7 +4,6 @@ import {
   plugin as InertiaPlugin,
 } from "@inertiajs/inertia-vue3";
 import { InertiaProgress } from "@inertiajs/progress";
-import Layout from "./Layouts/AppLayout";
 
 const el = document.getElementById("app");
 

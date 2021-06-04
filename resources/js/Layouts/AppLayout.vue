@@ -1,11 +1,10 @@
 <template>
-  <div class="flex h-screen bg-gray-100 dark:bg-gray-900">
+  <div
+    class="flex h-screen bg-gray-100 dark:bg-gray-900"
+    :class="{ 'overflow-hidden': sidebarOpen }"
+  >
     <!-- Sidebar -->
-    <aside class="w-1/6">
-      <template v-if="navbarMounted">
-        <sidebar />
-      </template>
-    </aside>
+    <sidebar />
 
     <div class="flex flex-col flex-1 w-full">
       <!-- Navbar -->
@@ -14,7 +13,7 @@
       </header>
 
       <main class="h-full overflow-y-auto shadow-inner">
-        <div class="container p-4 mx-auto">
+        <div class="container mx-auto py-4 md:px-4">
           <slot></slot>
         </div>
       </main>
@@ -34,10 +33,16 @@ export default {
     Navbar,
   },
   setup() {
-    const navbarMounted = ref(false);
-    event.$once("navbar-mounted", () => (navbarMounted.value = true));
+    const sidebarOpen = ref(false);
 
-    return { navbarMounted };
+    onMounted(() =>
+      event.$on(
+        "sidebar-toggle",
+        () => (sidebarOpen.value = !sidebarOpen.value)
+      )
+    );
+
+    return { sidebarOpen };
   },
 };
 </script>

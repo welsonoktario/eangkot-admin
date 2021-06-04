@@ -1,160 +1,267 @@
 <template>
-  <div
-    class="h-full flex flex-col py-4 bg-white dark:bg-gray-800 dark:text-white"
+  <transition name="fade" mode="out-in">
+    <div
+      v-if="sidebarOpen"
+      class="bg-gray-900 opacity-75 w-screen h-screen absolute inset-0 mt-16"
+      @click="sidebarOpen = !sidebarOpen"
+    ></div>
+  </transition>
+  <transition
+    enter-from-class="opacity-0 transform -translate-x-20"
+    enter-active-class="transition ease-in-out duration-150"
+    enter-to-class="opacity-100"
+    leave-from-class="opacity-100"
+    leave-active-class="transition ease-in-out duration-150"
+    leave-to-class="opacity-0 transform -translate-x-20"
+    mode="in-out"
   >
-    <h1 class="text-xl font-bold text-center">eAngkot</h1>
+    <aside
+      v-if="sidebarOpen || currentWidth >= 768"
+      class="
+        w-64
+        py-4
+        flex-shrink-0
+        bg-white
+        dark:bg-gray-800
+        dark:text-white
+        fixed
+        inset-y-0
+        mt-16
+        md:static
+        md:mt-0
+        md:block
+      "
+      :class="{ 'hidden z-50': !sidebarOpen }"
+    >
+      <h1 class="text-xl font-bold text-center">eAngkot</h1>
 
-    <ul class="mt-6">
-      <li v-for="route in routes" :key="route.name" class="relative px-4 py-1">
-        <inertia-link
-          :href="route.url"
-          as="button"
-          class="inline-flex items-center p-2 w-full font-semibold focus:outline-none"
-          :class="{
-            'text-gray-50 hover:text-gray-200 bg-indigo-600 dark:bg-indigo-500 rounded-md':
-              route.name == currentRoute,
-            'text-gray-700 hover:text-black dark:text-gray-50 dark:hover:text-gray-300':
-              route.name != currentRoute,
-          }"
+      <ul class="mt-6">
+        <li
+          v-for="route in routes"
+          :key="route.name"
+          class="relative px-4 py-1"
         >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            v-html="route.icon"
-          ></svg>
-          <span class="ml-4">{{ route.label }}</span>
-        </inertia-link>
-      </li>
-      <li class="relative px-4 py-1">
-        <button
-          class="inline-flex items-center p-2 w-full font-semibold justify-between text-gray-700 hover:text-black dark:text-gray-50 dark:hover:text-gray-300 focus:outline-none"
-          @click="akunMenuOpen = !akunMenuOpen"
-        >
-          <span class="inline-flex items-center">
+          <inertia-link
+            :href="route.url"
+            as="button"
+            class="
+              inline-flex
+              items-center
+              p-2
+              w-full
+              font-semibold
+              focus:outline-none
+            "
+            :class="{
+              'text-gray-50 hover:text-gray-200 bg-indigo-600 dark:bg-purple-600 rounded-md':
+                route.name == currentRoute,
+              'text-gray-700 hover:text-black dark:text-gray-50 dark:hover:text-gray-300':
+                route.name != currentRoute,
+            }"
+          >
             <svg
               class="w-5 h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
-              v-html="akunRoute.icon"
+              v-html="route.icon"
             ></svg>
-            <span class="ml-4">Akun</span>
-          </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+            <span class="ml-4">{{ route.label }}</span>
+          </inertia-link>
+        </li>
+        <li class="relative px-4 py-1">
+          <button
+            class="
+              inline-flex
+              items-center
+              p-2
+              w-full
+              font-semibold
+              justify-between
+              text-gray-700
+              hover:text-black
+              dark:text-gray-50
+              dark:hover:text-gray-300
+              focus:outline-none
+            "
+            @click="akunMenuOpen = !akunMenuOpen"
           >
-            <path
-              v-if="akunMenuOpen"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
-            <path
-              v-else
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </button>
-        <ul
-          v-show="akunMenuOpen"
-          class="p-2 mt-2 space-y-2 overflow-hidden font-medium rounded-md shadow-inner text-gray-700 dark:text-gray-50 bg-gray-50 dark:bg-gray-900"
-        >
-          <li v-for="route in akunRoute.routes">
-            <inertia-link
-              :href="route.url"
-              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-              :class="{
-                'bg-indigo-600 dark:bg-indigo-600 text-gray-50':
-                  currentRoute === route.name,
-              }"
-            >
-              {{ route.label }}
-            </inertia-link>
-          </li>
-        </ul>
-      </li>
-      <li class="relative px-4 py-1">
-        <button
-          class="inline-flex items-center p-2 w-full font-semibold justify-between text-gray-700 hover:text-black dark:text-gray-50 dark:hover:text-gray-300 focus:outline-none"
-          @click="pengajuanMenuOpen = !pengajuanMenuOpen"
-        >
-          <span class="inline-flex items-center">
+            <span class="inline-flex items-center">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                v-html="akunRoute.icon"
+              ></svg>
+              <span class="ml-4">Akun</span>
+            </span>
             <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
-              v-html="pengajuanRoute.icon"
-            ></svg>
-            <span class="ml-4">Pengajuan</span>
-          </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              v-if="pengajuanMenuOpen"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
-            <path
-              v-else
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </button>
-        <ul
-          v-show="pengajuanMenuOpen"
-          class="p-2 mt-2 space-y-2 overflow-hidden font-medium rounded-md shadow-inner text-gray-700 dark:text-gray-50 bg-gray-50 dark:bg-gray-900"
-        >
-          <li v-for="route in pengajuanRoute.routes">
-            <inertia-link
-              :href="route.url"
-              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-              :class="{
-                'bg-indigo-600 dark:bg-indigo-600 text-gray-50':
-                  currentRoute === route.name,
-              }"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
-              {{ route.label }}
-            </inertia-link>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
+              <path
+                v-if="akunMenuOpen"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+              <path
+                v-else
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+          <ul
+            v-show="akunMenuOpen"
+            class="
+              p-2
+              mt-2
+              space-y-2
+              overflow-hidden
+              font-medium
+              rounded-md
+              shadow-inner
+              text-gray-700
+              dark:text-gray-50
+              bg-gray-50
+              dark:bg-gray-900
+            "
+          >
+            <li v-for="route in akunRoute.routes" :key="route.name">
+              <inertia-link
+                :href="route.url"
+                class="
+                  px-2
+                  py-1
+                  transition-colors
+                  duration-150
+                  hover:text-gray-800
+                  dark:hover:text-gray-200
+                "
+                :class="{
+                  'bg-indigo-600 dark:bg-purple-600 text-gray-50':
+                    currentRoute === route.name,
+                }"
+              >
+                {{ route.label }}
+              </inertia-link>
+            </li>
+          </ul>
+        </li>
+        <li class="relative px-4 py-1">
+          <button
+            class="
+              inline-flex
+              items-center
+              p-2
+              w-full
+              font-semibold
+              justify-between
+              text-gray-700
+              hover:text-black
+              dark:text-gray-50
+              dark:hover:text-gray-300
+              focus:outline-none
+            "
+            @click="pengajuanMenuOpen = !pengajuanMenuOpen"
+          >
+            <span class="inline-flex items-center">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                v-html="pengajuanRoute.icon"
+              ></svg>
+              <span class="ml-4">Pengajuan</span>
+            </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                v-if="pengajuanMenuOpen"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+              <path
+                v-else
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+          <ul
+            v-show="pengajuanMenuOpen"
+            class="
+              p-2
+              mt-2
+              space-y-2
+              overflow-hidden
+              font-medium
+              rounded-md
+              shadow-inner
+              text-gray-700
+              dark:text-gray-50
+              bg-gray-50
+              dark:bg-gray-900
+            "
+          >
+            <li v-for="route in pengajuanRoute.routes" :key="route.name">
+              <inertia-link
+                :href="route.url"
+                class="
+                  px-2
+                  py-1
+                  transition-colors
+                  duration-150
+                  hover:text-gray-800
+                  dark:hover:text-gray-200
+                "
+                :class="{
+                  'bg-indigo-600 dark:bg-purple-600 text-gray-50':
+                    currentRoute === route.name,
+                }"
+              >
+                {{ route.label }}
+              </inertia-link>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+  </transition>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import event from "@/eventBus";
 
 export default {
   setup() {
     const akunMenuOpen = ref(false);
     const pengajuanMenuOpen = ref(false);
-    const currentRoute = ref(route().current());
+    const sidebarOpen = ref(false);
+    const currentRoute = route().current();
+    const currentWidth = ref(window.innerWidth);
     const routes = [
       {
         name: "admin.home.index",
@@ -206,14 +313,23 @@ export default {
       ],
     };
 
+    const onCurrentWidthChange = () => {
+      if (window.innerWidth >= 768) sidebarOpen.value = !sidebarOpen.value;
+      currentWidth.value = window.innerWidth;
+    };
+
     onMounted(() => {
-      if (currentRoute.value.includes("akun")) akunMenuOpen.value = true;
-      if (currentRoute.value.includes("pengajuan")) pengajuanMenuOpen.value = true;
-      event.$on(
-        "page-navigation",
-        () => (currentRoute.value = route().current())
-      );
+      window.addEventListener("resize", onCurrentWidthChange);
+      if (currentRoute.includes("akun")) akunMenuOpen.value = true;
+      if (currentRoute.includes("pengajuan")) pengajuanMenuOpen.value = true;
+      event.$on("sidebar-toggle", () => {
+        sidebarOpen.value = !sidebarOpen.value;
+      });
     });
+
+    onBeforeMount(() =>
+      window.removeEventListener("resize", onCurrentWidthChange)
+    );
 
     return {
       akunMenuOpen,
@@ -222,7 +338,21 @@ export default {
       routes,
       akunRoute,
       pengajuanRoute,
+      sidebarOpen,
+      currentWidth,
     };
   },
 };
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

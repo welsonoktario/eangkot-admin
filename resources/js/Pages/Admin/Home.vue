@@ -17,8 +17,6 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
-import event from "@/eventBus";
 import AppLayout from '@/Layouts/AppLayout';
 
 export default {
@@ -26,9 +24,6 @@ export default {
   props: {
     auth: Object,
     errors: Object,
-  },
-  setup() {
-    onMounted(() => event.$emit("page-navigation", "Home"));
   },
 };
 </script>
