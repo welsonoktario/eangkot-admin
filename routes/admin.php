@@ -9,17 +9,9 @@ use App\Http\Controllers\API\TransaksiController;
 use App\Http\Controllers\API\TrayekController;
 use App\Models\PengajuanBonus;
 use App\Models\PengajuanDriver;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::redirect('/', '/home', 302);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('home', HomeController::class, ['as' => 'admin']);

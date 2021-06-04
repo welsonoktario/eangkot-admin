@@ -18,7 +18,7 @@ class TrayekController extends Controller
     {
         $trayeks = Trayek::all();
 
-        return Inertia::render('Trayek', ['trayeks' => $trayeks]);
+        return Inertia::render('Admin/Trayek', ['trayeks' => $trayeks]);
     }
 
     /**

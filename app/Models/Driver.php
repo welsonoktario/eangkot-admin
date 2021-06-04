@@ -3,19 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class Driver extends Model
 {
-    use SpatialTrait;
-
-    protected $fillable = ['angkot_id', 'no_kendaraan'];
+    protected $fillable = ['user_id', 'angkot_id', 'bank_id', 'alamat', 'nik', 'rekening'];
     protected $hidden = ['bank_id', 'nik', 'rekening', 'alamat'];
-    protected $spatialFields = ['lokasi'];
 
-    public function account()
+    public function user()
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(User::class);
     }
 
     public function bank()

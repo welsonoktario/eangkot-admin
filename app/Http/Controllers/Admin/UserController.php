@@ -16,9 +16,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with(['account' => fn ($q) => $q->whereHas('roles', fn ($q) => $q->where('id', 2))])->get();
+        $users = User::whereHas('roles', fn ($q) => $q->where('id', 2))->get();
 
-        return Inertia::render('User', ['users' => $users]);
+        return Inertia::render('Admin/User', ['users' => $users]);
     }
 
     /**

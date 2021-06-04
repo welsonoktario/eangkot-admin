@@ -18,7 +18,7 @@ class PromoController extends Controller
     {
         $promos = Promo::all();
 
-        return Inertia::render('Promo', ['promos' => $promos]);
+        return Inertia::render('Admin/Promo', ['promos' => $promos]);
     }
 
     /**

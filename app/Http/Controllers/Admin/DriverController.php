@@ -17,9 +17,9 @@ class DriverController extends Controller
      */
     public function index()
     {
-        $drivers = Driver::with(['account', 'angkot'])->get();
+        $drivers = Driver::with(['user', 'angkot'])->get();
 
-        return Inertia::render('Driver', ['drivers' => $drivers]);
+        return Inertia::render('Admin/Driver', ['drivers' => $drivers]);
     }
 
     /**

@@ -16,8 +16,10 @@ class CreateTrayeksTable extends Migration
         Schema::create('trayeks', function (Blueprint $table) {
             $table->id();
             $table->string('kode')->unique();
+            $table->text('rute');
             $table->text('rute_berangkat');
             $table->text('rute_pulang');
+            $table->string('gambar')->nullable();
         });
     }
 

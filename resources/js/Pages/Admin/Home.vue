@@ -19,8 +19,10 @@
 <script>
 import { onMounted } from "vue";
 import event from "@/eventBus";
+import AppLayout from '@/Layouts/AppLayout';
 
 export default {
+  layout: AppLayout,
   props: {
     auth: Object,
     errors: Object,

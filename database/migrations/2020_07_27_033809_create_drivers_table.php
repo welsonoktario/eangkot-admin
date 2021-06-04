@@ -15,7 +15,7 @@ class CreateDriversTable extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('account_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
             $table->foreignId('bank_id')
@@ -26,7 +26,6 @@ class CreateDriversTable extends Migration
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->string('nama');
             $table->string('alamat');
             $table->string('nik', 16)->unique();
             $table->string('rekening')->unique()->nullable();

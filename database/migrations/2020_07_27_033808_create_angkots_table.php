@@ -18,10 +18,10 @@ class CreateAngkotsTable extends Migration
             $table->foreignId('trayek_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->string('no_kendaraan', 10);
+            $table->string('no_kendaraan', 10)->unique();
             $table->boolean('aktif')->default(false);
             $table->point('lokasi')->nullable();
-            $table->string('gambar')->nullable();
+            $table->timestamps();
         });
     }
 

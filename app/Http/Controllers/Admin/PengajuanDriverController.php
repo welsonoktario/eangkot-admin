@@ -21,7 +21,7 @@ class PengajuanDriverController extends Controller
     {
         $pengajuans = PengajuanDriver::with('user')->get();
 
-        return Inertia::render('Pengajuan/Driver', ['pengajuans' => $pengajuans]);
+        return Inertia::render('Admin/Pengajuan/Driver', ['pengajuans' => $pengajuans]);
     }
 
     /**

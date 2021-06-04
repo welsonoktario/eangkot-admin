@@ -18,7 +18,7 @@ class PengajuanBonusController extends Controller
     {
         $pengajuans = PengajuanBonus::with('driver')->get();
 
-        return Inertia::render('Pengajuan/Bonus', ['pengajuans' => $pengajuans]);
+        return Inertia::render('Admin/Pengajuan/Bonus', ['pengajuans' => $pengajuans]);
     }
 
     /**

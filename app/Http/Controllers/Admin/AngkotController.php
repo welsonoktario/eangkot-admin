@@ -18,7 +18,7 @@ class AngkotController extends Controller
     {
         // $angkots = Angkot::exclude(['lokasi'])->get();
 
-        return Inertia::render('Angkot');
+        return Inertia::render('Admin/Angkot');
     }
 
     /**

@@ -18,7 +18,7 @@ class TransaksiController extends Controller
     {
         $transaksis = Transaksi::all();
 
-        return Inertia::render('Transaksi', ['transaksis' => $transaksis]);
+        return Inertia::render('Admin/Transaksi', ['transaksis' => $transaksis]);
     }
 
     /**

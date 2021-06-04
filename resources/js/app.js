@@ -12,13 +12,8 @@ createApp({
   render: () =>
     h(InertiaApp, {
       initialPage: JSON.parse(el.dataset.page),
-      resolveComponent: (name) => {
-        const page = route().current().includes("admin")
-          ? require(`./Pages/Admin/${name}`).default
-          : require(`./Pages/Web/${name}`).default;
-        page.layout = page.layout || Layout;
-        return page;
-      },
+      resolveComponent: (name) =>
+        import(`./Pages/${name}`).then((m) => m.default),
     }),
 })
   .mixin({ methods: { route } })

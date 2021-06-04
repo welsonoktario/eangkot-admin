@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccountRoleTable extends Migration
+class CreateUserRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateAccountRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('account_role', function (Blueprint $table) {
-            $table->foreignId('account_id')
+        Schema::create('user_role', function (Blueprint $table) {
+            $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
             $table->foreignId('role_id')
@@ -30,6 +30,6 @@ class CreateAccountRoleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account_role');
+        Schema::dropIfExists('user_role');
     }
 }
