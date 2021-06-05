@@ -14,11 +14,20 @@ class AngkotController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $angkots = Angkot::exclude(['lokasi'])->get();
+        $query = $request->query;
+        $show = $request->show;
+        $angkots = Angkot::with('trayek')->exclude(['lokasi'])->paginate($show ?: 5)->through(function ($item) {
+            return [
+                'id' => $item->id,
+                'trayek' => $item->trayek,
+                'no_kendaraan' => $item->no_kendaraan,
+                'aktif' => $item->status
+            ];
+        });;
 
-        return Inertia::render('Admin/Angkot');
+        return Inertia::render('Admin/Angkot', ['angkots' => $angkots]);
     }
 
     /**

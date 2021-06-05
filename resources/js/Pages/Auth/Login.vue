@@ -1,62 +1,66 @@
 <template>
-  <breeze-validation-errors class="mb-4" />
+  <div class="bg-gray-100 h-screen flex">
+    <div class="m-auto w-96 p-6 bg-white rounded-lg shadow-md">
+      <h1 class="font-bold text-center text-2xl mb-6">eAngkot Admin</h1>
+      <breeze-validation-errors class="mb-4" />
 
-  <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-    {{ status }}
+      <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+        {{ status }}
+      </div>
+
+      <form @submit.prevent="submit">
+        <div>
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            class="mt-1 border-none bg-gray-100 block w-full rounded-md"
+            v-model="form.email"
+            required
+            autofocus
+            autocomplete="username"
+          />
+        </div>
+
+        <div class="mt-4">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            class="mt-1 border-none bg-gray-100 block w-full rounded-md"
+            v-model="form.password"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+
+        <div class="flex items-center justify-end mt-6">
+          <button
+            class="
+              w-full
+              bg-indigo-600
+              dark:bg-purple-600
+              py-2
+              px-4
+              rounded-md
+              text-white
+            "
+            :class="{ 'opacity-25': form.processing }"
+            :disabled="form.processing"
+          >
+            Log in
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-
-  <form @submit.prevent="submit">
-    <div>
-      <breeze-label for="email" value="Email" />
-      <breeze-input
-        id="email"
-        type="email"
-        class="mt-1 block w-full"
-        v-model="form.email"
-        required
-        autofocus
-        autocomplete="username"
-      />
-    </div>
-
-    <div class="mt-4">
-      <breeze-label for="password" value="Password" />
-      <breeze-input
-        id="password"
-        type="password"
-        class="mt-1 block w-full"
-        v-model="form.password"
-        required
-        autocomplete="current-password"
-      />
-    </div>
-
-    <div class="flex items-center justify-end mt-4">
-
-      <breeze-button
-        class="ml-4"
-        :class="{ 'opacity-25': form.processing }"
-        :disabled="form.processing"
-      >
-        Log in
-      </breeze-button>
-    </div>
-  </form>
 </template>
 
 <script>
-import BreezeButton from "@/Components/Button";
-import BreezeInput from "@/Components/Input";
-import BreezeCheckbox from "@/Components/Checkbox";
-import BreezeLabel from "@/Components/Label";
 import BreezeValidationErrors from "@/Components/ValidationErrors";
 
 export default {
   components: {
-    BreezeButton,
-    BreezeInput,
-    BreezeCheckbox,
-    BreezeLabel,
     BreezeValidationErrors,
   },
 

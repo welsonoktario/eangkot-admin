@@ -43,6 +43,7 @@
         >
           <inertia-link
             :href="route.url"
+            @click="navigation(route.name)"
             as="button"
             class="
               inline-flex
@@ -140,6 +141,7 @@
             <li v-for="route in akunRoute.routes" :key="route.name">
               <inertia-link
                 :href="route.url"
+                @click="navigation(route.name)"
                 class="
                   px-2
                   py-1
@@ -228,6 +230,7 @@
             <li v-for="route in pengajuanRoute.routes" :key="route.name">
               <inertia-link
                 :href="route.url"
+                @click="navigation(route.name)"
                 class="
                   px-2
                   py-1
@@ -260,7 +263,7 @@ export default {
     const akunMenuOpen = ref(false);
     const pengajuanMenuOpen = ref(false);
     const sidebarOpen = ref(false);
-    const currentRoute = route().current();
+    const currentRoute = ref(route().current());
     const currentWidth = ref(window.innerWidth);
     const routes = [
       {
@@ -318,10 +321,13 @@ export default {
       currentWidth.value = window.innerWidth;
     };
 
+    const navigation = (name) => (currentRoute.value = name);
+
     onMounted(() => {
       window.addEventListener("resize", onCurrentWidthChange);
-      if (currentRoute.includes("akun")) akunMenuOpen.value = true;
-      if (currentRoute.includes("pengajuan")) pengajuanMenuOpen.value = true;
+      if (currentRoute.value.includes("akun")) akunMenuOpen.value = true;
+      if (currentRoute.value.includes("pengajuan"))
+        pengajuanMenuOpen.value = true;
       event.$on("sidebar-toggle", () => {
         sidebarOpen.value = !sidebarOpen.value;
       });
@@ -340,6 +346,7 @@ export default {
       pengajuanRoute,
       sidebarOpen,
       currentWidth,
+      navigation
     };
   },
 };
