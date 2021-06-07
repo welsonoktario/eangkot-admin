@@ -15,15 +15,15 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['http://api.eangkot.test/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['POST', 'GET', 'PATCH'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['http://localhost:8100'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['Accept', 'Content-Type', 'Referer', 'User-Agent', 'Authorization'],
 
     'exposed_headers' => [],
 

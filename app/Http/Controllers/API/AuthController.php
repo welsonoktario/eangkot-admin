@@ -2,46 +2,35 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
+use Exception;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Request;
 
-class AuthController
+class AuthController extends Controller
 {
-    public function checkUser(Request $request)
-    {
-        $user = User::firstWhere('no_hp', $request->phone);
-
-        if (!$user) {
-            return response()->json([
-                'status' => 'OK',
-                'msg' => 'NOT_REGISTERED',
-            ], 200);
-        }
-
-        return response()->json([
-            'status' => 'OK',
-            'msg' => 'REGISTERED'
-        ], 200);
-    }
-
     public function login(Request $request)
     {
         $user = User::firstWhere('no_hp', $request->phone);
 
         if (!$user) {
             return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'User tidak ditemukan',
+                'status' => 'OK',
+                'msg' => 'REGISTER',
             ], 200);
         }
 
+        $token = $user->createToken($user->nama)->plainTextToken;
+
         return response()->json([
             'status' => 'OK',
+            'msg' => 'REGISTERED',
             'data' => [
-                'user' => $user,
-                'access_token' => $user->createToken($user->nama)
+                'user' => $user->only(['id', 'nama', 'no_hp', 'email', 'secure']),
+                'token' => $token
             ]
         ], 200);
     }
@@ -49,26 +38,28 @@ class AuthController
     public function requestOtp(Request $request)
     {
         // random otp number
-        $randomNum = random_int(10 ** (4 - 1), (10 ** 4) - 1);
+        $randomNum = '1234';// random_int(10 ** (4 - 1), (10 ** 4) - 1);
         $hash = Hash::make($randomNum, ['rounds' => 12]);
 
-        $msg = "$randomNum adalah kode OTP anda. Jangan sebarkan kode OTP anda kepada siapapun!";
+        /* $msg = "$randomNum adalah kode OTP untuk aplikasi eAngkot anda. Jangan sebarkan kode OTP anda kepada siapapun!";
 
         $req = Http::post('https://console.zenziva.net/reguler/api/sendsms/', [
-            'userKey' => env('ZENZIVA_USER_KEY'),
-            'passKey' => env('ZENZIVA_API_KEY'),
+            'userkey' => env('ZENZIVA_USER_KEY'),
+            'passkey' => env('ZENZIVA_API_KEY'),
             'to' => $request->phone,
             'message' => $msg
         ]);
 
         if ($req->failed()) {
-            return 'FAIL';
-        }
+            return response()->json([
+                'status' => 'FAIL',
+                'msg' => $req->body()
+            ]);
+        } */
 
         return response()->json([
             'status' => 'OK',
             'data' => [
-                'res' => $req->body(),
                 'otp' => $hash
             ]
         ]);
@@ -76,18 +67,42 @@ class AuthController
 
     public function register(Request $request)
     {
-        $user = User::create($request->all());
-
-        if (!$user) {
+        try {
+            $user = User::create([
+                'nama' => $request->nama,
+                'no_hp' => $request->phone
+            ]);
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] === 1062) {
+                return response()->json([
+                    'status' => 'FAIL',
+                    'msg' => 'Nomor HP telah digunakan',
+                    'error' => $e
+                ], 500);
+            } else {
+                return response()->json([
+                    'status' => 'FAIL',
+                    'msg' => 'Terjadi kesalahan sistem',
+                    'error' => $e
+                ], 500);
+            }
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'FAIL',
                 'msg' => 'Terjadi kesalahan sistem',
+                'error' => $e->getMessage()
             ], 500);
         }
 
+        $user->roles()->sync([2]);
+        $token = $user->createToken($user->nama)->plainTextToken;
+
         return response()->json([
             'status' => 'OK',
-            'data' => $user,
+            'data' => [
+                'user' => $user->only(['id', 'nama', 'no_hp', 'email', 'secure']),
+                'token' => $token
+            ],
         ], 200);
     }
 }

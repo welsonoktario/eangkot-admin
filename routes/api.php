@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,13 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::prefix('auth')->group(function () {
-    Route::get('otp', [AuthController::class, 'requestOtp']);
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('otp', [AuthController::class, 'requestOtp']);
     Route::post('check', [AuthController::class, 'checkUser']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
+});
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::group(['prefix' => 'users'], function() {
+        Route::post('{id}/ubah-password', [UserController::class, 'ubahPassword'])->name('api.users.ubahPassword');
+    });
+
+    Route::resource('users', UserController::class, ['as' => 'api', 'only' => 'update']);
 });
