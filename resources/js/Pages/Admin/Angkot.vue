@@ -1,5 +1,13 @@
 <template>
-  <data-table :data="angkots" :columns="columns">
+  <h2 class="my-6 text-2xl font-bold text-gray-700 dark:text-gray-200">
+    Angkot
+  </h2>
+  <data-table
+    :data="angkots"
+    :columns="columns"
+    @showing="onShowing"
+    @searching="onSearching"
+  >
     <tr
       class="text-gray-700 dark:text-gray-400"
       v-for="angkot in angkots.data"
@@ -34,7 +42,8 @@
 import AppLayout from "@/Layouts/AppLayout";
 import DataTable from "@/Components/DataTable";
 import Modal from "@/Components/Modal";
-import { ref } from "@vue/reactivity";
+import { reactive, ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 
 export default {
   layout: AppLayout,
@@ -47,12 +56,34 @@ export default {
     errors: Object,
     angkots: Object,
   },
-  setup() {
+  setup(props) {
     const isModalOpen = ref(false);
+    const filters = reactive({
+      show: 0,
+      search: "",
+    });
     const columns = ["ID", "Trayek", "No. Kendaraan", "Status"];
     const editAngkot = (id) => (isModalOpen.value = !isModalOpen.value);
 
-    return { isModalOpen, columns, editAngkot };
+    const onShowing = (val) => {
+      filters.show = val;
+      Inertia.get(route("admin.angkot.index"), filters, {
+        preserveState: true,
+      });
+    };
+
+    const onSearching = (q) => {
+      filters.search = q;
+      setTimeout(
+        () =>
+          Inertia.get(route("admin.angkot.index"), filters, {
+            preserveState: true,
+          }),
+        150
+      );
+    };
+
+    return { isModalOpen, columns, editAngkot, onShowing, onSearching };
   },
 };
 </script>

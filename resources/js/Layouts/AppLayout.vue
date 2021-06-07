@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex h-screen bg-gray-100 dark:bg-gray-900"
+    class="flex h-screen max-h-screen bg-gray-100 dark:bg-gray-900"
     :class="{ 'overflow-hidden': sidebarOpen }"
   >
     <!-- Sidebar -->
@@ -8,12 +8,12 @@
 
     <div class="flex flex-col flex-1 w-full">
       <!-- Navbar -->
-      <header>
+      <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
         <navbar />
       </header>
 
       <main class="h-full overflow-y-auto shadow-inner">
-        <div class="container mx-auto py-4 md:px-4">
+        <div class="container px-2 md:px-6 mx-auto grid">
           <slot></slot>
         </div>
       </main>

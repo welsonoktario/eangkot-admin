@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/home', 302);
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('home', HomeController::class, ['as' => 'admin']);
     Route::resource('angkot', AngkotController::class, ['as' => 'admin']);
     Route::resource('promo', PromoController::class, ['as' => 'admin']);

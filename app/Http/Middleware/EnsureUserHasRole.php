@@ -20,9 +20,11 @@ class EnsureUserHasRole
     {
         $user = User::with('roles')->find(Auth::id());
 
-        if (!$user->roles->contains('id', 1)) {
+        if (!$user->roles->contains('nama', ucfirst($role))) {
             Auth::logout();
-            return redirect()->route('web.home.index');
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect('http://eangkot.test');
         }
 
         return $next($request);

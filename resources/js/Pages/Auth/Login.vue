@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-gray-100 h-screen flex">
-    <div class="m-auto w-96 p-6 bg-white rounded-lg shadow-md">
+  <div class="bg-gray-100 dark:bg-gray-900 dark:text-white h-screen flex">
+    <div class="m-auto w-96 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <h1 class="font-bold text-center text-2xl mb-6">eAngkot Admin</h1>
       <breeze-validation-errors class="mb-4" />
 
@@ -14,7 +14,7 @@
           <input
             id="email"
             type="email"
-            class="mt-1 border-none bg-gray-100 block w-full rounded-md"
+            class="mt-1 border-none bg-gray-100 dark:bg-gray-700 block w-full rounded-md"
             v-model="form.email"
             required
             autofocus
@@ -27,7 +27,7 @@
           <input
             id="password"
             type="password"
-            class="mt-1 border-none bg-gray-100 block w-full rounded-md"
+            class="mt-1 border-none bg-gray-100 dark:bg-gray-700 block w-full rounded-md"
             v-model="form.password"
             required
             autocomplete="current-password"

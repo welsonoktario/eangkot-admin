@@ -19,10 +19,10 @@
       "
     >
       <span class="flex items-center col-span-3">
-        Showing {{ from }}-{{ to }} of {{ total }}
+        Menampilkan {{ from }}-{{ to }} dari {{ total }} item
       </span>
       <span class="col-span-2"></span>
-      <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
+      <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end xs:mx-auto">
         <nav>
           <ul class="inline-flex items-center">
             <template v-for="(link, key) in links">

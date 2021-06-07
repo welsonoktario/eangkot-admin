@@ -174,6 +174,7 @@ export default {
   props: {
     open: Boolean,
   },
+  emits: ['action'],
   setup() {},
 };
 </script>

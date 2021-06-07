@@ -2,7 +2,7 @@
   <transition name="fade" mode="out-in">
     <div
       v-if="sidebarOpen"
-      class="bg-gray-900 opacity-75 w-screen h-screen absolute inset-0 mt-16"
+      class="bg-gray-900 opacity-75 w-screen absolute inset-0 mt-16 z-40"
       @click="sidebarOpen = !sidebarOpen"
     ></div>
   </transition>
@@ -18,6 +18,7 @@
     <aside
       v-if="sidebarOpen || currentWidth >= 768"
       class="
+        z-50
         w-64
         py-4
         flex-shrink-0
@@ -317,11 +318,14 @@ export default {
     };
 
     const onCurrentWidthChange = () => {
-      if (window.innerWidth >= 768) sidebarOpen.value = !sidebarOpen.value;
+      if (window.innerWidth >= 768) sidebarOpen.value = false;
       currentWidth.value = window.innerWidth;
     };
 
-    const navigation = (name) => (currentRoute.value = name);
+    const navigation = (name) => {
+      currentRoute.value = name;
+      if (window.innerWidth <= 768) sidebarOpen.value = false;
+    };
 
     onMounted(() => {
       window.addEventListener("resize", onCurrentWidthChange);
@@ -346,7 +350,7 @@ export default {
       pengajuanRoute,
       sidebarOpen,
       currentWidth,
-      navigation
+      navigation,
     };
   },
 };
