@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\FavoritController;
+use App\Http\Controllers\API\TransaksiController;
+use App\Http\Controllers\API\TrayekController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('otp', [AuthController::class, 'requestOtp']);
+    Route::post('request-otp', [AuthController::class, 'requestOtp']);
+    Route::post('check-otp', [AuthController::class, 'checkOtp']);
     Route::post('check', [AuthController::class, 'checkUser']);
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
@@ -27,5 +31,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('{id}/ubah-password', [UserController::class, 'ubahPassword'])->name('api.users.ubahPassword');
     });
 
-    Route::resource('users', UserController::class, ['as' => 'api', 'only' => 'update']);
+    Route::resource('user', UserController::class, ['as' => 'api', 'only' => 'update']);
+    Route::resource('favorit', FavoritController::class, ['as' => 'api']);
+    Route::resource('transaksi', TransaksiController::class, ['as' => 'api']);
+    Route::resource('trayek', TrayekController::class, ['as' => 'api', 'only' => ['index', 'show']]);
 });

@@ -4,9 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pesanan;
-use App\Models\Promo;
 use App\Models\Transaksi;
-use App\Models\TransaksiDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -31,10 +29,10 @@ class TransaksiController extends Controller
             'ulasan'
         ])->get();
 
-        if ($transaksis->isEmpty()) {
+        if (!$transaksis) {
             return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Data user tidak ditemukan'
+                'status' => 'FAIL',
+                'msg' => 'Terjadi kesalahan memuat riwayat transaksi'
             ], 500);
         }
 
@@ -65,12 +63,6 @@ class TransaksiController extends Controller
                 'msg' => 'Gagal membuat transaksi'
             ], 500);
         } else {
-            if ($request->promo) {
-                $promo = Promo::find($request->promo);
-                $transaksi->promo()->associate($promo);
-                $transaksi->save();
-            }
-
             $detail = $transaksi->detail()->create([
                 'durasi_perjalanan' => $request->detail->durasi,
                 'jarak_perjalanan' => $request->detail->jarak

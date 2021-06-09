@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Favorit;
+use Exception;
+use GeoJson\Geometry\MultiPoint;
+use GeoJson\Geometry\Point;
 use Illuminate\Http\Request;
-use Throwable;
 
 class FavoritController extends Controller
 {
@@ -20,9 +22,9 @@ class FavoritController extends Controller
 
         if (!$favorits) {
             return response()->json([
-                'status' => 'GAGAL',
+                'status' => 'FAIL',
                 'msg' => 'Not found',
-            ], 404);
+            ], 500);
         }
 
         return response()->json([
@@ -40,13 +42,19 @@ class FavoritController extends Controller
     public function store(Request $request)
     {
         try {
-            $favorit = Favorit::create(['nama' => $request->nama]);
+            $lokasi_jemput = new Point($request->jemput->lat, $request->jemput->lng);
+            $lokasi_tujuan = new Point($request->tujuan->lat, $request->jemput->lng);
+            $favorit = Favorit::create([
+                'nama' => $request->nama,
+                'rute' => new MultiPoint([$lokasi_jemput, $lokasi_tujuan])
+            ]);
+
             $favorit->user()->associate($request->user_id);
             $favorit->trayek()->associate($request->angkot_id);
-        } catch (Throwable $err) {
+        } catch (Exception $err) {
             return response()->json([
-                'status' => 'GAGAL',
-                'msg' => $err
+                'status' => 'FAIL',
+                'msg' => $err->getMessage()
             ], 500);
         }
 
@@ -66,11 +74,11 @@ class FavoritController extends Controller
     {
         $favorit = Favorit::with(['user', 'trayek'])->find($id);
 
-        if ($favorit->isEmpty()) {
+        if (!$favorit) {
             return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Not found',
-            ], 404);
+                'status' => 'FAIL',
+                'msg' => 'Data favorit tidak ditemukan',
+            ], 500);
         }
 
         return response()->json([
@@ -88,26 +96,31 @@ class FavoritController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $favorit = Favorit::where([
+        $favorit = Favorit::firstWhere([
             ['id', $id],
             ['user_id', $request->user]
-        ])->first();
+        ]);
 
         if (!$favorit) {
             return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Not found'
-            ], 404);
+                'status' => 'FAIL',
+                'msg' => 'Data favorit tidak ditemukan'
+            ], 500);
         }
 
         try {
-            $favorit->update(['name' => $request->name]);
-            $favorit->user()->associate($request->user);
+            $lokasi_jemput = new Point($request->jemput->lat, $request->jemput->lng);
+            $lokasi_tujuan = new Point($request->tujuan->lat, $request->jemput->lng);
+            $favorit->update([
+                'name' => $request->name,
+                'rute' => new MultiPoint([$lokasi_jemput, $lokasi_tujuan])
+            ]);
+
             if ($request->has('trayek_id')) $favorit->trayek()->associate($request->trayek);
-        } catch (Throwable $err) {
+        } catch (Exception $err) {
             return response()->json([
-                'status' => 'GAGAL',
-                'msg' => $err
+                'status' => 'FAIL',
+                'msg' => $err->getMessage()
             ], 500);
         }
 
@@ -129,14 +142,14 @@ class FavoritController extends Controller
 
         if (!$favorit) {
             return response()->json([
-                'status' => 'GAGAL',
+                'status' => 'FAIL',
                 'msg' => 'Data favorit tidak ditemukan'
             ], 404);
         }
 
         if (!$favorit->delete()) {
             return response()->json([
-                'status' => 'OK',
+                'status' => 'FAIL',
                 'msg' => 'Terjadi kesalahan menghapus favorit'
             ], 500);
         }

@@ -7,6 +7,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 
@@ -38,8 +39,15 @@ class AuthController extends Controller
     public function requestOtp(Request $request)
     {
         // random otp number
-        $randomNum = '1234';// random_int(10 ** (4 - 1), (10 ** 4) - 1);
+        $randomNum = '1234'; // random_int(10 ** (4 - 1), (10 ** 4) - 1);
         $hash = Hash::make($randomNum, ['rounds' => 12]);
+
+        if (!Cache::tags(['otp'])->put($request->phone, $hash, 300)) {
+            return response()->json([
+                'status' => 'FAIL',
+                'msg' => 'Terjadi kesalahan sistem'
+            ], 500);
+        }
 
         /* $msg = "$randomNum adalah kode OTP untuk aplikasi eAngkot anda. Jangan sebarkan kode OTP anda kepada siapapun!";
 
@@ -58,10 +66,27 @@ class AuthController extends Controller
         } */
 
         return response()->json([
+            'status' => 'OK'
+            // 'data' => $req->body()
+        ]);
+    }
+
+    public function checkOtp(Request $request)
+    {
+        try {
+            $hash = Cache::tags(['otp'])->pull($request->phone);
+            $compare = Hash::check($request->pin, $hash);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'FAIL',
+                'msg' => 'Terjadi kesalahan sistem',
+                'err' => $e->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
             'status' => 'OK',
-            'data' => [
-                'otp' => $hash
-            ]
+            'msg' => $compare
         ]);
     }
 

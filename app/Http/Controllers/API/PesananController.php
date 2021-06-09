@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Pesanan;
 use App\Models\User;
+use GeoJson\Geometry\MultiPoint;
 use GeoJson\Geometry\Point;
 use Illuminate\Http\Request;
 use Throwable;
@@ -35,9 +36,11 @@ class PesananController extends Controller
     public function store(Request $request)
     {
         $lokasi_jemput = new Point($request->lokasi->lat, $request->lokasi->lng);
+        $lokasi_tujuan = new Point($request->tujuan->lat, $request->lokasi->lng);
         $user = User::find($request->user);
+
         $pesanan = $user->pesanan()::create([
-            'lokasi_jemput' => $lokasi_jemput,
+            'rute' => new MultiPoint([$lokasi_jemput, $lokasi_tujuan]),
             'jumlah_penumpang' => $request->penumpang
         ]);
 

@@ -18,10 +18,6 @@ class CreateTransaksisTable extends Migration
             $table->foreignId('pesanan_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->foreignId('promo_id')
-                ->constrained()
-                ->on('promos')
-                ->cascadeOnDelete();
             $table->dateTime('tanggal')->useCurrent();
             $table->integer('ongkos');
         });

@@ -22,6 +22,7 @@ class CreateFavoritsTable extends Migration
             $table->foreignId('trayek_id')
                 ->constrained()
                 ->cascadeOnDelete();
+            $table->multiPoint('rute');
         });
     }
 

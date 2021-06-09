@@ -15,9 +15,9 @@ class TrayekController extends Controller
      */
     public function index()
     {
-        $trayeks = Trayek::all();
+        $trayeks = Trayek::all(['id', 'kode', 'rute']);
 
-        if ($trayeks->isEmpty()) {
+        if (!$trayeks) {
             return response()->json([
                 'status' => 'GAGAL',
                 'msg' => 'Gagal memuat data angkot'
@@ -28,17 +28,6 @@ class TrayekController extends Controller
             'status' => 'OK',
             'data' => $trayeks
         ], 200);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -62,16 +51,5 @@ class TrayekController extends Controller
             'status' => 'OK',
             'data' => $trayek
         ], 200);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
     }
 }

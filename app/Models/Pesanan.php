@@ -9,8 +9,8 @@ class Pesanan extends Model
 {
     use SpatialTrait;
 
-    protected $fillable = ['driver_id', 'lokasi_jemput', 'jumlah_penumpang'];
-    protected $spatialFields = ['lokasi_jemput'];
+    protected $fillable = ['driver_id', 'rute', 'jumlah_penumpang'];
+    protected $spatialFields = ['rute'];
 
     public function user()
     {

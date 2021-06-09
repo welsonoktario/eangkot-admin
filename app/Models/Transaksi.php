@@ -11,11 +11,6 @@ class Transaksi extends Model
         return $this->belongsTo(Pesanan::class);
     }
 
-    public function promo()
-    {
-        return $this->belongsTo(Promo::class);
-    }
-
     public function ulasan()
     {
         return $this->hasOne(Ulasan::class);

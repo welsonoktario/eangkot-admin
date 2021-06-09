@@ -25,7 +25,7 @@ class CreatePesanansTable extends Migration
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->point('lokasi_jemput');
+            $table->multiPoint('rute');
             $table->integer('jumlah_penumpang')->default(1);
             $table->enum('status', ['Pending', 'Aktif', 'Batal', 'Selesai'])
                 ->default('Pending');
