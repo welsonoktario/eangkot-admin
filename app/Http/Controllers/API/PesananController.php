@@ -37,7 +37,7 @@ class PesananController extends Controller
     {
         $lokasi_jemput = new Point($request->lokasi->lat, $request->lokasi->lng);
         $lokasi_tujuan = new Point($request->tujuan->lat, $request->lokasi->lng);
-        $user = User::find($request->user);
+        $user = User::find($request->user_id);
 
         $pesanan = $user->pesanan()::create([
             'rute' => new MultiPoint([$lokasi_jemput, $lokasi_tujuan]),

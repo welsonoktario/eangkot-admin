@@ -20,7 +20,7 @@ class TransaksiController extends Controller
         $transaksis = Transaksi::with([
             'detail',
             'pesanan' => function ($q) use ($request) {
-                $q->where('user_id', $request->user);
+                $q->where('user_id', $request->user_id);
             },
             'pesanan.driver' => function ($q) {
                 $q->with(['angkot', 'angkot.trayek', 'user']);
@@ -53,7 +53,7 @@ class TransaksiController extends Controller
         $pesanan = Pesanan::find($request->pesanan);
         $transaksi = $pesanan->transaksi()->create([
             'tanggal' => Carbon::now(),
-            'user_id' => $request->user,
+            'user_id' => $request->user_id,
             'driver_id' => $request->driver
         ]);
 

@@ -4,9 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Favorit;
+use App\Models\Trayek;
 use Exception;
-use GeoJson\Geometry\MultiPoint;
-use GeoJson\Geometry\Point;
+use Grimzy\LaravelMysqlSpatial\Types\MultiPoint;
+use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Illuminate\Http\Request;
 
 class FavoritController extends Controller
@@ -18,7 +19,7 @@ class FavoritController extends Controller
      */
     public function index(Request $request)
     {
-        $favorits = Favorit::with('trayek')->where('user_id', $request->user)->get();
+        $favorits = Favorit::with('trayek')->where('user_id', $request->user_id)->get();
 
         if (!$favorits) {
             return response()->json([
@@ -42,15 +43,20 @@ class FavoritController extends Controller
     public function store(Request $request)
     {
         try {
-            $lokasi_jemput = new Point($request->jemput->lat, $request->jemput->lng);
-            $lokasi_tujuan = new Point($request->tujuan->lat, $request->jemput->lng);
+            $jemput = $request->jemput['lokasi'];
+            $tujuan = $request->tujuan['lokasi'];
+
+            $lokasi_jemput = new Point($jemput['lat'], $jemput['lng']);
+            $lokasi_tujuan = new Point($tujuan['lat'], $jemput['lng']);
+
+            $trayek = Trayek::firstWhere('kode', $request->trayek);
+
             $favorit = Favorit::create([
+                'user_id' => $request->user_id,
+                'trayek_id' => $trayek->id,
                 'nama' => $request->nama,
                 'rute' => new MultiPoint([$lokasi_jemput, $lokasi_tujuan])
             ]);
-
-            $favorit->user()->associate($request->user_id);
-            $favorit->trayek()->associate($request->angkot_id);
         } catch (Exception $err) {
             return response()->json([
                 'status' => 'FAIL',
@@ -98,7 +104,7 @@ class FavoritController extends Controller
     {
         $favorit = Favorit::firstWhere([
             ['id', $id],
-            ['user_id', $request->user]
+            ['user_id', $request->user_id]
         ]);
 
         if (!$favorit) {

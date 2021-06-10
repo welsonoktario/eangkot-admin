@@ -50,7 +50,7 @@ class DriverController extends Controller
 
     public function pengajuanDriver(Request $request)
     {
-        $user = User::find($request->user);
+        $user = User::find($request->user_id);
 
         // kalo user not found
         if (!$user) {

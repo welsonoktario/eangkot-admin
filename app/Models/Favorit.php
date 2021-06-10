@@ -8,7 +8,10 @@ use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 class Favorit extends Model
 {
     use SpatialTrait;
+
+    protected $fillable = ['user_id', 'trayek_id', 'nama', 'rute'];
     protected $spatialFields = ['rute'];
+    public $timestamps = false;
 
     public function user()
     {
