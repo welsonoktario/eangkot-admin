@@ -15,7 +15,11 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $user = User::firstWhere('no_hp', $request->phone);
+        if ($request->driver) {
+            $user = User::with(['driver', 'pengajuan'])->firstWhere('no_hp', $request->phone);
+        } else {
+            $user = User::firstWhere('no_hp', $request->phone);
+        }
 
         if (!$user) {
             return response()->json([
@@ -30,7 +34,9 @@ class AuthController extends Controller
             'status' => 'OK',
             'msg' => 'REGISTERED',
             'data' => [
-                'user' => $user->only(['id', 'nama', 'no_hp', 'email', 'secure']),
+                'user' => $request->driver
+                    ? $user->only(['id', 'nama', 'no_hp', 'email', 'secure', 'driver', 'pengajuan'])
+                    : $user->only(['id', 'nama', 'no_hp', 'email', 'secure']),
                 'token' => $token
             ]
         ], 200);

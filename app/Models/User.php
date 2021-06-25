@@ -64,8 +64,8 @@ class User extends Authenticatable
         return $this->hasMany(Favorit::class);
     }
 
-    public function pengajuans()
+    public function pengajuan()
     {
-        return $this->hasMany(PengajuanDriver::class);
+        return $this->hasOne(PengajuanDriver::class);
     }
 }

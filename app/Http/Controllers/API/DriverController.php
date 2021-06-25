@@ -9,6 +9,7 @@ use App\Models\PengajuanDriver;
 use App\Http\Controllers\Controller;
 use App\Models\Driver;
 use Carbon\Carbon;
+use Exception;
 use Grimzy\LaravelMysqlSpatial\Doctrine\Point;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,7 +23,42 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::find($request->user_id);
+
+        // kalo user not found
+        if (!$user) {
+            return response()->json([
+                'status' => 'GAGAL',
+                'msg' => 'Data user tidak ditemukan',
+            ], 404);
+        }
+
+        try {
+            $pengajuan = $user->pengajuan()->create([
+                'trayek_id' => $request->trayek,
+                'status' => 'Pending',
+                'tanggal' => Carbon::now()
+            ]);
+            $pengajuan->detail()->create([
+                'nik' => $request->nik,
+                'alamat' => $request->alamat,
+            ]);
+
+            // Upload foto-foto dokumen untuk
+            $this->uploadImage($user, 'ktp', $request->file('foto_ktp'), $request->format_ktp);
+            $this->uploadImage($user, 'sim', $request->file('foto_sim'), $request->format_sim);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'GAGAL',
+                'msg' => 'Terjadi kesalahan sistem',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 'OK',
+            'data' => $request->allFiles()
+        ], 201);
     }
 
     /**
@@ -48,50 +84,6 @@ class DriverController extends Controller
         ], 200);
     }
 
-    public function pengajuanDriver(Request $request)
-    {
-        $user = User::find($request->user_id);
-
-        // kalo user not found
-        if (!$user) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Data user tidak ditemukan',
-            ], 404);
-        }
-
-        try {
-            $pengajuan = $user->pengajuanDrivers()->create([
-                'trayek_id' => $request->trayek,
-                'status' => 'Pending',
-                'tanggal' => Carbon::now()
-            ]);
-            $pengajuan->detail()->create([
-                'bank_id' => $request->bank,
-                'nama' => $request->nama,
-                'nik' => $request->nik,
-                'no_kendaraan' => $request->plat,
-                'alamat' => $request->alamat,
-                'rekening' => $request->rekening,
-            ]);
-
-            // Upload foto-foto dokumen untuk
-            $this->uploadImage($user, 'ktp', $request->input('detail.ktp.base64'), $request->input('detail.ktp.format'));
-            $this->uploadImage($user, 'sim', $request->input('detail.sim.base64'), $request->input('detail.sim.format'));
-        } catch (Throwable $e) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Terjadi kesalahan sistem',
-                'error' => $e,
-            ], 500);
-        }
-
-        return response()->json([
-            'status' => 'OK',
-            'data' => $pengajuan
-        ], 201);
-    }
-
     public function statusPengajuan($id)
     {
         $pengajuan = PengajuanDriver::where('user_id', $id)->orderBy('id', 'DESC')->first();
@@ -110,28 +102,13 @@ class DriverController extends Controller
     }
 
     // Function upload file
-    private function uploadImage($user, String $jenis, String $base64, String $format)
+    private function uploadImage($user, String $jenis, $foto, String $format)
     {
         $fileName = "{$jenis}-{$user->id}-{$user->nama}.{$format}";
 
         Storage::disk('local')->put(
             "public/$jenis/$fileName",
-            base64_decode($base64)
+            file_get_contents($foto)
         );
-    }
-
-    public function updateLokasi(Request $request)
-    {
-        $driver = Driver::find($request->driver);
-        $driver->update([
-            'lokasi' => new Point($request->lat, $request->lng)
-        ]);
-    }
-
-    public function getLokasi(Request $request)
-    {
-        $driver = Driver::find($request->driver);
-
-        return response()->json(['driver' => $driver], 201);
     }
 }

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Favorit;
 use App\Models\Trayek;
 use Exception;
-use Grimzy\LaravelMysqlSpatial\Types\MultiPoint;
 use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Illuminate\Http\Request;
 
@@ -43,11 +42,9 @@ class FavoritController extends Controller
     public function store(Request $request)
     {
         try {
-            $jemput = $request->jemput['lokasi'];
             $tujuan = $request->tujuan['lokasi'];
 
-            $lokasi_jemput = new Point($jemput['lat'], $jemput['lng']);
-            $lokasi_tujuan = new Point($tujuan['lat'], $jemput['lng']);
+            $lokasi_tujuan = new Point($tujuan['lat'], $tujuan['lng']);
 
             $trayek = Trayek::firstWhere('kode', $request->trayek);
 
@@ -55,12 +52,13 @@ class FavoritController extends Controller
                 'user_id' => $request->user_id,
                 'trayek_id' => $trayek->id,
                 'nama' => $request->nama,
-                'rute' => new MultiPoint([$lokasi_jemput, $lokasi_tujuan])
+                'alamat' => $request->tujuan['alamat'],
+                'tujuan' => $lokasi_tujuan
             ]);
         } catch (Exception $err) {
             return response()->json([
                 'status' => 'FAIL',
-                'msg' => $err->getMessage()
+                'msg' => $err->getMessage(),
             ], 500);
         }
 
@@ -115,11 +113,11 @@ class FavoritController extends Controller
         }
 
         try {
-            $lokasi_jemput = new Point($request->jemput->lat, $request->jemput->lng);
-            $lokasi_tujuan = new Point($request->tujuan->lat, $request->jemput->lng);
+            $lokasi_tujuan = new Point($request->tujuan['lat'], $request->tujuan['lng']);
             $favorit->update([
                 'name' => $request->name,
-                'rute' => new MultiPoint([$lokasi_jemput, $lokasi_tujuan])
+                'alamat' => $request->alamat,
+                'tujuan' => $lokasi_tujuan
             ]);
 
             if ($request->has('trayek_id')) $favorit->trayek()->associate($request->trayek);

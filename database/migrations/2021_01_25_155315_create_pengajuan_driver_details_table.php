@@ -19,11 +19,10 @@ class CreatePengajuanDriverDetailsTable extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
             $table->foreignId('bank_id')
+                ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->string('nama');
             $table->string('nik', 16);
-            $table->string('no_kendaraan');
             $table->string('alamat');
             $table->string('rekening')->nullable();
         });

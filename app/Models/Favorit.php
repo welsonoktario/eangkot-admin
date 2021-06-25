@@ -9,8 +9,8 @@ class Favorit extends Model
 {
     use SpatialTrait;
 
-    protected $fillable = ['user_id', 'trayek_id', 'nama', 'rute'];
-    protected $spatialFields = ['rute'];
+    protected $fillable = ['user_id', 'trayek_id', 'nama', 'alamat', 'tujuan'];
+    protected $spatialFields = ['tujuan'];
     public $timestamps = false;
 
     public function user()
