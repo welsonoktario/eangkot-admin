@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\AngkotLokasiUpdated;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Angkot;
-use GeoJson\Geometry\Point;
+use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class AngkotController extends Controller
 {
@@ -100,22 +102,45 @@ class AngkotController extends Controller
 
     public function cariAngkot(Request $request)
     {
-        $trayek = $request->trayek;
-        $titikJemput = new Point($request->titikJemput->latitude, $request->titikJemput->longitude);
-        $query = "ST_DISTANCE($titikJemput, lokasi) jarak";
+        try {
+            $trayek = $request->trayek;
+            $titikJemput = new Point($request->titikJemput->latitude, $request->titikJemput->longitude);
+            $query = "ST_DISTANCE($titikJemput, lokasi) jarak";
 
-        $angkots = Angkot::select(DB::raw($query))->where('id', $trayek->id)->get();
-
-        if (!$angkots) {
+            $angkots = Angkot::select(DB::raw($query))
+                ->where('trayek_id', $trayek->id)
+                ->whereNotIn('id', $request->blacklist)
+                ->get();
+        } catch (Throwable $err) {
             return response()->json([
                 'status' => 'GAGAL',
-                'msg' => 'Tidak ada angkot tersedia untuk saat ini'
+                'msg' => 'Tidak ada angkot tersedia untuk saat ini',
+                'err' => $err->getMessage()
             ]);
-        };
+        }
 
         return response()->json([
             'status' => 'OK',
             'data' => $angkots
+        ]);
+    }
+
+    public function updateLokasi(Request $request, $id)
+    {
+        try {
+            $lokasi = new Point($request->lat, $request->lang);
+            $angkot = Angkot::find($id)->update(['lokasi' => $lokasi]);
+            broadcast(new AngkotLokasiUpdated($angkot))->toOthers();
+        } catch (Throwable $err) {
+            return response()->json([
+                'status' => 'GAGAL',
+                'msg' => 'Terjadi kesalahan sistem',
+                'err' => $err->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'OK'
         ]);
     }
 }

@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
+use App\Events\PesananCreated;
+use App\Events\PesananHandled;
 use App\Http\Controllers\Controller;
+use App\Models\Driver;
 use App\Models\Pesanan;
-use App\Models\User;
+use Carbon\Carbon;
 use GeoJson\Geometry\MultiPoint;
 use GeoJson\Geometry\Point;
 use Illuminate\Http\Request;
@@ -35,26 +38,30 @@ class PesananController extends Controller
      */
     public function store(Request $request)
     {
-        $lokasi_jemput = new Point($request->lokasi->lat, $request->lokasi->lng);
-        $lokasi_tujuan = new Point($request->tujuan->lat, $request->lokasi->lng);
-        $user = User::find($request->user_id);
+        try {
+            $lokasi_jemput = new Point($request->lokasi->lat, $request->lokasi->lng);
+            $lokasi_tujuan = new Point($request->tujuan->lat, $request->lokasi->lng);
 
-        $pesanan = $user->pesanan()::create([
-            'rute' => new MultiPoint([$lokasi_jemput, $lokasi_tujuan]),
-            'jumlah_penumpang' => $request->penumpang
-        ]);
+            $pesanan = Pesanan::create([
+                'user_id' => $request->user_id,
+                'driver_id' => $request->driver_id,
+                'rute' => new MultiPoint([$lokasi_jemput, $lokasi_tujuan]),
+                'penumpang' => $request->penumpang
+            ]);
 
-        if (!$pesanan) {
+            event(new PesananCreated($request->driver_id, $pesanan));
+        } catch (Throwable $err) {
             return response()->json([
                 'status' => 'GAGAL',
-                'msg' => 'Terjadi kesalahan membuat pesanan'
+                'msg' => 'Terjadi kesalahan membuat pesanan',
+                'err' => $err->getMessage()
             ], 500);
         }
 
         return response()->json([
             'status' => 'OK',
             'data' => $pesanan
-        ]);
+        ], 201);
     }
 
     /**
@@ -92,20 +99,35 @@ class PesananController extends Controller
         $pesanan = Pesanan::find($id);
 
         try {
-            if ($request->tipe === 'terima') {
-                $pesanan->update([
+            if (!$request->tipe === 'Batal') {
+                $pesanan = tap($pesanan->update([
                     'driver_id' => $request->driver,
-                    'status' => 'Aktif'
-                ]);
-            } else if ($request->tipe === 'batal') {
-                $pesanan->update([
-                    'status' => 'Batal'
+                    'status' => $request->tipe
+                ]));
+
+                if ($request->tipe === 'Selesai') {
+                    $pesanan->transaksi()->create([
+                        'pesanan_id' => $pesanan->id,
+                        'tanggal' => Carbon::now(),
+                        'durasi_perjalanan' => $request->transaksi->durasi,
+                        'jarak_perjalanan' => $request->transaksi->jarak
+                    ]);
+                }
+                event(new PesananHandled($pesanan));
+            } else if ($request->tipe === 'Batal') {
+                $pesanan->destroy();
+
+                event(new PesananHandled($request->tipe));
+                return response()->json([
+                    'status' => 'OK',
+                    'data' => null
                 ]);
             }
         } catch (Throwable $err) {
             return response()->json([
                 'status' => 'GAGAL',
-                'msg' => 'Terjadi kesalahan memuat data pesanan'
+                'msg' => 'Terjadi kesalahan memuat data pesanan',
+                'err' => $err->getMessage()
             ], 500);
         }
 

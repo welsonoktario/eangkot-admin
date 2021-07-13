@@ -17,9 +17,12 @@ class CreateTransaksisTable extends Migration
             $table->id();
             $table->foreignId('pesanan_id')
                 ->constrained()
+                ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->dateTime('tanggal')->useCurrent();
             $table->integer('ongkos');
+            $table->integer('durasi_perjalanan');
+            $table->decimal('jarak_perjalanan', 3, 2);
         });
     }
 

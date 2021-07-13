@@ -2,24 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
+use Illuminate\Database\Eloquent\Model;
 
 class Pesanan extends Model
 {
     use SpatialTrait;
 
-    protected $fillable = ['driver_id', 'rute', 'jumlah_penumpang'];
+    protected $fillable = [
+        'user_id',
+        'driver_id',
+        'penumpang',
+        'rute',
+        'status'
+    ];
     protected $spatialFields = ['rute'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function trayek()
-    {
-        return $this->belongsTo(Trayek::class);
     }
 
     public function driver()

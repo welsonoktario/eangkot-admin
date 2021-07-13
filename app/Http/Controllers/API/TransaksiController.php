@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pesanan;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Throwable;
 
 class TransaksiController extends Controller
 {
@@ -18,14 +18,12 @@ class TransaksiController extends Controller
     public function index(Request $request)
     {
         $transaksis = Transaksi::with([
-            'detail',
             'pesanan' => function ($q) use ($request) {
                 $q->where('user_id', $request->user_id);
             },
             'pesanan.driver' => function ($q) {
                 $q->with(['angkot', 'angkot.trayek', 'user']);
             },
-            'promo',
             'ulasan'
         ])->get();
 
@@ -50,30 +48,19 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        $pesanan = Pesanan::find($request->pesanan);
-        $transaksi = $pesanan->transaksi()->create([
-            'tanggal' => Carbon::now(),
-            'user_id' => $request->user_id,
-            'driver_id' => $request->driver
-        ]);
-
-        if (!$transaksi) {
+        try {
+            $transaksi = Transaksi::create([
+                'pesanan_id' => $request->pesanan_id,
+                'tanggal' => Carbon::now(),
+                'durasi_perjalanan' => $request->durasi,
+                'jarak_perjalanan' => $request->jarak
+            ]);
+        } catch (Throwable $err) {
             return response()->json([
                 'status' => 'GAGAL',
-                'msg' => 'Gagal membuat transaksi'
+                'msg' => 'Terjadi kesalahan pada sistem, silahkan coba lagi',
+                'err' => $err->getMessage()
             ], 500);
-        } else {
-            $detail = $transaksi->detail()->create([
-                'durasi_perjalanan' => $request->detail->durasi,
-                'jarak_perjalanan' => $request->detail->jarak
-            ]);
-
-            if (!$detail) {
-                return response()->json([
-                    'status' => 'GAGAL',
-                    'msg' => 'Gagal membuat detail transaksi'
-                ], 500);
-            }
         }
 
         return response()->json([
@@ -90,7 +77,7 @@ class TransaksiController extends Controller
      */
     public function show($id)
     {
-        $transaksis = Transaksi::with(['detail', 'driver', 'promo', 'ulasan'])->firstWhere('id', $id);
+        $transaksis = Transaksi::with(['driver', 'ulasan'])->firstWhere('id', $id);
 
         if ($transaksis->isEmpty()) {
             return response()->json([

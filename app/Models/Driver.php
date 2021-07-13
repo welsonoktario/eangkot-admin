@@ -21,12 +21,12 @@ class Driver extends Model
 
     public function angkot()
     {
-        return $this->belongsToMany(Angkot::class, 'driver_angkot');
+        return $this->belongsTo(Angkot::class);
     }
 
     public function pesanan()
     {
-        return $this->belongsTo(Pesanan::class);
+        return $this->hasMany(Pesanan::class);
     }
 
     public function pengajuanBonus()

@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     public function pesanan()
     {
-        return $this->hasOne(Pesanan::class);
+        return $this->hasMany(Pesanan::class);
     }
 
     public function favorits()

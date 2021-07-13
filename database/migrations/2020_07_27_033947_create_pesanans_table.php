@@ -18,17 +18,15 @@ class CreatePesanansTable extends Migration
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->foreignId('trayek_id')
-                ->constrained()
-                ->cascadeOnDelete();
             $table->foreignId('driver_id')
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
             $table->multiPoint('rute');
-            $table->integer('jumlah_penumpang')->default(1);
-            $table->enum('status', ['Pending', 'Aktif', 'Batal', 'Selesai'])
+            $table->integer('penumpang')->default(1);
+            $table->enum('status', ['Pending', 'Diterima', 'Ditolak', 'Aktif', 'Selesai', 'Batal'])
                 ->default('Pending');
+            $table->timestamps();
         });
     }
 
