@@ -7,5 +7,6 @@ import AppLayout from '@/Layouts/AppLayout';
 
 export default {
   layout: AppLayout,
+  setup(props) {}
 }
 </script>

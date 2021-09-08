@@ -113,9 +113,15 @@ class FavoritController extends Controller
         }
 
         try {
-            $lokasi_tujuan = new Point($request->tujuan['lat'], $request->tujuan['lng']);
+            if (array_key_exists('coordinates', $request->tujuan)) {
+                $coords = $request->tujuan['coordinates'];
+                $lokasi_tujuan = new Point($coords[1], $coords[0]);
+            } else {
+                $lokasi_tujuan = new Point($request->tujuan['lat'], $request->tujuan['lng']);
+            }
+
             $favorit->update([
-                'name' => $request->name,
+                'nama' => $request->nama,
                 'alamat' => $request->alamat,
                 'tujuan' => $lokasi_tujuan
             ]);

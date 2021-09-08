@@ -2,11 +2,8 @@
 
 use App\Http\Controllers\Admin\AngkotController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\TrayekController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\API\DriverController;
-use App\Http\Controllers\API\PromoController;
-use App\Http\Controllers\API\TransaksiController;
-use App\Http\Controllers\API\TrayekController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\PengajuanBonus;
 use App\Models\PengajuanDriver;
