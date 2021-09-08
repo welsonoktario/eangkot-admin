@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use Throwable;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\PengajuanDriver;
 use App\Http\Controllers\Controller;
-use App\Models\Driver;
 use Carbon\Carbon;
-use Exception;
 use Grimzy\LaravelMysqlSpatial\Doctrine\Point;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class DriverController extends Controller
 {
@@ -27,10 +25,7 @@ class DriverController extends Controller
 
         // kalo user not found
         if (!$user) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Data user tidak ditemukan',
-            ], 404);
+            return $this->fail('Data user tidak ditemukan', null);
         }
 
         try {
@@ -47,18 +42,11 @@ class DriverController extends Controller
             // Upload foto-foto dokumen untuk
             $this->uploadImage($user, 'ktp', $request->file('foto_ktp'), $request->format_ktp);
             $this->uploadImage($user, 'sim', $request->file('foto_sim'), $request->format_sim);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Terjadi kesalahan sistem',
-                'error' => $e->getMessage(),
-            ], 500);
+        } catch (Throwable $e) {
+            return $this->fail('Terjadi kesalahan sistem', $e->getMessage());
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $request->allFiles()
-        ], 201);
+        return $this->success();
     }
 
     /**
@@ -72,16 +60,10 @@ class DriverController extends Controller
         $user = User::with(['driver', 'driver.angkot'])->find($id);
 
         if (!$user) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Data user tidak ditemukan',
-            ], 404);
+            return $this->fail('Data driver tidak ditemukan');
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $user
-        ], 200);
+        return $this->success(null, $user);
     }
 
     public function statusPengajuan($id)
@@ -89,16 +71,10 @@ class DriverController extends Controller
         $pengajuan = PengajuanDriver::where('user_id', $id)->orderBy('id', 'DESC')->first();
 
         if (!$pengajuan) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Data user tidak ditemukan',
-            ]);
+            return $this->fail('Data pengajuan tidak ditemukan');
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $pengajuan
-        ]);
+        return $this->success(null, $pengajuan);
     }
 
     // Function upload file

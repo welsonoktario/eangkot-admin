@@ -5,9 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Favorit;
 use App\Models\Trayek;
-use Exception;
 use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Illuminate\Http\Request;
+use Throwable;
 
 class FavoritController extends Controller
 {
@@ -21,16 +21,10 @@ class FavoritController extends Controller
         $favorits = Favorit::with('trayek')->where('user_id', $request->user_id)->get();
 
         if (!$favorits) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'Not found',
-            ], 500);
+            return $this->fail('Terjadi kesalahan sistem');
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $favorits,
-        ]);
+        return $this->success(null, $favorits);
     }
 
     /**
@@ -55,17 +49,11 @@ class FavoritController extends Controller
                 'alamat' => $request->tujuan['alamat'],
                 'tujuan' => $lokasi_tujuan
             ]);
-        } catch (Exception $err) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => $err->getMessage(),
-            ], 500);
+        } catch (Throwable $err) {
+            return $this->fail('Terjadi kesalahan sistem', $err->getMessage());
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $favorit,
-        ], 201);
+        return $this->success(null, $favorit);
     }
 
     /**
@@ -85,10 +73,7 @@ class FavoritController extends Controller
             ], 500);
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $favorit,
-        ]);
+        return $this->success(null, $favorit);
     }
 
     /**
@@ -106,10 +91,7 @@ class FavoritController extends Controller
         ]);
 
         if (!$favorit) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'Data favorit tidak ditemukan'
-            ], 500);
+            return $this->fail('Data favorit tidak ditemukan');
         }
 
         try {
@@ -127,17 +109,11 @@ class FavoritController extends Controller
             ]);
 
             if ($request->has('trayek_id')) $favorit->trayek()->associate($request->trayek);
-        } catch (Exception $err) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => $err->getMessage()
-            ], 500);
+        } catch (Throwable $err) {
+            return $this->fail('Terjadi kesalahan sistem', $err->getMessage());
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $favorit,
-        ], 201);
+        return $this->success(null, $favorit);
     }
 
     /**
@@ -148,24 +124,12 @@ class FavoritController extends Controller
      */
     public function destroy($id)
     {
-        $favorit = Favorit::find($id);
-
-        if (!$favorit) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'Data favorit tidak ditemukan'
-            ], 404);
+        try {
+            Favorit::destroy($id);
+        } catch (Throwable $e) {
+            return $this->fail('Terjadi kesalahan sistem', $e->getMessage());
         }
 
-        if (!$favorit->delete()) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'Terjadi kesalahan menghapus favorit'
-            ], 500);
-        }
-
-        return response()->json([
-            'status' => 'OK'
-        ], 200);
+        return $this->success();
     }
 }

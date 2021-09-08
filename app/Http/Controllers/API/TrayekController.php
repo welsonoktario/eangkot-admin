@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Trayek;
-use Illuminate\Http\Request;
 
 class TrayekController extends Controller
 {
@@ -18,16 +17,10 @@ class TrayekController extends Controller
         $trayeks = Trayek::all(['id', 'kode', 'rute']);
 
         if (!$trayeks) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Gagal memuat data angkot'
-            ], 500);
+            return $this->fail('Terjadi kesalahan memuat data trayek');
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $trayeks
-        ], 200);
+        return $this->success(null, $trayeks);
     }
 
     /**
@@ -41,15 +34,9 @@ class TrayekController extends Controller
         $trayek = Trayek::find($id);
 
         if (!$trayek) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Data trayek tidak ditemukan'
-            ], 404);
+            return $this->fail('Terjadi kesalahan memuat data trayek');
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $trayek
-        ], 200);
+        return $this->success(null, $trayek);
     }
 }

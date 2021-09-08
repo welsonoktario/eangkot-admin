@@ -81,7 +81,7 @@
                 </button>
               </li>
               <li v-else :key="key + 1">
-                <inertia-link
+                <Link
                   v-if="link.label.includes('Previous')"
                   :href="link.url"
                 >
@@ -99,8 +99,8 @@
                       d="M15 19l-7-7 7-7"
                     ></path>
                   </svg>
-                </inertia-link>
-                <inertia-link
+                </Link>
+                <Link
                   v-else-if="link.label.includes('Next')"
                   :href="link.url"
                 >
@@ -118,8 +118,8 @@
                       d="M9 5l7 7-7 7"
                     ></path>
                   </svg>
-                </inertia-link>
-                <inertia-link
+                </Link>
+                <Link
                   v-else
                   class="
                     px-3
@@ -142,7 +142,12 @@
 </template>
 
 <script>
+import { Link } from '@inertiajs/inertia-vue3'
+
 export default {
+  components: {
+    Link
+  },
   props: {
     from: Number,
     to: Number,

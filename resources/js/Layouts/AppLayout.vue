@@ -13,7 +13,7 @@
       </header>
 
       <main class="h-full overflow-y-auto shadow-inner">
-        <div class="container px-2 md:px-6 mx-auto grid">
+        <div class="container px-4 md:px-6 mx-auto grid">
           <slot></slot>
         </div>
       </main>

@@ -24,10 +24,7 @@ class PesananController extends Controller
     {
         $pesanans = Pesanan::with('user')->where('trayek_id', $request->trayek)->get();
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $pesanans
-        ]);
+        return $this->success(null, $pesanans);
     }
 
     /**
@@ -50,18 +47,11 @@ class PesananController extends Controller
             ]);
 
             event(new PesananCreated($request->driver_id, $pesanan));
-        } catch (Throwable $err) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Terjadi kesalahan membuat pesanan',
-                'err' => $err->getMessage()
-            ], 500);
+        } catch (Throwable $e) {
+            return $this->fail('Terjadi kesalahan membuat pesanan', $e->getMessage());
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $pesanan
-        ], 201);
+        return $this->success(null, $pesanan);
     }
 
     /**
@@ -75,16 +65,10 @@ class PesananController extends Controller
         $pesanan = Pesanan::find($id);
 
         if (!$pesanan) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Terjadi kesalahan memuat data pesanan'
-            ], 500);
+            return $this->fail('Terjadi kesalahan memuat data pesanan');
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $pesanan
-        ]);
+        return $this->success(null, $pesanan);
     }
 
     /**
@@ -96,10 +80,14 @@ class PesananController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $pesanan = Pesanan::find($id);
-
         try {
-            if (!$request->tipe === 'Batal') {
+            if ($request->tipe === 'Batal') {
+                Pesanan::destroy($id);
+
+                event(new PesananHandled($request->tipe));
+                return $this->success();
+            } else {
+                $pesanan = Pesanan::find($id);
                 $pesanan = tap($pesanan->update([
                     'driver_id' => $request->driver,
                     'status' => $request->tipe
@@ -114,26 +102,11 @@ class PesananController extends Controller
                     ]);
                 }
                 event(new PesananHandled($pesanan));
-            } else if ($request->tipe === 'Batal') {
-                $pesanan->destroy();
-
-                event(new PesananHandled($request->tipe));
-                return response()->json([
-                    'status' => 'OK',
-                    'data' => null
-                ]);
             }
-        } catch (Throwable $err) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Terjadi kesalahan memuat data pesanan',
-                'err' => $err->getMessage()
-            ], 500);
+        } catch (Throwable $e) {
+            return $this->fail('Terjadi kesalahan memuat data pesanan', $e->getMessage());
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $pesanan
-        ]);
+        return $this->success(null, $pesanan);
     }
 }

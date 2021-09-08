@@ -109,13 +109,14 @@
         <slot></slot>
       </tbody>
     </table>
+
+    <pagination
+      :from="data.from"
+      :to="data.to"
+      :total="data.total"
+      :links="data.links"
+    />
   </div>
-  <pagination
-    :from="data.from"
-    :to="data.to"
-    :total="data.total"
-    :links="data.links"
-  />
 </template>
 
 <script>

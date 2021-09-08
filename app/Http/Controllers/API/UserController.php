@@ -4,10 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -19,29 +19,15 @@ class UserController extends Controller
             $user->update($request->all());
         } catch (QueryException $e) {
             if ($e->errorInfo[1] === 1062) {
-                return response()->json([
-                    'status' => 'FAIL',
-                    'msg' => 'Email telah digunakan. Silahkan coba email lain',
-                    'error' => $e->errorInfo[2]
-                ], 500);
-            } else {
-                return response()->json([
-                    'status' => 'FAIL',
-                    'msg' => 'Terjadi kesalahan sistem',
-                    'error' => $e->errorInfo[2]
-                ], 500);
+                return $this->fail('Email telah digunakan. Silahkan coba email lain', $e->errorInfo[2]);
             }
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'Terjadi kesalahan sistem',
-                'error' => $e->getMessage()
-            ], 500);
+
+            return $this->fail('Terjadi kesalahan mengubah akun', $e->errorInfo[2]);
+        } catch (Throwable $e) {
+            return $this->fail('Terjadi kesalahan mengubah akun', $e->getMessage());
         }
 
-        return response()->json([
-            'status' => 'OK'
-        ], 204);
+        return $this->success();
     }
 
     public function ubahPassword($id, Request $request) {
@@ -61,16 +47,10 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
                 'secure' => true
             ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'Terjadi kesalahan sistem',
-                'error' => $e->getMessage()
-            ], 500);
+        } catch (Throwable $e) {
+            return $this->fail('Terjadi kesalahan mengubah password', $e->getMessage());
         }
 
-        return response()->json([
-            'status' => 'OK'
-        ], 204);
+        return $this->success();
     }
 }

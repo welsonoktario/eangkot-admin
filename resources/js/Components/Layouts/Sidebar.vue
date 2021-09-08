@@ -42,7 +42,7 @@
           :key="route.name"
           class="relative px-4 py-1"
         >
-          <inertia-link
+          <Link
             :href="route.url"
             @click="navigation(route.name)"
             as="button"
@@ -70,7 +70,7 @@
               v-html="route.icon"
             ></svg>
             <span class="ml-4">{{ route.label }}</span>
-          </inertia-link>
+          </Link>
         </li>
         <li class="relative px-4 py-1">
           <button
@@ -140,7 +140,7 @@
             "
           >
             <li v-for="route in akunRoute.routes" :key="route.name">
-              <inertia-link
+              <Link
                 :href="route.url"
                 @click="navigation(route.name)"
                 class="
@@ -157,7 +157,7 @@
                 }"
               >
                 {{ route.label }}
-              </inertia-link>
+              </Link>
             </li>
           </ul>
         </li>
@@ -229,7 +229,7 @@
             "
           >
             <li v-for="route in pengajuanRoute.routes" :key="route.name">
-              <inertia-link
+              <Link
                 :href="route.url"
                 @click="navigation(route.name)"
                 class="
@@ -246,7 +246,7 @@
                 }"
               >
                 {{ route.label }}
-              </inertia-link>
+              </Link>
             </li>
           </ul>
         </li>
@@ -256,10 +256,14 @@
 </template>
 
 <script>
+import { Link } from '@inertiajs/inertia-vue3'
 import { onBeforeMount, onMounted, ref } from "vue";
 import event from "@/eventBus";
 
 export default {
+  components: {
+    Link,
+  },
   setup() {
     const akunMenuOpen = ref(false);
     const pengajuanMenuOpen = ref(false);

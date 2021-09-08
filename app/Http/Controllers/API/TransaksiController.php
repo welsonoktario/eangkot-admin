@@ -28,16 +28,10 @@ class TransaksiController extends Controller
         ])->get();
 
         if (!$transaksis) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'Terjadi kesalahan memuat riwayat transaksi'
-            ], 500);
+            return $this->fail('Terjadi kesalahan memuat riwayat transaksi');
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $transaksis
-        ], 200);
+        return $this->success(null, $transaksis);
     }
 
     /**
@@ -55,18 +49,11 @@ class TransaksiController extends Controller
                 'durasi_perjalanan' => $request->durasi,
                 'jarak_perjalanan' => $request->jarak
             ]);
-        } catch (Throwable $err) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Terjadi kesalahan pada sistem, silahkan coba lagi',
-                'err' => $err->getMessage()
-            ], 500);
+        } catch (Throwable $e) {
+            return $this->fail('Terjadi kesalahan menambah transaksi', $e->getMessage());
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $transaksi
-        ], 201);
+        return $this->success(null, $transaksi);
     }
 
     /**
@@ -77,19 +64,13 @@ class TransaksiController extends Controller
      */
     public function show($id)
     {
-        $transaksis = Transaksi::with(['driver', 'ulasan'])->firstWhere('id', $id);
+        $transaksi = Transaksi::with(['driver', 'ulasan'])->firstWhere('id', $id);
 
-        if ($transaksis->isEmpty()) {
-            return response()->json([
-                'status' => 'GAGAL',
-                'msg' => 'Data transaksi tidak ditemukan'
-            ], 404);
+        if ($transaksi->isEmpty()) {
+            return $this->fail('Terjadi kesalahan memuat data transaksi');
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => $transaksis
-        ], 200);
+        return $this->success(null, $transaksi);
     }
 
     /**

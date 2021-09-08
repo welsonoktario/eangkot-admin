@@ -4,12 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class AuthController extends Controller
 {
@@ -22,24 +22,17 @@ class AuthController extends Controller
         }
 
         if (!$user) {
-            return response()->json([
-                'status' => 'OK',
-                'msg' => 'REGISTER',
-            ], 200);
+            return $this->success('REGISTER');
         }
 
         $token = $user->createToken($user->nama)->plainTextToken;
 
-        return response()->json([
-            'status' => 'OK',
-            'msg' => 'REGISTERED',
-            'data' => [
-                'user' => $request->driver
-                    ? $user->only(['id', 'nama', 'no_hp', 'email', 'secure', 'driver', 'pengajuan'])
-                    : $user->only(['id', 'nama', 'no_hp', 'email', 'secure']),
-                'token' => $token
-            ]
-        ], 200);
+        return $this->success('REGISTERED', [
+            'user' => $request->driver
+                ? $user->only(['id', 'nama', 'no_hp', 'email', 'secure', 'driver', 'pengajuan'])
+                : $user->only(['id', 'nama', 'no_hp', 'email', 'secure']),
+            'token' => $token
+        ]);
     }
 
     public function requestOtp(Request $request)
@@ -49,10 +42,7 @@ class AuthController extends Controller
         $hash = Hash::make($randomNum, ['rounds' => 12]);
 
         if (!Cache::tags(['otp'])->put($request->phone, $hash, 300)) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'Terjadi kesalahan sistem'
-            ], 500);
+            return $this->fail(null, 'Terjadi kesalahan sistem');
         }
 
         /* $msg = "$randomNum adalah kode OTP untuk aplikasi eAngkot anda. Jangan sebarkan kode OTP anda kepada siapapun!";
@@ -65,16 +55,10 @@ class AuthController extends Controller
         ]);
 
         if ($req->failed()) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => $req->body()
-            ]);
+            return $this->fail($req->body());
         } */
 
-        return response()->json([
-            'status' => 'OK'
-            // 'data' => $req->body()
-        ]);
+        return $this->success();
     }
 
     public function checkOtp(Request $request)
@@ -82,18 +66,11 @@ class AuthController extends Controller
         try {
             $hash = Cache::tags(['otp'])->pull($request->phone);
             $compare = Hash::check($request->pin, $hash);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'Terjadi kesalahan sistem',
-                'err' => $e->getMessage()
-            ], 500);
+        } catch (Throwable $e) {
+            return $this->fail('Terjadi kesalahan sistem', $e->getMessage());
         }
 
-        return response()->json([
-            'status' => 'OK',
-            'msg' => $compare
-        ]);
+        return $this->success($compare);
     }
 
     public function register(Request $request)
@@ -105,35 +82,20 @@ class AuthController extends Controller
             ]);
         } catch (QueryException $e) {
             if ($e->errorInfo[1] === 1062) {
-                return response()->json([
-                    'status' => 'FAIL',
-                    'msg' => 'Nomor HP telah digunakan',
-                    'error' => $e
-                ], 500);
-            } else {
-                return response()->json([
-                    'status' => 'FAIL',
-                    'msg' => 'Terjadi kesalahan sistem',
-                    'error' => $e
-                ], 500);
+                return $this->fail('Nomor HP telah digunakan', $e->getMessage());
             }
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'FAIL',
-                'msg' => 'Terjadi kesalahan sistem',
-                'error' => $e->getMessage()
-            ], 500);
+
+            return $this->fail('Terjadi kesalahan sistem', $e->getMessage());
+        } catch (Throwable $e) {
+            return $this->fail('Terjadi kesalahan sistem', $e->getMessage());
         }
 
         $user->roles()->sync([2]);
         $token = $user->createToken($user->nama)->plainTextToken;
 
-        return response()->json([
-            'status' => 'OK',
-            'data' => [
-                'user' => $user->only(['id', 'nama', 'no_hp', 'email', 'secure']),
-                'token' => $token
-            ],
-        ], 200);
+        return $this->success(null, [
+            'user' => $user->only(['id', 'nama', 'no_hp', 'email', 'secure']),
+            'token' => $token
+        ]);
     }
 }
