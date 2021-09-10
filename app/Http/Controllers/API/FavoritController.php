@@ -64,7 +64,7 @@ class FavoritController extends Controller
      */
     public function show($id)
     {
-        $favorit = Favorit::with(['user', 'trayek'])->find($id);
+        $favorit = Favorit::with('trayek')->find($id);
 
         if (!$favorit) {
             return response()->json([
