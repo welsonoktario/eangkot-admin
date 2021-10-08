@@ -16,8 +16,7 @@
         flex
         items-end
         bg-black bg-opacity-50
-        sm:items-center
-        sm:justify-center
+        sm:items-center sm:justify-center
       "
     >
       <transition
@@ -38,9 +37,7 @@
             bg-white
             rounded-t-lg
             dark:bg-gray-800
-            sm:rounded-lg
-            sm:m-4
-            sm:max-w-xl
+            sm:rounded-lg sm:m-4 sm:max-w-xl
           "
           role="dialog"
         >
@@ -69,8 +66,7 @@
                 duration-150
                 rounded
                 dark:hover:text-gray-200
-                hover:
-                hover:text-gray-700
+                hover: hover:text-gray-700
               "
               aria-label="close"
             >
@@ -103,8 +99,7 @@
               -mx-6
               -mb-4
               space-y-4
-              sm:space-y-0 sm:space-x-6
-              sm:flex-row
+              sm:space-y-0 sm:space-x-6 sm:flex-row
               bg-gray-50
               dark:bg-gray-800
             "
@@ -124,15 +119,12 @@
                 border border-gray-300
                 rounded-lg
                 dark:text-gray-400
-                sm:px-4
-                sm:py-2
-                sm:w-auto
+                sm:px-4 sm:py-2 sm:w-auto
                 active:bg-transparent
                 hover:border-gray-500
                 focus:border-gray-500
                 active:text-gray-500
-                focus:outline-none
-                focus:shadow-outline-gray
+                focus:outline-none focus:shadow-outline-gray
               "
             >
               Cancel
@@ -151,13 +143,10 @@
                 bg-purple-600
                 border border-transparent
                 rounded-lg
-                sm:w-auto
-                sm:px-4
-                sm:py-2
+                sm:w-auto sm:px-4 sm:py-2
                 active:bg-purple-600
                 hover:bg-purple-700
-                focus:outline-none
-                focus:shadow-outline-purple
+                focus:outline-none focus:shadow-outline-purple
               "
             >
               Accept
@@ -170,11 +159,20 @@
 </template>
 
 <script>
+import { onMounted, ref } from "@vue/runtime-core";
+import eventBus from "@/eventBus";
+
 export default {
-  props: {
-    open: Boolean,
+  setup() {
+    const open = ref(false);
+
+    onMounted(() => modalToggle());
+
+    const modalToggle = () => {
+      eventBus.$on("modal-toggle", () => (open.value = !open.value));
+    };
+
+    return { open, modalToggle };
   },
-  emits: ['action'],
-  setup() {},
 };
 </script>

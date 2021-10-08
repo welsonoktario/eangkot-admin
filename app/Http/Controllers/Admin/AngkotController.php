@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Angkot;
+use App\Models\Trayek;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -39,9 +40,11 @@ class AngkotController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create()
     {
-        //
+        $trayeks = Trayek::all();
+
+        return $this->success('OK', ['trayeks' => $trayeks]);
     }
 
     /**

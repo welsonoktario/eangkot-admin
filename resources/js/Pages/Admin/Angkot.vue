@@ -1,7 +1,14 @@
 <template>
-  <h2 class="my-6 text-2xl font-bold text-gray-700 dark:text-gray-200">
-    Angkot
-  </h2>
+  <div class="flex flex-row justify-between my-6">
+    <h2 class="text-2xl font-bold text-gray-700 dark:text-gray-200">Angkot</h2>
+
+    <button
+      @click="modalAngkot('add')"
+      class="bg-purple-600 text-white px-4 py-2 rounded-md"
+    >
+      Tambah Angkot
+    </button>
+  </div>
   <data-table
     :data="angkots"
     :columns="columns"
@@ -28,13 +35,13 @@
         >
       </td>
       <td class="px-4 py-3 mx-auto">
-        <button @click="editAngkot(angkot.id)">Edit</button>
+        <button @click="modalAngkot('edit', angkot.id)">Edit</button>
       </td>
     </tr>
   </data-table>
-  <modal :open="isModalOpen">
-    <template v-slot:title>Keren</template>
-    <template v-slot:content>Mantap!</template>
+  <modal>
+    <template v-slot:title>{{ modal.type }}</template>
+    <template v-slot:content></template>
   </modal>
 </template>
 
@@ -42,8 +49,9 @@
 import AppLayout from "@/Layouts/AppLayout";
 import DataTable from "@/Components/DataTable";
 import Modal from "@/Components/Modal";
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+import eventBus from "@/eventBus";
 
 export default {
   layout: AppLayout,
@@ -57,13 +65,25 @@ export default {
     angkots: Object,
   },
   setup(props) {
-    const isModalOpen = ref(false);
+    const modal = reactive({
+      type: "",
+      isOpen: false,
+    });
     const filters = reactive({
       show: 0,
       search: "",
     });
     const columns = ["ID", "Trayek", "No. Kendaraan", "Status"];
-    const editAngkot = (id) => (isModalOpen.value = !isModalOpen.value);
+    const modalAngkot = (type, id = null) => {
+      if (type == "add") {
+        modal.type = "Tambah Angkot";
+        // Inertia.get(route("admin.angkot.create"));
+      } else if (type == "edit") {
+        modal.type = "Edit Angkot";
+      }
+
+      eventBus.$emit("modal-toggle");
+    };
 
     const onShowing = (val) => {
       filters.show = val;
@@ -83,7 +103,7 @@ export default {
       );
     };
 
-    return { isModalOpen, columns, editAngkot, onShowing, onSearching };
+    return { columns, modal, modalAngkot, onShowing, onSearching };
   },
 };
 </script>
