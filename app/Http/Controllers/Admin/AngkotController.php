@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Angkot;
 use App\Models\Trayek;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class AngkotController extends Controller
@@ -17,6 +18,7 @@ class AngkotController extends Controller
      */
     public function index(Request $request)
     {
+        $trayeks = Trayek::get(['id', 'kode']);
         $angkots = Angkot::with('trayek')
             ->exclude(['lokasi'])
             ->whereRaw('LOWER(no_kendaraan) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
@@ -32,7 +34,7 @@ class AngkotController extends Controller
                 ]
             );
 
-        return Inertia::render('Admin/Angkot', ['angkots' => $angkots]);
+        return Inertia::render('Admin/Angkot', ['angkots' => $angkots, 'trayeks' => $trayeks]);
     }
 
     /**
@@ -55,7 +57,13 @@ class AngkotController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Angkot::create([
+            'trayek_id' => $request->trayek['id'],
+            'no_kendaraan' => $request->plat,
+            'aktif' => $request->status ? true : false
+        ]);
+
+        return Redirect::route('admin.angkot.index');
     }
 
     /**
@@ -89,7 +97,13 @@ class AngkotController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Angkot::find($id)->update([
+            'no_kendaraan' => $request->plat,
+            'trayek_id' => $request->trayek['id'],
+            'aktif' => $request->status ? true : false
+        ]);
+
+        return Redirect::route('admin.angkot.index');
     }
 
     /**
