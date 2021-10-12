@@ -30,7 +30,7 @@ class AngkotController extends Controller
                     'id' => $item->id,
                     'trayek' => $item->trayek,
                     'no_kendaraan' => $item->no_kendaraan,
-                    'aktif' => $item->status
+                    'aktif' => $item->aktif
                 ]
             );
 
@@ -67,28 +67,6 @@ class AngkotController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -114,6 +92,8 @@ class AngkotController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Angkot::destroy($id);
+
+        return Redirect::route('admin.angkot.index');
     }
 }

@@ -14,9 +14,22 @@ class TrayekController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $trayeks = Trayek::all();
+        $trayeks = Trayek::whereRaw('LOWER(rute) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
+            ->paginate($request->show ?: 5)
+            ->withQueryString()
+            ->through(
+                fn ($item) =>
+                [
+                    'id' => $item->id,
+                    'kode' => $item->kode,
+                    'rute' => $item->rute,
+                    'berangkat' => $item->rute_berangkat,
+                    'pulang' => $item->rute_pulang,
+                    'gambar' => $item->gambar
+                ]
+            );
 
         return Inertia::render('Admin/Trayek', ['trayeks' => $trayeks]);
     }

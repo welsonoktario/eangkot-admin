@@ -27,7 +27,7 @@
         <span
           class="px-2 py-1 font-semibold leading-tight rounded-full"
           :class="{
-            'text-green-700 bg-green-100': angkot.aktif,
+            'text-purple-700 bg-purple-100': angkot.aktif,
             'text-gray-700 bg-gray-100 dark:text-gray-100 dark:bg-gray-700':
               !angkot.aktif,
           }"
@@ -35,7 +35,12 @@
         >
       </td>
       <td class="px-4 py-3 mx-auto">
-        <button @click="modalAngkot('edit', angkot.id)">Edit</button>
+        <button @click="modalAngkot('edit', angkot.id)" class="mr-2">
+          Edit
+        </button>
+        <button @click="deleteAngkot(angkot.id)" class="text-red-500 ml-2">
+          Hapus
+        </button>
       </td>
     </tr>
   </data-table>
@@ -183,38 +188,33 @@
       <label class="mt-6 flex flex-row justify-between">
         <span class="dark:text-white w-full">Aktif?</span>
         <SwitchGroup>
-          <p>
-            <Switch
-              v-model="angkot.status"
-              :class="angkot.status ? 'bg-indigo-600' : 'bg-gray-700'"
+          <Switch
+            v-model="angkot.status"
+            :class="angkot.status ? 'bg-purple-600' : 'bg-gray-700'"
+            class="
+              relative
+              inline-flex
+              items-center
+              h-6
+              transition-colors
+              rounded-full
+              w-11
+              focus:outline-none
+            "
+          >
+            <span
+              :class="angkot.status ? 'translate-x-6' : 'translate-x-1'"
               class="
-                relative
-                inline-flex
-                items-center
-                h-6
-                transition-colors
+                inline-block
+                w-4
+                h-4
+                transition-transform
+                transform
+                bg-white
                 rounded-full
-                w-11
-                focus:outline-none
-                focus:ring-2
-                focus:ring-offset-2
-                focus:ring-indigo-500
               "
-            >
-              <span
-                :class="angkot.status ? 'translate-x-6' : 'translate-x-1'"
-                class="
-                  inline-block
-                  w-4
-                  h-4
-                  transition-transform
-                  transform
-                  bg-white
-                  rounded-full
-                "
-              />
-            </Switch>
-          </p>
+            />
+          </Switch>
         </SwitchGroup>
       </label>
     </template>
@@ -377,13 +377,19 @@ export default {
     const submitForm = () => {
       if (modal.type == "Tambah Angkot") {
         Inertia.post(route("admin.angkot.store"), angkot, {
+          preserveState: true,
           onSuccess: () => toggleModal(),
         });
       } else if (modal.type == "Edit Angkot") {
         Inertia.patch(route("admin.angkot.update", angkot.id), angkot, {
+          preserveState: true,
           onSuccess: () => toggleModal(),
         });
       }
+    };
+
+    const deleteAngkot = (id) => {
+      Inertia.delete(route("admin.angkot.destroy", id));
     };
 
     return {
@@ -394,6 +400,7 @@ export default {
       onShowing,
       onSearching,
       submitForm,
+      deleteAngkot,
     };
   },
 };

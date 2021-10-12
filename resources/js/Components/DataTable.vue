@@ -4,12 +4,13 @@
       <label for="showing">Tampilkan</label>
       <select
         class="
-          showing-input
           bg-gray-100
           dark:bg-gray-800
           rounded-md
           border-none
           mx-2
+          px-2
+          py-1
         "
         name="showing"
         v-model="showing"
@@ -21,55 +22,25 @@
       <span>item</span>
     </div>
     <div
-      class="
-        relative
-        px-2
-        bg-gray-100
-        dark:bg-gray-800
-        dark:text-white
-        rounded-md
-      "
+      class="relative text-gray-400 dark:text-gray-500 focus-within:text-white"
     >
-      <div
-        class="
-          absolute
-          inset-y-0
-          left-0
-          pl-3
-          flex
-          items-center
-          pointer-events-none
-        "
-      >
-        <svg
-          class="w-5 h-5 text-gray-500"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          ></path>
-        </svg>
-      </div>
+      <span class="absolute inset-y-0 left-0 pl-2 flex">
+        <SearchIcon class="h-5 my-auto"
+      /></span>
       <input
         class="
           search-input
-          border-none
-          py-2
           pl-8
-          pr-4
-          bg-white
-          placeholder-gray-500
-          text-gray-900
-          dark:text-white
-          dark:bg-gray-800
+          border-none
           w-full
+          rounded-md
+          shadow-md
+          px-2
+          py-1
           block
+          bg-white
+          dark:bg-gray-800
+          placeholder-gray-500
         "
         v-model="query"
         type="text"
@@ -94,8 +65,7 @@
             border-b
             dark:border-gray-700
             bg-gray-50
-            dark:text-gray-400
-            dark:bg-gray-800
+            dark:text-gray-400 dark:bg-gray-800
           "
         >
           <th v-for="(column, index) in columns" :key="index" class="px-3 py-4">
@@ -120,12 +90,15 @@
 </template>
 
 <script>
+import { ArrowDownIcon, SearchIcon } from "@heroicons/vue/solid";
 import { ref, watch } from "vue";
 import Pagination from "@/Components/Pagination";
 
 export default {
   components: {
+    ArrowDownIcon,
     Pagination,
+    SearchIcon,
   },
   props: {
     columns: Array,
