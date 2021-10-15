@@ -1,6 +1,7 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
+  mode: "jit",
   darkMode: "media",
   purge: {
     enabled: true,
@@ -17,7 +18,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["Nunito", ...defaultTheme.fontFamily.sans],
+        sans: ["Inter", ...defaultTheme.fontFamily.sans],
       },
       screens: {
         xs: "375px",
@@ -27,9 +28,7 @@ module.exports = {
   },
 
   variants: {
-    extend: {
-      opacity: ["disabled"],
-    },
+    extend: {},
   },
 
   plugins: [

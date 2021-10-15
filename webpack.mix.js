@@ -20,7 +20,9 @@ mix
     require("tailwindcss"),
     require("autoprefixer"),
   ])
-  .webpackConfig(require("./webpack.config"));
+  .browserSync('eangkot.test')
+  .webpackConfig(require("./webpack.config"))
+  .disableSuccessNotifications();
 
 if (mix.inProduction()) {
   mix.version();

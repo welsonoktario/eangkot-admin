@@ -19,7 +19,7 @@
       v-if="sidebarOpen || currentWidth >= 768"
       class="
         z-50
-        w-64
+        w-full
         py-4
         flex-shrink-0
         bg-white
@@ -32,7 +32,7 @@
         md:mt-0
         md:block
       "
-      :class="{ 'hidden z-50': !sidebarOpen }"
+      :class="{ hidden: !sidebarOpen }"
     >
       <h1 class="text-xl font-bold text-center">eAngkot</h1>
 
@@ -40,7 +40,7 @@
         <li
           v-for="route in routes"
           :key="route.name"
-          class="relative px-4 py-1"
+          class="relative px-4 py-2"
         >
           <Link
             :href="route.url"
@@ -55,7 +55,7 @@
               focus:outline-none
             "
             :class="{
-              'text-gray-50 hover:text-gray-200 bg-indigo-600 dark:bg-purple-600 rounded-md':
+              'text-indigo-500 dark:text-indigo-400 hover:text-indigo-400 dark:hover:text-indigo-300':
                 route.name == currentRoute,
               'text-gray-700 hover:text-black dark:text-gray-50 dark:hover:text-gray-300':
                 route.name != currentRoute,
@@ -72,7 +72,7 @@
             <span class="ml-4">{{ route.label }}</span>
           </Link>
         </li>
-        <li class="relative px-4 py-1">
+        <li class="relative px-4 py-2">
           <button
             class="
               inline-flex
@@ -132,7 +132,6 @@
               overflow-hidden
               font-medium
               rounded-md
-              shadow-inner
               text-gray-700
               dark:text-gray-50
               bg-gray-50
@@ -152,7 +151,7 @@
                   dark:hover:text-gray-200
                 "
                 :class="{
-                  'bg-indigo-600 dark:bg-purple-600 text-gray-50':
+                  'bg-indigo-600 dark:bg-indigo-600 text-gray-50':
                     currentRoute === route.name,
                 }"
               >
@@ -161,7 +160,7 @@
             </li>
           </ul>
         </li>
-        <li class="relative px-4 py-1">
+        <li class="relative px-4 py-2">
           <button
             class="
               inline-flex
@@ -221,7 +220,6 @@
               overflow-hidden
               font-medium
               rounded-md
-              shadow-inner
               text-gray-700
               dark:text-gray-50
               bg-gray-50
@@ -241,7 +239,7 @@
                   dark:hover:text-gray-200
                 "
                 :class="{
-                  'bg-indigo-600 dark:bg-purple-600 text-gray-50':
+                  'bg-indigo-600 dark:bg-indigo-600 text-gray-50':
                     currentRoute === route.name,
                 }"
               >
@@ -256,7 +254,7 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/inertia-vue3'
+import { Link } from "@inertiajs/inertia-vue3";
 import { onBeforeMount, onMounted, ref } from "vue";
 import event from "@/eventBus";
 

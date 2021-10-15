@@ -54,11 +54,11 @@
               >
                 <slot name="title"></slot>
               </DialogTitle>
-              <div class="mt-2">
+              <div class="mt-6 text-sm">
                 <slot name="content"></slot>
               </div>
 
-              <div class="mt-4 flex flex-ro justify-end">
+              <div class="mt-4 flex flex-row justify-end">
                 <slot name="footer"></slot>
               </div>
             </div>

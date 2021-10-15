@@ -7,16 +7,15 @@
       justify-between
       md:justify-end
       h-full
-      px-2
-      md:px-6
+      px-6
       mx-auto
       text-indigo-600
-      dark:text-purple-600
+      dark:text-indigo-600
     "
   >
     <button
       @click="toggleSidebar"
-      class="md:hidden focus:outline-none text-indigo-600 dark:text-purple-600"
+      class="md:hidden focus:outline-none text-indigo-600 dark:text-indigo-600"
     >
       <svg
         class="w-6 h-6"
@@ -35,12 +34,14 @@
     </button>
     <ul class="flex items-center flex-shrink-0 space-x-6">
       <li class="relative">
-        <div
+        <img
           @click="toggleProfile"
-          class="bg-gray-900 rounded-full w-8 h-8"
-        ></div>
+          class="bg-gray-200 dark:bg-gray-900 rounded-full w-8 h-8"
+          :src="`https://ui-avatars.com/api/?name=${user.nama}`"
+          width="100%"
+        />
         <template v-if="profileMenuOpen">
-          <profile-menu />
+          <ProfileMenu :user="user" />
         </template>
       </li>
     </ul>
@@ -49,21 +50,24 @@
 
 <script>
 import event from "@/eventBus";
-import { ref } from "@vue/reactivity";
+import { computed, ref } from "vue";
 import ProfileMenu from "@/Components/Layouts/ProfileMenu";
+import { usePage } from "@inertiajs/inertia-vue3";
 
 export default {
   components: {
     ProfileMenu,
   },
   setup() {
+    const user = computed(() => usePage().props.value.auth.user);
+
     const profileMenuOpen = ref(false);
     const toggleSidebar = () => event.$emit("sidebar-toggle");
 
     const toggleProfile = () =>
       (profileMenuOpen.value = !profileMenuOpen.value);
 
-    return { profileMenuOpen, toggleSidebar, toggleProfile };
+    return { user, profileMenuOpen, toggleSidebar, toggleProfile };
   },
 };
 </script>

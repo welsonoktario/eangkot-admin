@@ -4,45 +4,85 @@
 
     <button
       @click="modalTrayek('add')"
-      class="bg-purple-600 text-white px-4 py-2 rounded-md"
+      class="
+        transition
+        duration-150
+        ease-out
+        text-indigo-500
+        dark:text-indigo-400
+        hover:bg-indigo-500
+        hover:text-gray-50
+        dark:hover:bg-indigo-400
+        dark:hover:text-gray-100
+        hover:shadow-lg
+        rounded-lg
+        bg-opacity-10
+        px-4
+        py-2
+      "
     >
       Tambah Trayek
     </button>
   </div>
 
-  <DataTable
-    :data="trayeks"
-    :columns="columns"
-    @showing="onShowing"
-    @searching="onSearching"
-  >
-    <tr
-      class="text-gray-700 dark:text-gray-400"
+  <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-8">
+    <div
       v-for="trayek in trayeks.data"
       :key="trayek.id"
+      class="
+        rounded-xl
+        shadow-lg
+        bg-gray-50
+        dark:bg-gray-800
+        p-4
+        cursor-pointer
+      "
+      @click="modalTrayek('edit', trayek.id)"
     >
-      <td class="px-4 py-3">{{ trayek.id }}</td>
-      <td class="px-4 py-3">{{ trayek.kode }}</td>
-      <td class="px-4 py-3">{{ trayek.rute }}</td>
-      <td class="px-4 py-3">
-        <img
-          v-if="trayek.gambar"
-          :src="trayek.gambar"
-          :alt="trayek.kode"
-          width="25%"
-        />
-        <p v-else>-</p>
-      </td>
-      <td class="px-4 py-3 mx-auto">
-        <button @click="modalTrayek('edit', trayek.id)" class="mr-2">
-          Edit
-        </button>
-        <button class="text-red-500 ml-2">Hapus</button>
-      </td>
-    </tr>
-  </DataTable>
+      <div
+        class="
+          w-full
+          rounded-xl
+          border border-black
+          dark:border-0 dark:border-transparent
+          h-28
+          md:h-24
+          bg-top bg-no-repeat bg-cover
+        "
+        :style="{
+          backgroundImage: `url(${trayek.gambar})`,
+        }"
+      ></div>
+      <p class="text-xl font-bold text-center mt-4">Trayek {{ trayek.kode }}</p>
+    </div>
+  </div>
+
+  <Pagination
+    class="
+      grid
+      mt-16
+      mb-8
+      mx-auto
+      text-xs
+      font-semibold
+      tracking-wide
+      text-gray-500
+      dark:border-gray-700
+      sm:grid-cols-9
+      dark:text-gray-50
+    "
+    :showLabel="false"
+    :from="trayeks.from"
+    :to="trayeks.to"
+    :total="trayeks.total"
+    :links="trayeks.links"
+  />
 
   <Dialog class="grid grid-cols-1">
+    <template v-slot:title>
+      {{ modal.type }}
+    </template>
+
     <template v-slot:content>
       <label class="block">
         <span class="dark:text-white">Kode</span>
@@ -57,7 +97,6 @@
             mt-2
             w-full
             rounded-md
-            shadow-md
           "
           type="text"
           name="kode"
@@ -79,7 +118,6 @@
             mt-2
             w-full
             rounded-md
-            shadow-md
           "
           type="text"
           name="rute"
@@ -101,7 +139,6 @@
             mt-2
             w-full
             rounded-md
-            shadow-md
           "
           rows="3"
           name="berangkat"
@@ -123,7 +160,6 @@
             mt-2
             w-full
             rounded-md
-            shadow-md
           "
           rows="3"
           name="pulang"
@@ -145,12 +181,23 @@
             mt-2
             w-full
             rounded-md
-            shadow-md
           "
-          type="text"
+          type="url"
           name="gambar"
           id="gambar"
-          v-model="trayek.gambar"
+          v-model.lazy="trayek.gambar"
+        />
+        <div
+          v-if="trayek.gambar"
+          class="
+            mt-2
+            h-36
+            w-full
+            rounded-lg
+            bg-top bg-no-repeat bg-cover
+            border border-black
+          "
+          :style="{ backgroundImage: `url(${trayek.gambar})` }"
         />
       </label>
     </template>
@@ -166,10 +213,12 @@
           py-2
           text-sm
           font-medium
-          text-white
+          text-gray-900
+          dark:text-gray-50
           border border-transparent
           rounded-md
-          hover:bg-gray-700
+          hover:bg-gray-200
+          dark:hover:bg-gray-700
           focus:outline-none
         "
         @click="toggleModal"
@@ -187,10 +236,10 @@
           text-sm
           font-medium
           text-white
-          bg-purple-600
+          bg-indigo-600
           border border-transparent
           rounded-md
-          hover:bg-purple-400
+          hover:bg-indigo-400
           focus:outline-none
         "
       >
@@ -202,17 +251,17 @@
 
 <script>
 import AppLayout from "@/Layouts/AppLayout";
-import DataTable from "@/Components/DataTable";
 import Dialog from "@/Components/Dialog";
 import { reactive } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import eventBus from "@/eventBus";
+import Pagination from "@/Components/Pagination.vue";
 
 export default {
   layout: AppLayout,
   components: {
-    DataTable,
     Dialog,
+    Pagination,
   },
   props: {
     auth: Object,
@@ -238,8 +287,6 @@ export default {
       show: 0,
       search: "",
     });
-
-    const columns = ["ID", "Kode Trayek", "Rute", "Gambar"];
 
     const toggleModal = () => eventBus.$emit("modal-toggle");
 
@@ -288,8 +335,8 @@ export default {
     };
 
     return {
+      modal,
       trayek,
-      columns,
       modalTrayek,
       toggleModal,
       onShowing,

@@ -1,22 +1,22 @@
 <template>
   <div
-    class="flex h-screen max-h-screen bg-gray-100 dark:bg-gray-900"
+    class="grid grid-cols-10 h-screen"
     :class="{ 'overflow-hidden': sidebarOpen }"
   >
     <!-- Sidebar -->
-    <sidebar />
+    <Sidebar class="col-span-5 md:col-span-1" />
 
-    <div class="flex flex-col flex-1 w-full">
-      <!-- Navbar -->
-      <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
-        <navbar />
-      </header>
+    <div class="col-span-10 md:col-span-9 w-full h-full">
+      <div class="flex flex-col h-full">
+        <!-- Navbar -->
+        <header class="flex-none z-10 py-4 bg-white dark:bg-gray-800">
+          <navbar />
+        </header>
 
-      <main class="h-full overflow-y-auto shadow-inner">
-        <div class="container px-4 md:px-6 mx-auto grid">
+        <main class="flex-1 container overflow-y-auto px-6">
           <slot></slot>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   </div>
 </template>

@@ -39,7 +39,7 @@
             class="
               w-full
               bg-indigo-600
-              dark:bg-purple-600
+              dark:bg-indigo-600
               py-2
               px-4
               rounded-md

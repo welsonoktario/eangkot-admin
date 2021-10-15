@@ -3,15 +3,7 @@
     <div class="dark:text-white mb-4 md:mb-0 mx-auto md:mx-0">
       <label for="showing">Tampilkan</label>
       <select
-        class="
-          bg-gray-100
-          dark:bg-gray-800
-          rounded-md
-          border-none
-          mx-2
-          px-2
-          py-1
-        "
+        class="bg-white dark:bg-gray-800 rounded-lg border-none mx-2 px-2 py-1"
         name="showing"
         v-model="showing"
       >
@@ -33,8 +25,7 @@
           pl-8
           border-none
           w-full
-          rounded-md
-          shadow-md
+          rounded-lg
           px-2
           py-1
           block
@@ -50,42 +41,67 @@
       />
     </div>
   </div>
-  <div class="overflow-x-auto rounded-md shadow-md mx-auto w-full">
-    <table
-      class="table table-responsive w-full whitespace-nowrap dark:text-white"
-    >
-      <thead>
-        <tr
-          class="
-            text-xs
-            font-semibold
-            tracking-wide
-            text-left text-gray-500
-            uppercase
-            border-b
-            dark:border-gray-700
-            bg-gray-50
-            dark:text-gray-400 dark:bg-gray-800
-          "
-        >
-          <th v-for="(column, index) in columns" :key="index" class="px-3 py-4">
-            {{ column }}
-          </th>
-          <th></th>
-        </tr>
-      </thead>
+  <div class="mx-auto w-full rounded-lg shadow-lg">
+    <div class="rounded-t-lg overflow-x-auto">
+      <table class="table-auto w-full whitespace-nowrap dark:text-white">
+        <thead>
+          <tr
+            class="
+              text-xs
+              font-semibold
+              tracking-wide
+              text-left text-gray-500
+              uppercase
+              border-b
+              dark:border-gray-700
+              bg-gray-50
+              dark:text-gray-400
+              dark:bg-gray-800
+            "
+          >
+            <th
+              v-for="(column, index) in columns"
+              :key="index"
+              class="px-3 py-4"
+            >
+              {{ column }}
+            </th>
+            <th></th>
+          </tr>
+        </thead>
 
-      <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-        <slot></slot>
-      </tbody>
-    </table>
+        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+          <slot></slot>
+        </tbody>
+      </table>
+    </div>
 
-    <pagination
-      :from="data.from"
-      :to="data.to"
-      :total="data.total"
-      :links="data.links"
-    />
+    <div>
+      <Pagination
+        class="
+          grid
+          px-4
+          py-3
+          text-xs
+          font-semibold
+          tracking-wide
+          text-gray-500
+          uppercase
+          border-t
+          dark:border-gray-700
+          bg-gray-50
+          sm:grid-cols-9
+          dark:text-gray-400
+          dark:bg-gray-800
+          rounded-b-lg
+        "
+        :showLabel="true"
+        :from="data.from"
+        :to="data.to"
+        :total="data.total"
+        :links="data.links"
+      />
+    </div>
   </div>
 </template>
 

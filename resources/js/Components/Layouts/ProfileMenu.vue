@@ -4,7 +4,7 @@
       absolute
       right-0
       w-48
-      p-2
+      py-2
       mt-2
       space-y-2
       text-gray-600
@@ -17,6 +17,9 @@
       dark:bg-gray-700
     "
   >
+    <li class="mt-2 pb-4 border-b border-gray-300 dark:border-gray-700">
+      <p class="text-lg text-center font-semibold">{{ user.nama }}</p>
+    </li>
     <li class="flex">
       <button
         @click="logout"
@@ -61,6 +64,9 @@
 import { Inertia } from "@inertiajs/inertia";
 
 export default {
+  props: {
+    user: Object,
+  },
   setup(props) {
     const logout = () => {
       Inertia.post("/logout", {

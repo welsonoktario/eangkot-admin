@@ -4,12 +4,27 @@
 
     <button
       @click="modalAngkot('add')"
-      class="bg-purple-600 text-white px-4 py-2 rounded-md"
+      class="
+        transition
+        duration-150
+        ease-out
+        text-indigo-500
+        dark:text-indigo-400
+        hover:bg-indigo-500
+        hover:text-gray-50
+        dark:hover:bg-indigo-400
+        dark:hover:text-gray-100
+        hover:shadow-lg
+        rounded-lg
+        bg-opacity-10
+        px-4
+        py-2
+      "
     >
       Tambah Angkot
     </button>
   </div>
-  <data-table
+  <DataTable
     :data="angkots"
     :columns="columns"
     @showing="onShowing"
@@ -27,7 +42,7 @@
         <span
           class="px-2 py-1 font-semibold leading-tight rounded-full"
           :class="{
-            'text-purple-700 bg-purple-100': angkot.aktif,
+            'text-indigo-700 bg-indigo-100': angkot.aktif,
             'text-gray-700 bg-gray-100 dark:text-gray-100 dark:bg-gray-700':
               !angkot.aktif,
           }"
@@ -43,9 +58,13 @@
         </button>
       </td>
     </tr>
-  </data-table>
+  </DataTable>
 
   <Dialog class="grid grid-cols-1">
+    <template v-slot:title>
+      {{ modal.type }}
+    </template>
+
     <template v-slot:content>
       <label for="block">
         <span class="dark:text-white">Trayek</span>
@@ -59,10 +78,9 @@
                 pl-3
                 pr-10
                 text-left
-                bg-white
+                bg-gray-100
                 dark:bg-gray-700
                 rounded-md
-                shadow-md
                 cursor-default
                 focus:outline-none
                 focus-visible:ring-2
@@ -128,7 +146,7 @@
                   <li
                     :class="[
                       active
-                        ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-gray-600'
+                        ? 'text-indigo-500 dark:text-indigo-400 bg-indigo-100 dark:bg-gray-600'
                         : 'text-gray-900 dark:text-white',
                       'cursor-default select-none relative py-2 pl-10 pr-4',
                     ]"
@@ -176,7 +194,6 @@
             mt-2
             w-full
             rounded-md
-            shadow-md
           "
           type="text"
           name="no_kendaraan"
@@ -186,11 +203,11 @@
       </label>
 
       <label class="mt-6 flex flex-row justify-between">
-        <span class="dark:text-white w-full">Aktif?</span>
+        <span class="dark:text-white w-full">Aktif</span>
         <SwitchGroup>
           <Switch
             v-model="angkot.status"
-            :class="angkot.status ? 'bg-purple-600' : 'bg-gray-700'"
+            :class="angkot.status ? 'bg-indigo-500 dark:bg-indigo-400' : 'bg-gray-200 dark:bg-gray-700'"
             class="
               relative
               inline-flex
@@ -198,7 +215,7 @@
               h-6
               transition-colors
               rounded-full
-              w-11
+              w-12
               focus:outline-none
             "
           >
@@ -251,10 +268,10 @@
           text-sm
           font-medium
           text-white
-          bg-purple-600
+          bg-indigo-600
           border border-transparent
           rounded-md
-          hover:bg-purple-400
+          hover:bg-indigo-400
           focus:outline-none
         "
         @click="submitForm"
@@ -332,8 +349,8 @@ export default {
     const modalAngkot = (type, id = null) => {
       angkot.id = 0;
       angkot.trayek = {
-        id: 0,
-        kode: "",
+        id: props.trayeks[0].id,
+        kode: props.trayeks[0].kode,
       };
       angkot.plat = "";
       angkot.status = false;
@@ -393,6 +410,7 @@ export default {
     };
 
     return {
+      modal,
       angkot,
       columns,
       modalAngkot,
