@@ -53,7 +53,7 @@ class FavoritController extends Controller
             return $this->fail('Terjadi kesalahan sistem', $err->getMessage());
         }
 
-        return $this->success(null, $favorit);
+        return $this->success('Rute favorit berhasil ditambah', $favorit);
     }
 
     /**
@@ -113,7 +113,7 @@ class FavoritController extends Controller
             return $this->fail('Terjadi kesalahan sistem', $err->getMessage());
         }
 
-        return $this->success(null, $favorit);
+        return $this->success('Rute favorit berhasil diubah', $favorit);
     }
 
     /**

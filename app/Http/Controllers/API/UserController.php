@@ -27,7 +27,7 @@ class UserController extends Controller
             return $this->fail('Terjadi kesalahan mengubah akun', $e->getMessage());
         }
 
-        return $this->success();
+        return $this->success('Profil berhasil diubah');
     }
 
     public function ubahPassword($id, Request $request) {
