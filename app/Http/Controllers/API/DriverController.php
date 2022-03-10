@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\PengajuanDriver;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use Grimzy\LaravelMysqlSpatial\Doctrine\Point;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 

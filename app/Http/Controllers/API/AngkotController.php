@@ -6,8 +6,8 @@ use App\Events\AngkotLokasiUpdated;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Angkot;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Illuminate\Support\Facades\DB;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 use Throwable;
 
 class AngkotController extends Controller

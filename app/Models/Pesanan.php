@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Model;
+use MatanYadaev\EloquentSpatial\Objects\MultiPoint;
+use MatanYadaev\EloquentSpatial\SpatialBuilder;
 
 class Pesanan extends Model
 {
-    use SpatialTrait;
-
     protected $fillable = [
         'user_id',
         'driver_id',
@@ -16,7 +15,12 @@ class Pesanan extends Model
         'rute',
         'status'
     ];
-    protected $spatialFields = ['rute'];
+    protected $casts = ['rute' => MultiPoint::class];
+
+    public function newEloquentBuilder($query): SpatialBuilder
+    {
+        return new SpatialBuilder($query);
+    }
 
     public function user()
     {

@@ -3,15 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
+use MatanYadaev\EloquentSpatial\SpatialBuilder;
 
 class Angkot extends Model
 {
-    use SpatialTrait;
-
     protected $fillable = ['trayek_id', 'no_kendaraan', 'aktif', 'lokasi'];
     protected $columns = ['id', 'trayek_id', 'no_kendaraan', 'aktif', 'lokasi'];
-    protected $spatialFields = ['lokasi'];
+    protected $casts = ['lokasi' => Point::class];
+
+    public function newEloquentBuilder($query): SpatialBuilder
+    {
+        return new SpatialBuilder($query);
+    }
 
     public function scopeExclude($query, $value = [])
     {

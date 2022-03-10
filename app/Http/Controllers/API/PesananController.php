@@ -5,12 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Events\PesananCreated;
 use App\Events\PesananHandled;
 use App\Http\Controllers\Controller;
-use App\Models\Driver;
 use App\Models\Pesanan;
 use Carbon\Carbon;
-use GeoJson\Geometry\MultiPoint;
-use GeoJson\Geometry\Point;
 use Illuminate\Http\Request;
+use MatanYadaev\EloquentSpatial\Objects\MultiPoint;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 use Throwable;
 
 class PesananController extends Controller

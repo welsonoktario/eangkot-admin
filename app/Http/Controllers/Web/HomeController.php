@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class HomeController extends Controller
