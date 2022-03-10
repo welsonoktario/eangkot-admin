@@ -1,31 +1,26 @@
 <?php
 
-use App\Http\Controllers\Admin\AngkotController;
-use App\Http\Controllers\Admin\HomeController;
-use App\Http\Controllers\Admin\TrayekController;
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Models\PengajuanBonus;
-use App\Models\PengajuanDriver;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/home', 302);
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::resource('home', HomeController::class, ['as' => 'admin']);
-    Route::resource('angkot', AngkotController::class, ['as' => 'admin']);
-    Route::resource('promo', PromoController::class, ['as' => 'admin']);
-    Route::resource('transaksi', TransaksiController::class, ['as' => 'admin']);
-    Route::resource('trayek', TrayekController::class, ['as' => 'admin']);
+    Route::resource('home', Admin\HomeController::class, ['as' => 'admin']);
+    Route::resource('angkot', Admin\AngkotController::class, ['as' => 'admin']);
+    Route::resource('promo', Admin\PromoController::class, ['as' => 'admin']);
+    Route::resource('transaksi', Admin\TransaksiController::class, ['as' => 'admin']);
+    Route::resource('trayek', Admin\TrayekController::class, ['as' => 'admin']);
 
     Route::group(['prefix' => 'akun'], function() {
-        Route::resource('driver', DriverController::class, ['as' => 'admin.akun']);
-        Route::resource('user', UserController::class, ['as' => 'admin.akun']);
+        Route::resource('driver', Admin\DriverController::class, ['as' => 'admin.akun']);
+        Route::resource('user', Admin\UserController::class, ['as' => 'admin.akun']);
     });
 
     Route::group(['prefix' => 'pengajuan'], function() {
-        Route::resource('bonus', PengajuanBonus::class, ['as' => 'admin.pengajuan']);
-        Route::resource('driver', PengajuanDriver::class, ['as' => 'admin.pengajuan']);
+        Route::resource('bonus', Admin\PengajuanBonusController::class, ['as' => 'admin.pengajuan']);
+        Route::resource('driver', Admin\PengajuanDriverController::class, ['as' => 'admin.pengajuan']);
     });
 });
 

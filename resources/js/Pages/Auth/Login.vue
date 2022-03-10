@@ -14,7 +14,17 @@
           <input
             id="email"
             type="email"
-            class="mt-1 border-none bg-gray-100 dark:bg-gray-700 block w-full rounded-md"
+            class="
+              form-input
+              border-none
+              dark:text-white
+              bg-gray-100
+              dark:bg-gray-700
+              block
+              mt-2
+              w-full
+              rounded-md
+            "
             v-model="form.email"
             required
             autofocus
@@ -27,7 +37,17 @@
           <input
             id="password"
             type="password"
-            class="mt-1 border-none bg-gray-100 dark:bg-gray-700 block w-full rounded-md"
+            class="
+              form-input
+              border-none
+              dark:text-white
+              bg-gray-100
+              dark:bg-gray-700
+              block
+              mt-2
+              w-full
+              rounded-md
+            "
             v-model="form.password"
             required
             autocomplete="current-password"
@@ -39,7 +59,8 @@
             class="
               w-full
               bg-indigo-600
-              dark:bg-indigo-600
+              dark:bg-indigo-500
+              dark:hover:bg-indigo-400
               py-2
               px-4
               rounded-md

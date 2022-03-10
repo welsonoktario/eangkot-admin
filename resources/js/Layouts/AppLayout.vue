@@ -1,12 +1,12 @@
 <template>
   <div
-    class="grid grid-cols-10 h-screen"
+    class="grid grid-cols-12 h-screen"
     :class="{ 'overflow-hidden': sidebarOpen }"
   >
     <!-- Sidebar -->
-    <Sidebar class="col-span-5 md:col-span-1" />
+    <Sidebar />
 
-    <div class="col-span-10 md:col-span-9 w-full h-full">
+    <div class="col-span-12 md:col-span-10 w-full h-full">
       <div class="flex flex-col h-full">
         <!-- Navbar -->
         <header class="flex-none z-10 py-4 bg-white dark:bg-gray-800">

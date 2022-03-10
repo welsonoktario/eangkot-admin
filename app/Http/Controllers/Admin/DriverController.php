@@ -15,9 +15,20 @@ class DriverController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $drivers = Driver::with(['user', 'angkot'])->get();
+        $drivers = Driver::with(['user', 'angkot.trayek'])->whereRaw('LOWER(alamat) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
+        ->paginate($request->show ?: 5)
+        ->withQueryString()
+        ->through(
+            fn ($item) =>
+            [
+                'id' => $item->id,
+                'user' => $item->user,
+                'alamat' => $item->alamat,
+                'angkot' => $item->angkot
+            ]
+        );
 
         return Inertia::render('Admin/Driver', ['drivers' => $drivers]);
     }

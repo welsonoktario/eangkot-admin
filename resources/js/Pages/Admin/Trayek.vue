@@ -53,7 +53,7 @@
           backgroundImage: `url(${trayek.gambar})`,
         }"
       ></div>
-      <p class="text-xl font-bold text-center mt-4">Trayek {{ trayek.kode }}</p>
+      <p class="text-xl font-bold text-center mt-4 dark:text-gray-50">Trayek {{ trayek.kode }}</p>
     </div>
   </div>
 

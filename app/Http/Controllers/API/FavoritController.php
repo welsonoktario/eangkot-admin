@@ -18,7 +18,7 @@ class FavoritController extends Controller
      */
     public function index(Request $request)
     {
-        $favorits = Favorit::with('trayek')->where('user_id', $request->user_id)->get();
+        $favorits = Favorit::with('trayek')->whereRaw('user_id = ?', $request->user_id)->get();
 
         if (!$favorits) {
             return $this->fail('Terjadi kesalahan sistem');
