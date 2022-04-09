@@ -13,6 +13,7 @@ const mix = require("laravel-mix");
 
 mix
   .js("resources/js/app.js", "public/js")
+  .js("resources/js/bootstrap.js", "public/js")
   .sourceMaps()
   .vue()
   .postCss("resources/css/app.css", "public/css", [
@@ -20,7 +21,7 @@ mix
     require("tailwindcss"),
     require("autoprefixer"),
   ])
-  .browserSync('eangkot.test')
+  .browserSync("eangkot.test")
   .webpackConfig(require("./webpack.config"))
   .disableSuccessNotifications();
 

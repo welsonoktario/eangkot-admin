@@ -4,12 +4,12 @@ namespace App\Events;
 
 use App\Models\Angkot;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AngkotLokasiUpdated implements ShouldBroadcast
+class AngkotLokasiUpdated implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -32,7 +32,7 @@ class AngkotLokasiUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('angkot.' . $this->angkot->id);
+        return new PresenceChannel("angkot.{$this->angkot->id}");
     }
 
     /**
@@ -40,8 +40,21 @@ class AngkotLokasiUpdated implements ShouldBroadcast
      *
      * @return array
      */
-    /* public function broadcastWith()
+    public function broadcastWith()
     {
-        return ['lokasi' => $this->angkot->lokasi];
-    } */
+        return [
+            'angkot' => $this->angkot->toArray()
+        ];
+    }
+
+    /**
+     * The model event's broadcast name.
+     *
+     * @param  string  $event
+     * @return string|null
+     */
+    public function broadcastAs()
+    {
+        return 'angkot.lokasi-updated';
+    }
 }

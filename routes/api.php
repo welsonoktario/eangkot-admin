@@ -6,6 +6,7 @@ use App\Http\Controllers\API\FavoritController;
 use App\Http\Controllers\API\TransaksiController;
 use App\Http\Controllers\API\TrayekController;
 use App\Http\Controllers\API\UserController;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 Route::group(['prefix' => 'auth'], function () {
     Route::post('request-otp', [AuthController::class, 'requestOtp']);

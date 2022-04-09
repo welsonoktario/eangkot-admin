@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['POST', 'GET', 'PATCH'],
 
-    'allowed_origins' => ['http://localhost:8100'],
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 

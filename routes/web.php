@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('web.home.index');
 Route::get('/angkot', [HomeController::class, 'angkot']);
+Route::view('test', 'test');
