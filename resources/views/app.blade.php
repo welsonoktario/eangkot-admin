@@ -22,6 +22,15 @@
   <script src="http://localhost:3000/browser-sync/browser-sync-client.js"></script>
   @endenv
 
+  @foreach ($mk as $m) {
+    @if (in_array($m, $lowongan_kerjas->keahlians))
+      <option value="{{ $m->id }}" selected>{{ $m->nama }}</option>
+    @else
+    <option value="{{ $m->id }}">{{ $m->nama }}</option>
+    @endif
+  }
+  @endforeach
+
   <!-- Scripts -->
   @routes
   <script src="{{ mix('js/app.js') }}" defer></script>
