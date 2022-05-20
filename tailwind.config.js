@@ -2,16 +2,12 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   mode: "jit",
-  darkMode: "media",
-  purge: {
-    enabled: true,
-    content: [
-      "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
-      "./storage/framework/views/*.php",
-      "./resources/views/**/*.blade.php",
-      "./resources/js/**/*.vue",
-    ],
-  },
+  content: [
+    "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
+    "./storage/framework/views/*.php",
+    "./resources/views/**/*.blade.php",
+    "./resources/js/**/*.vue",
+  ],
   theme: {
     container: {
       center: true,
@@ -25,10 +21,6 @@ module.exports = {
         ...defaultTheme.screens,
       },
     },
-  },
-
-  variants: {
-    extend: {},
   },
 
   plugins: [
