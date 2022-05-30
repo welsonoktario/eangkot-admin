@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
     Route::group(['prefix' => 'user'], function () {
-        Route::post('{id}/ubah-password', [UserController::class, 'ubahPassword'])->name('api.user.ubahPassword');
+        Route::patch('{user}/ubah-password', [UserController::class, 'ubahPassword'])->name('api.user.ubahPassword');
     });
 
     Route::resource('driver', DriverController::class, ['as' => 'api', 'only' => ['show', 'store']]);

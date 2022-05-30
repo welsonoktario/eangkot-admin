@@ -17,9 +17,9 @@ return [
 
     'paths' => ['http://api.eangkot.test/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['POST', 'GET', 'PATCH'],
+    'allowed_methods' => ['POST', 'GET', 'PATCH', 'PUT'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['http://localhost:8100/*', 'http://localhost:8100'],
 
     'allowed_origins_patterns' => [],
 
@@ -29,6 +29,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];

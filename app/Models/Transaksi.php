@@ -27,4 +27,9 @@ class Transaksi extends Model
     {
         return $this->hasOne(Ulasan::class);
     }
+
+    public function detail()
+    {
+        return $this->hasOne(TransaksiDetail::class);
+    }
 }

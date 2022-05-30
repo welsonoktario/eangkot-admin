@@ -24,6 +24,7 @@ class TransaksiController extends Controller
             'pesanan.driver' => function ($q) {
                 $q->with(['angkot', 'angkot.trayek', 'user']);
             },
+            'detail',
             'ulasan'
         ])->get();
 

@@ -30,10 +30,8 @@ class UserController extends Controller
         return $this->success('Profil berhasil diubah');
     }
 
-    public function ubahPassword($id, Request $request) {
-        $user = User::find($id);
-
-        if ($request->has('password_lama')) {
+    public function ubahPassword(User $user, Request $request) {
+        if ($request->password_lama) {
             if (!Hash::check($request->password_lama, $user->password)) {
                 return response()->json([
                     'status' => 'NOT_MATCH',
