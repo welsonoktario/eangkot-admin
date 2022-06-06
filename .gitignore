@@ -2,10 +2,12 @@
 /public/hot
 /public/storage
 /public/js
-/public/css/
+/public/css
 /public/error.log
+/public/mix-manifest.json
 /storage/*.key
 /vendor
+/data
 .env
 .env.backup
 .phpunit.result.cache
@@ -18,3 +20,4 @@ yarn-error.log
 /.vscode
 package-lock.json
 /eangkot-firebase-adminsdk.json
+dump.rdb
