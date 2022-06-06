@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,6 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('angkot.{id}', function ($user, $id) {
+Broadcast::channel('angkot.{id}', function (User $user, $id) {
     return $user->toArray();
 });

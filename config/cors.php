@@ -15,11 +15,16 @@ return [
     |
     */
 
-    'paths' => ['http://api.eangkot.test/*', 'sanctum/csrf-cookie'],
+    'paths' => ['http://eangkot.test/api/*', 'sanctum/csrf-cookie', 'http://eangkot.test/broadcasting/*'],
 
     'allowed_methods' => ['POST', 'GET', 'PATCH', 'PUT'],
 
-    'allowed_origins' => ['http://localhost:8100/*', 'http://localhost:8100'],
+    'allowed_origins' => [
+        'http://localhost:8100/*',
+        'http://localhost:8100',
+        'http://localhost/*',
+        'http://localhost'
+    ],
 
     'allowed_origins_patterns' => [],
 

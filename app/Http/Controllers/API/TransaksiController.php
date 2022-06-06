@@ -7,6 +7,8 @@ use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Throwable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TransaksiController extends Controller
 {
@@ -81,8 +83,24 @@ class TransaksiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Transaksi $transaksi)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $ulasan = $transaksi->ulasan()->create([
+                'rating' => $request->rating,
+                'komentar' => $request->komentar
+            ]);
+
+            DB::commit();
+
+            return $this->success(null, $ulasan);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            Log::error("Add ulasan: {$e->getMessage()}");
+
+            return $this->fail("Terjadi kesalahan menambah ulasan");
+        }
     }
 }

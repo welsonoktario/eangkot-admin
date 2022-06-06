@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Throwable;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -63,6 +64,7 @@ class AuthController extends Controller
 
     public function checkOtp(Request $request)
     {
+        Log::debug($request->all());
         try {
             $hash = Cache::tags(['otp'])->pull($request->phone);
             $compare = Hash::check($request->pin, $hash);
