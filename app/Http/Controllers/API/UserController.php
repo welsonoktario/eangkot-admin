@@ -16,7 +16,18 @@ class UserController extends Controller
         $user = User::find($id);
 
         try {
-            $user->update($request->all());
+            if ($request->email) {
+                $user->update([
+                    'nama' => $request->nama,
+                    'email' => $request->email,
+                    'no_hp' => $request->no_hp
+                ]);
+            } else {
+                $user->update([
+                    'nama' => $request->nama,
+                    'no_hp' => $request->no_hp
+                ]);
+            }
         } catch (QueryException $e) {
             if ($e->errorInfo[1] === 1062) {
                 return $this->fail('Email telah digunakan. Silahkan coba email lain', $e->errorInfo[2]);
@@ -30,7 +41,8 @@ class UserController extends Controller
         return $this->success('Profil berhasil diubah');
     }
 
-    public function ubahPassword(User $user, Request $request) {
+    public function ubahPassword(User $user, Request $request)
+    {
         if ($request->password_lama) {
             if (!Hash::check($request->password_lama, $user->password)) {
                 return response()->json([
