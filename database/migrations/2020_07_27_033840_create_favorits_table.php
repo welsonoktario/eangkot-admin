@@ -4,11 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-<<<<<<< HEAD
 return new class extends Migration
-=======
-class CreateFavoritsTable extends Migration
->>>>>>> 862cba1 (Initial commit)
 {
     /**
      * Run the migrations.
