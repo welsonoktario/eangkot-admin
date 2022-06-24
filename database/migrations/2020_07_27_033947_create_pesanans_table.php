@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePesanansTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,13 +15,8 @@ class CreatePesanansTable extends Migration
     {
         Schema::create('pesanans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
-            $table->foreignId('driver_id')
-                ->nullable()
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('driver_id');
             $table->multiPoint('rute');
             $table->integer('penumpang')->default(1);
             $table->enum('status', ['Pending', 'Diterima', 'Ditolak', 'Aktif', 'Selesai', 'Batal'])
@@ -39,4 +34,4 @@ class CreatePesanansTable extends Migration
     {
         Schema::dropIfExists('pesanans');
     }
-}
+};

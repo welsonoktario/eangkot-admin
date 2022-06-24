@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFavoritsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,12 +16,8 @@ class CreateFavoritsTable extends Migration
         Schema::create('favorits', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
-            $table->foreignId('trayek_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('trayek_id');
             $table->string('alamat');
             $table->point('tujuan');
         });
@@ -36,4 +32,4 @@ class CreateFavoritsTable extends Migration
     {
         Schema::dropIfExists('favorits');
     }
-}
+};

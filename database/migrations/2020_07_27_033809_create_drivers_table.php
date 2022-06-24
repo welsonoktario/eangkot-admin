@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDriversTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,17 +15,9 @@ class CreateDriversTable extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
-            $table->foreignId('bank_id')
-                ->nullable()
-                ->constrained()
-                ->cascadeOnDelete();
-            $table->foreignId('angkot_id')
-                ->nullable()
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('bank_id')->nullable();
+            $table->unsignedBigInteger('angkot_id')->nullable();
             $table->string('alamat');
             $table->string('nik', 16)->unique();
             $table->string('rekening')->unique()->nullable();
@@ -42,4 +34,4 @@ class CreateDriversTable extends Migration
     {
         Schema::dropIfExists('drivers');
     }
-}
+};

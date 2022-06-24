@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransaksisTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,10 +15,7 @@ class CreateTransaksisTable extends Migration
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pesanan_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('pesanan_id');
             $table->dateTime('tanggal')->useCurrent();
             $table->integer('ongkos');
             $table->integer('durasi_perjalanan');
@@ -35,4 +32,4 @@ class CreateTransaksisTable extends Migration
     {
         Schema::dropIfExists('transaksis');
     }
-}
+};

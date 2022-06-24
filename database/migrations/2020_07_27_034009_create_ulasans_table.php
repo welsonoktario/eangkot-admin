@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUlasansTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,9 +17,7 @@ class CreateUlasansTable extends Migration
             $table->id();
             $table->tinyInteger('rating');
             $table->string('komentar')->nullable();
-            $table->foreignId('transaksi_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('transaksi_id');
         });
     }
 
@@ -32,4 +30,4 @@ class CreateUlasansTable extends Migration
     {
         Schema::dropIfExists('ulasans');
     }
-}
+};

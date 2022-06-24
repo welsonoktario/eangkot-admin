@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePengajuanDriversTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,13 +15,8 @@ class CreatePengajuanDriversTable extends Migration
     {
         Schema::create('pengajuan_drivers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnDelete();
-            $table
-                ->foreignId('trayek_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('trayek_id');
             $table->enum('status', ['Pending', 'Diterima', 'Ditolak'])->default('Pending');
             $table->dateTime('tanggal');
         });
@@ -36,4 +31,4 @@ class CreatePengajuanDriversTable extends Migration
     {
         Schema::dropIfExists('pengajuan_drivers');
     }
-}
+};
