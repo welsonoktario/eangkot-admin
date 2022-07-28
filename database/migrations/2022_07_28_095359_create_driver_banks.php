@@ -12,22 +12,16 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('pengajuan_drivers', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')
+        Schema::create('driver_banks', function (Blueprint $table) {
+            $table->foreignId('driver_id')
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->foreignId('trayek_id')
+            $table->foreignId('bank_id')
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('nik', 16);
-            $table->string('sim', 16);
-            $table->string('alamat');
-            $table->enum('status', ['Pending', 'Diterima', 'Ditolak'])->default('Pending');
-            $table->dateTime('tanggal');
-            $table->timestamps();
+            $table->string('rekening');
         });
     }
 
@@ -38,6 +32,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('pengajuan_drivers');
+        Schema::dropIfExists('driver_banks');
     }
 };

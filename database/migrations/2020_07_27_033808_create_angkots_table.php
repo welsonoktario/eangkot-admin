@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -15,11 +14,14 @@ return new class extends Migration
     {
         Schema::create('angkots', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('trayek_id');
+            $table->foreignId('trayek_id')
+                ->constrained()
+                ->cascadeOnUpdate();
             $table->string('no_kendaraan', 10)->unique();
             $table->boolean('aktif')->default(false);
             $table->point('lokasi')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

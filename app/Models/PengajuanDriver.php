@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PengajuanDriver extends Model
 {
-    protected $fillable = ['trayek_id', 'tanggal', 'status'];
+    protected $guarded = ['id'];
     public $timestamps = false;
 
     public function user()

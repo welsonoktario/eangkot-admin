@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Driver extends Model
 {
-    protected $fillable = ['user_id', 'angkot_id', 'bank_id', 'alamat', 'nik', 'rekening'];
+    use SoftDeletes;
+
+    protected $guarded = ['id'];
     protected $hidden = ['bank_id', 'nik', 'rekening', 'alamat'];
 
     public function user()
@@ -14,9 +17,9 @@ class Driver extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function bank()
+    public function rekenings()
     {
-        return $this->belongsTo(Bank::class);
+        return $this->belongsToMany(Bank::class, 'driver_banks');
     }
 
     public function angkot()
@@ -24,13 +27,8 @@ class Driver extends Model
         return $this->belongsTo(Angkot::class);
     }
 
-    public function pesanan()
+    public function pesanans()
     {
         return $this->hasMany(Pesanan::class);
-    }
-
-    public function pengajuanBonus()
-    {
-        return $this->hasMany(PengajuanBonus::class);
     }
 }

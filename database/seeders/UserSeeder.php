@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
         User::insert($users);
         $welson = User::find(1);
         $jon = User::find(2);
-        $welson->roles()->sync([1, 2, 3]);
+        $welson->roles()->sync([1, 2]);
         $jon->roles()->sync([2, 3]);
     }
 }

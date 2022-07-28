@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\SpatialBuilder;
 
 class Angkot extends Model
 {
-    protected $fillable = ['trayek_id', 'no_kendaraan', 'aktif', 'lokasi'];
+use SoftDeletes;
+
+    protected $guarded = ['id'];
     protected $columns = ['id', 'trayek_id', 'no_kendaraan', 'aktif', 'lokasi'];
     protected $casts = ['lokasi' => Point::class];
 
@@ -27,8 +30,8 @@ class Angkot extends Model
         return $this->belongsTo(Trayek::class);
     }
 
-    public function drivers()
+    public function driver()
     {
-        return $this->belongsToMany(Driver::class, 'driver_angkot');
+        return $this->hasOne(Driver::class);
     }
 }

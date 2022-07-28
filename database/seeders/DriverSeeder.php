@@ -14,17 +14,16 @@ class DriverSeeder extends Seeder
      */
     public function run()
     {
-        $drivers = [
-            [
+        $driver = Driver::query()
+            ->create([
                 'user_id' => 2,
-                'bank_id' => 1,
                 'angkot_id' => 1,
                 'nik' => '1234567890123456',
                 'alamat' => 'Jl. Keren No. 1',
-                'rekening' => '7803463882'
-            ]
-        ];
+            ]);
 
-        Driver::insert($drivers);
+        $driver->rekenings()->sync([
+            1 => ['rekening' => '7805308444']
+        ]);
     }
 }
