@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Angkot;
 use App\Models\Trayek;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Throwable;
 
 class AngkotController extends Controller
 {
@@ -18,8 +20,10 @@ class AngkotController extends Controller
      */
     public function index(Request $request)
     {
-        $trayeks = Trayek::get(['id', 'kode']);
-        $angkots = Angkot::with('trayek')
+        $trayeks = Trayek::query()
+            ->get(['id', 'kode']);
+        $angkots = Angkot::query()
+            ->with('trayek')
             ->exclude(['lokasi'])
             ->whereRaw('LOWER(no_kendaraan) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
             ->paginate($request->show ?: 5)
@@ -44,7 +48,7 @@ class AngkotController extends Controller
      */
     public function create()
     {
-        $trayeks = Trayek::all();
+        $trayeks = Trayek::query()->all();
 
         return $this->success('OK', ['trayeks' => $trayeks]);
     }
@@ -70,16 +74,26 @@ class AngkotController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Angkot  $angkot
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Angkot $angkot)
     {
-        Angkot::find($id)->update([
-            'no_kendaraan' => $request->plat,
-            'trayek_id' => $request->trayek['id'],
-            'aktif' => $request->status ? true : false
-        ]);
+        DB::beginTransaction();
+
+        try {
+            $angkot->query()
+                ->update([
+                    'no_kendaraan' => $request->plat,
+                    'trayek_id' => $request->trayek['id'],
+                    'aktif' => $request->status ? true : false
+                ]);
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            return Redirect::back();
+        }
 
         return Redirect::route('admin.angkot.index');
     }
@@ -87,12 +101,12 @@ class AngkotController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Angkot  $angkot
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Angkot $angkot)
     {
-        Angkot::destroy($id);
+        $angkot->delete();
 
         return Redirect::route('admin.angkot.index');
     }

@@ -16,7 +16,8 @@ class TrayekController extends Controller
      */
     public function index(Request $request)
     {
-        $trayeks = Trayek::whereRaw('LOWER(rute) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
+        $trayeks = Trayek::query()
+            ->whereRaw('LOWER(rute) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
             ->paginate($request->show ?: 5)
             ->withQueryString()
             ->through(

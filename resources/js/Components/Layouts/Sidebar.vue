@@ -2,34 +2,22 @@
   <transition name="fade" mode="out-in">
     <div
       v-if="sidebarOpen"
-      class="bg-gray-900 opacity-75 w-screen absolute inset-0 mt-16 z-40"
+      class="absolute inset-0 z-40 w-screen mt-16 bg-gray-900 opacity-75"
       @click="sidebarOpen = !sidebarOpen"
     ></div>
   </transition>
   <transition
-    enter-from-class="opacity-0 transform -translate-x-20"
-    enter-active-class="transition ease-in-out duration-150"
+    enter-from-class="transform -translate-x-20 opacity-0"
+    enter-active-class="transition duration-150 ease-in-out"
     enter-to-class="opacity-100"
     leave-from-class="opacity-100"
-    leave-active-class="transition ease-in-out duration-150"
-    leave-to-class="opacity-0 transform -translate-x-20"
+    leave-active-class="transition duration-150 ease-in-out"
+    leave-to-class="transform -translate-x-20 opacity-0"
     mode="in-out"
   >
     <aside
       v-if="sidebarOpen || currentWidth >= 768"
-      class="
-        col-span-2
-        z-50
-        w-full
-        py-4
-        flex-shrink-0
-        bg-white
-        dark:bg-gray-800 dark:text-white
-        fixed
-        inset-y-0
-        mt-16
-        md:static md:mt-0 md:block
-      "
+      class="fixed inset-y-0 z-50 flex-shrink-0 w-full col-span-2 py-4 mt-16 bg-white border-r border-gray-100 dark:bg-gray-800 dark:text-white md:static md:mt-0 md:block"
       :class="{ hidden: !sidebarOpen }"
     >
       <h1 class="text-xl font-bold text-center">eAngkot</h1>
@@ -44,48 +32,30 @@
             :href="route.url"
             @click="navigation(route.name)"
             as="button"
-            class="
-              inline-flex
-              items-center
-              p-2
-              w-full
-              font-semibold
-              focus:outline-none
-            "
+            class="inline-flex items-center w-full p-2 font-semibold focus:outline-none"
             :class="{
-              'text-indigo-500 dark:text-indigo-400 hover:text-indigo-400 dark:hover:text-indigo-300':
+              'text-indigo-500 hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300':
                 route.name == currentRoute,
               'text-gray-700 hover:text-black dark:text-gray-50 dark:hover:text-gray-300':
                 route.name != currentRoute,
             }"
           >
-            <component :is="route.icon" class="h-5 w-5"></component>
+            <component :is="route.icon" class="w-5 h-5"></component>
             <span class="ml-4">{{ route.label }}</span>
           </Link>
         </li>
         <li class="relative px-4 py-2">
           <button
-            class="
-              inline-flex
-              items-center
-              p-2
-              w-full
-              font-semibold
-              justify-between
-              text-gray-700
-              hover:text-black
-              dark:text-gray-50 dark:hover:text-gray-300
-              focus:outline-none
-            "
+            class="inline-flex items-center justify-between w-full p-2 font-semibold text-gray-700 hover:text-black focus:outline-none dark:text-gray-50 dark:hover:text-gray-300"
             @click="akunMenuOpen = !akunMenuOpen"
           >
             <span class="inline-flex items-center">
-              <component :is="akunRoute.icon" class="h-5 w-5"></component>
+              <component :is="akunRoute.icon" class="w-5 h-5"></component>
               <span class="ml-4">Akun</span>
             </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4"
+              class="w-4 h-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -108,33 +78,15 @@
           </button>
           <ul
             v-show="akunMenuOpen"
-            class="
-              p-2
-              mt-2
-              space-y-2
-              overflow-hidden
-              font-medium
-              rounded-md
-              text-gray-700
-              dark:text-gray-50
-              bg-gray-50
-              dark:bg-gray-900
-            "
+            class="p-2 mt-2 space-y-2 overflow-hidden font-medium text-gray-700 rounded-md bg-gray-50 dark:bg-gray-900 dark:text-gray-50"
           >
             <li v-for="route in akunRoute.routes" :key="route.name">
               <Link
                 :href="route.url"
                 @click="navigation(route.name)"
-                class="
-                  px-2
-                  py-1
-                  transition-colors
-                  duration-150
-                  hover:text-gray-800
-                  dark:hover:text-gray-200
-                "
+                class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 :class="{
-                  'bg-indigo-600 dark:bg-indigo-600 text-gray-50':
+                  'bg-indigo-600 text-gray-50 dark:bg-indigo-600':
                     currentRoute === route.name,
                 }"
               >
@@ -145,27 +97,16 @@
         </li>
         <li class="relative px-4 py-2">
           <button
-            class="
-              inline-flex
-              items-center
-              p-2
-              w-full
-              font-semibold
-              justify-between
-              text-gray-700
-              hover:text-black
-              dark:text-gray-50 dark:hover:text-gray-300
-              focus:outline-none
-            "
+            class="inline-flex items-center justify-between w-full p-2 font-semibold text-gray-700 hover:text-black focus:outline-none dark:text-gray-50 dark:hover:text-gray-300"
             @click="pengajuanMenuOpen = !pengajuanMenuOpen"
           >
             <span class="inline-flex items-center">
-              <component :is="pengajuanRoute.icon" class="h-5 w-5"></component>
+              <component :is="pengajuanRoute.icon" class="w-5 h-5"></component>
               <span class="ml-4">Pengajuan</span>
             </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4"
+              class="w-4 h-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -188,33 +129,15 @@
           </button>
           <ul
             v-show="pengajuanMenuOpen"
-            class="
-              p-2
-              mt-2
-              space-y-2
-              overflow-hidden
-              font-medium
-              rounded-md
-              text-gray-700
-              dark:text-gray-50
-              bg-gray-50
-              dark:bg-gray-900
-            "
+            class="p-2 mt-2 space-y-2 overflow-hidden font-medium text-gray-700 rounded-md bg-gray-50 dark:bg-gray-900 dark:text-gray-50"
           >
             <li v-for="route in pengajuanRoute.routes" :key="route.name">
               <Link
                 :href="route.url"
                 @click="navigation(route.name)"
-                class="
-                  px-2
-                  py-1
-                  transition-colors
-                  duration-150
-                  hover:text-gray-800
-                  dark:hover:text-gray-200
-                "
+                class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 :class="{
-                  'bg-indigo-600 dark:bg-indigo-600 text-gray-50':
+                  'bg-indigo-600 text-gray-50 dark:bg-indigo-600':
                     currentRoute === route.name,
                 }"
               >
@@ -288,11 +211,6 @@ export default {
     const pengajuanRoute = {
       icon: DocumentTextIcon,
       routes: [
-        {
-          name: "admin.pengajuan.bonus.index",
-          label: "Bonus",
-          url: route("admin.pengajuan.bonus.index"),
-        },
         {
           name: "admin.pengajuan.driver.index",
           label: "Driver",

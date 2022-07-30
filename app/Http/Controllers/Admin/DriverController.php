@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Angkot;
 use App\Models\Driver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Throwable;
 
 class DriverController extends Controller
 {
@@ -18,17 +21,17 @@ class DriverController extends Controller
     public function index(Request $request)
     {
         $drivers = Driver::with(['user', 'angkot.trayek'])->whereRaw('LOWER(alamat) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
-        ->paginate($request->show ?: 5)
-        ->withQueryString()
-        ->through(
-            fn ($item) =>
-            [
-                'id' => $item->id,
-                'user' => $item->user,
-                'alamat' => $item->alamat,
-                'angkot' => $item->angkot
-            ]
-        );
+            ->paginate($request->show ?: 5)
+            ->withQueryString()
+            ->through(
+                fn ($item) =>
+                [
+                    'id' => $item->id,
+                    'user' => $item->user,
+                    'alamat' => $item->alamat,
+                    'angkot' => $item->angkot
+                ]
+            );
 
         return Inertia::render('Admin/Driver', ['drivers' => $drivers]);
     }
@@ -57,26 +60,26 @@ class DriverController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Driver $driver)
     {
-        $driver = Driver::with(['driver', 'driver.angkot'])->find($id);
+        $driver->load('angkot.trayek');
 
-        return $driver;
+        return $this->success('OK', $driver);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Driver $driver)
     {
-        $driver = Driver::with('angkot')->find($id);
-        $angkots = Angkot::all();
+        $driver->load('angkot.trayek');
+        $angkots = Angkot::query()->all();
 
         return [
             'driver' => $driver,
@@ -88,34 +91,45 @@ class DriverController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Driver $driver)
     {
-        $driver = Driver::find($id);
+        DB::beginTransaction();
 
-        if ($driver->update($request->all())) {
-            return 'ok';
-        } else {
-            return 'fail';
+        try {
+            $driver->update($request->all());
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            return Redirect::back();
         }
+
+        return Redirect::route('admin.akun.driver.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Driver  $driver
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Driver $driver)
     {
-        $driver = Driver::find($id);
+        DB::beginTransaction();
 
-        if ($driver->destroy()) {
-            return 'ok';
-        } else {
-            return 'fail';
+        try {
+            $driver->delete();
+
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            return Redirect::back();
         }
+
+        return Redirect::route('admin.akun.driver.index');
     }
 }

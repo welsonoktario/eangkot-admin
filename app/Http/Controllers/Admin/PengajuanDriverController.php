@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\PengajuanDriver;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Throwable;
@@ -27,14 +29,14 @@ class PengajuanDriverController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\PengajuanDriver  $pengajuanDriver
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(PengajuanDriver $pengajuanDriver)
     {
-        $pengajuan = PengajuanDriver::with(['user', 'angkot', 'detail'])->find($id);
+        $pengajuanDriver->load(['user', 'angkot', 'detail']);
 
-        if ($pengajuan->isEmpty()) {
+        if ($pengajuanDriver->isEmpty()) {
             return response()->json([
                 'status' => 'GAGAL',
                 'msg' => 'Data pengajuan tidak ditemukan'
@@ -42,7 +44,7 @@ class PengajuanDriverController extends Controller
         }
 
         try {
-            $user = $pengajuan->user;
+            $user = $pengajuanDriver->user;
             $ktp = Storage::url("ktp/ktp-{$user->id}-{$user->nama}.jpeg");
             $sim = Storage::url("sim/sim-{$user->id}-{$user->nama}.jpeg");
         } catch (Throwable $e) {
@@ -56,7 +58,7 @@ class PengajuanDriverController extends Controller
         return response()->json([
             'status' => 'OK',
             'data' => [
-                'pengajuan' => $pengajuan,
+                'pengajuan' => $pengajuanDriver,
                 'dokumen' => [
                     'ktp' => $ktp,
                     'sim' => $sim,
@@ -69,31 +71,35 @@ class PengajuanDriverController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\PengajuanDriver  $pengajuanDriver
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, PengajuanDriver $pengajuanDriver)
     {
-        $pengajuan = PengajuanDriver::find($id);
-        $pengajuan->update([
-            'status' => $request->status
-        ]);
+        DB::beginTransaction();
 
-        if ($request->status === 'Diterima') {
-            $user = User::with('user')->find($pengajuan->user->id);
-            $user->roles()->attach(3);
-            $user->driver()->create([
-                'angkot_id' => $pengajuan->angkot->angkot_id,
-                'no_kendaraan' => $pengajuan->detail->no_kendaraan,
-                'status' => 0
+        try {
+            $pengajuanDriver->update([
+                'status' => $request->status
             ]);
-            $user->driver->detail()->create([
-                'bank_id' => $pengajuan->detail->bank->id,
-                'nama' => $pengajuan->detail->nama,
-                'alamat' => $pengajuan->detail->alamat,
-                'rekening' => $pengajuan->detail->rekening,
-                'nik' => $pengajuan->detail->nik
-            ]);
+
+            if ($request->status === 'Diterima') {
+                $user = $pengajuanDriver->user;
+                $user->roles()->attach(3);
+                $user->driver()->create([
+                    'angkot_id' => $pengajuanDriver->angkot->angkot_id,
+                    'no_kendaraan' => $pengajuanDriver->detail->no_kendaraan,
+                    'status' => 0,
+                    'alamat' => $pengajuanDriver->detail->alamat,
+                    'nik' => $pengajuanDriver->detail->nik
+                ]);
+            }
+
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            return Redirect::back();
         }
 
         /* try {
@@ -125,8 +131,6 @@ class PengajuanDriverController extends Controller
             ], 500);
         } */
 
-        return response()->json([
-            'status' => 'OK',
-        ], 201);
+        return Redirect::route('admin.pengajuan.driver.index');
     }
 }

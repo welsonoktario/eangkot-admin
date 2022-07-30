@@ -2,7 +2,7 @@
   <TransitionRoot appear :show="open" as="template">
     <Dialog as="div" @close="open = !open">
       <div class="fixed inset-0 z-50 overflow-y-auto">
-        <div class="min-h-screen px-4 text-center">
+        <div class="flex items-center justify-center min-h-screen">
           <TransitionChild
             as="template"
             enter="duration-300 ease-out"
@@ -17,10 +17,6 @@
             </DialogOverlay>
           </TransitionChild>
 
-          <span class="inline-block h-screen align-middle" aria-hidden="true">
-            &#8203;
-          </span>
-
           <TransitionChild
             as="template"
             enter="duration-300 ease-out"
@@ -30,8 +26,8 @@
             leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95"
           >
-            <div
-              class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-2xl"
+            <DialogPanel
+              class="inline-block w-full max-w-md p-6 my-auto overflow-y-auto text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl dark:bg-gray-800"
             >
               <DialogTitle
                 as="h3"
@@ -43,10 +39,10 @@
                 <slot name="content"></slot>
               </div>
 
-              <div class="mt-4 flex flex-row justify-end">
+              <div class="flex flex-row justify-end mt-4">
                 <slot name="footer"></slot>
               </div>
-            </div>
+            </DialogPanel>
           </TransitionChild>
         </div>
       </div>
@@ -54,31 +50,19 @@
   </TransitionRoot>
 </template>
 
-<script>
+<script setup>
 import { onMounted, ref } from "vue";
 import {
   TransitionRoot,
   TransitionChild,
   Dialog,
+  DialogPanel,
   DialogOverlay,
   DialogTitle,
 } from "@headlessui/vue";
 import eventBus from "@/eventBus";
 
-export default {
-  components: {
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
-  },
-  setup() {
-    const open = ref(false);
+const open = ref(false);
 
-    onMounted(() => eventBus.$on("modal-toggle", () => (open.value = !open.value)));
-
-    return { open };
-  },
-};
+onMounted(() => eventBus.$on("modal-toggle", () => (open.value = !open.value)));
 </script>
