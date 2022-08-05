@@ -1,10 +1,14 @@
 <template>
-  <div class="flex flex-row justify-between my-6">
+  <Head>
+    <title>eAngkot Admin - Angkot</title>
+  </Head>
+
+  <div class="my-6 flex flex-row justify-between">
     <h2 class="text-2xl font-bold text-gray-700 dark:text-gray-200">Angkot</h2>
 
     <button
       @click="modalAngkot('add')"
-      class="transition duration-150 ease-out text-indigo-600 dark:text-indigo-500 hover:bg-indigo-500 hover:text-gray-50 dark:hover:bg-indigo-500 dark:hover:text-gray-100 hover:shadow-lg rounded-lg px-4 py-2"
+      class="rounded-lg px-4 py-2 text-indigo-600 transition duration-150 ease-out hover:bg-indigo-500 hover:text-gray-50 hover:shadow-lg dark:text-indigo-500 dark:hover:bg-indigo-500 dark:hover:text-gray-100"
     >
       Tambah Angkot
     </button>
@@ -25,20 +29,20 @@
       <td class="px-4 py-3">{{ angkot.no_kendaraan }}</td>
       <td class="px-4 py-3 text-sm">
         <span
-          class="px-2 py-1 font-semibold leading-tight rounded-full"
+          class="rounded-full px-2 py-1 font-semibold leading-tight"
           :class="{
-            'text-indigo-700 bg-indigo-100': angkot.aktif,
-            'text-gray-700 bg-gray-100 dark:text-gray-100 dark:bg-gray-700':
+            'bg-indigo-100 text-indigo-700': angkot.aktif,
+            'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-100':
               !angkot.aktif,
           }"
           >{{ angkot.aktif ? "Aktif" : "Non-Aktif" }}</span
         >
       </td>
-      <td class="px-4 py-3 mx-auto">
+      <td class="mx-auto px-4 py-3">
         <button @click="modalAngkot('edit', angkot.id)" class="mr-2">
           Edit
         </button>
-        <button @click="deleteAngkot(angkot.id)" class="text-red-500 ml-2">
+        <button @click="deleteAngkot(angkot.id)" class="ml-2 text-red-500">
           Hapus
         </button>
       </td>
@@ -56,16 +60,16 @@
         <Listbox v-model="angkot.trayek">
           <div class="relative mt-1">
             <ListboxButton
-              class="relative w-full py-2 pl-3 pr-10 text-left bg-gray-100 dark:bg-gray-700 rounded-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm"
+              class="relative w-full cursor-default rounded-md bg-gray-100 py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 dark:bg-gray-700 sm:text-sm"
             >
               <span class="block truncate dark:text-white">{{
                 angkot.trayek.kode
               }}</span>
               <span
-                class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
               >
                 <SelectorIcon
-                  class="w-5 h-5 text-gray-400"
+                  class="h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
               </span>
@@ -77,7 +81,7 @@
               leave-to-class="opacity-0"
             >
               <ListboxOptions
-                class="absolute w-full py-1 mt-1 overflow-auto text-base bg-white dark:bg-gray-700 rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-gray-700 sm:text-sm"
               >
                 <ListboxOption
                   v-slot="{ active, selected }"
@@ -89,9 +93,9 @@
                   <li
                     :class="[
                       active
-                        ? 'text-indigo-500 dark:text-indigo-400 bg-indigo-100 dark:bg-gray-600'
+                        ? 'bg-indigo-100 text-indigo-500 dark:bg-gray-600 dark:text-indigo-400'
                         : 'text-gray-900 dark:text-white',
-                      'cursor-default select-none relative py-2 pl-10 pr-4',
+                      'relative cursor-default select-none py-2 pl-10 pr-4',
                     ]"
                   >
                     <span
@@ -106,7 +110,7 @@
                       v-if="selected"
                       class="absolute inset-y-0 left-0 flex items-center pl-3 dark:text-indigo-400"
                     >
-                      <CheckIcon class="w-5 h-5" aria-hidden="true" />
+                      <CheckIcon class="h-5 w-5" aria-hidden="true" />
                     </span>
                   </li>
                 </ListboxOption>
@@ -116,10 +120,10 @@
         </Listbox>
       </label>
 
-      <label class="block mt-4">
+      <label class="mt-4 block">
         <span class="dark:text-white">No. Kendaraan</span>
         <input
-          class="form-input border-none dark:text-white bg-gray-100 dark:bg-gray-700 block mt-2 w-full rounded-md"
+          class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
           type="text"
           name="no_kendaraan"
           id="no_kendaraan"
@@ -128,7 +132,7 @@
       </label>
 
       <label class="mt-6 flex flex-row justify-between">
-        <span class="dark:text-white w-full">Aktif</span>
+        <span class="w-full dark:text-white">Aktif</span>
         <SwitchGroup>
           <Switch
             v-model="angkot.status"
@@ -137,11 +141,11 @@
                 ? 'bg-indigo-500 dark:bg-indigo-400'
                 : 'bg-gray-200 dark:bg-gray-700'
             "
-            class="relative inline-flex items-center h-6 transition-colors rounded-full w-12 focus:outline-none"
+            class="relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus:outline-none"
           >
             <span
               :class="angkot.status ? 'translate-x-6' : 'translate-x-1'"
-              class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
+              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
             />
           </Switch>
         </SwitchGroup>
@@ -151,14 +155,14 @@
     <template v-slot:footer>
       <button
         type="button"
-        class="inline-flex justify-center mr-2 px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md hover:bg-gray-700 focus:outline-none"
+        class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none"
         @click="toggleModal"
       >
         Batal
       </button>
       <button
         type="button"
-        class="inline-flex justify-center ml-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-400 focus:outline-none"
+        class="ml-2 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400 focus:outline-none"
         @click="submitForm"
       >
         Simpan
@@ -167,14 +171,7 @@
   </Dialog>
 </template>
 
-<script>
-export default {
-  layout: AppLayout,
-};
-</script>
-
 <script setup>
-import AppLayout from "@/Layouts/AppLayout";
 import DataTable from "@/Components/DataTable";
 import {
   Listbox,
@@ -188,6 +185,7 @@ import { CheckIcon, SelectorIcon } from "@heroicons/vue/solid";
 import Dialog from "@/Components/Dialog";
 import { reactive } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+import { Head } from "@inertiajs/inertia-vue3";
 import eventBus from "@/eventBus";
 
 const props = defineProps({

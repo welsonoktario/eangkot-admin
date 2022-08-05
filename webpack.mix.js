@@ -13,20 +13,23 @@ const path = require("path");
  */
 
 mix
-  .js("resources/js/app.js", "public/js")
-  .js("resources/js/bootstrap.js", "public/js")
-  .sourceMaps()
-  .vue()
   .postCss("resources/css/app.css", "public/css", [
     require("postcss-import"),
     require("tailwindcss"),
     require("autoprefixer"),
   ])
-  .browserSync("eangkot.test")
+  .js("resources/js/app.js", "public/js")
+  .js("resources/js/bootstrap.js", "public/js")
+  .vue({
+    extractStyles: true,
+  })
+  .extract()
   .webpackConfig(require("./webpack.config"))
   .alias({ ziggy: path.resolve("vendor/tightenco/ziggy/dist/vue") })
   .disableSuccessNotifications();
 
 if (mix.inProduction()) {
   mix.version();
+} else {
+  mix.sourceMaps().browserSync("eangkot.test");
 }

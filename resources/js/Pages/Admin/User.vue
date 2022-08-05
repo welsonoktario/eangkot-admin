@@ -1,4 +1,8 @@
 <template>
+  <Head>
+    <title>eAngkot Admin - User</title>
+  </Head>
+
   <div class="my-6">
     <h2 class="text-2xl font-bold text-gray-700 dark:text-gray-200">User</h2>
 
@@ -17,7 +21,7 @@
         <td class="px-4 py-3">{{ user.nama }}</td>
         <td class="px-4 py-3">{{ user.no_hp }}</td>
         <td class="px-4 py-3">{{ user.email }}</td>
-        <td class="inline-flex items-center px-4 py-3 mx-auto justify-evenly">
+        <td class="mx-auto inline-flex items-center justify-evenly px-4 py-3">
           <button @click="modalUser('detail', user.id)" class="mr-2">
             <EyeIcon class="h-5" />
           </button>
@@ -40,7 +44,7 @@
       <template v-slot:footer>
         <button
           type="button"
-          class="inline-flex justify-center px-4 py-2 mr-2 text-sm font-medium text-white border border-transparent rounded-md hover:bg-gray-700 focus:outline-none"
+          class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none"
           @click="toggleModal"
         >
           {{ modal.type == "Detail User" ? "Tutup" : "Batal" }}
@@ -48,7 +52,7 @@
         <button
           v-if="modal.type == 'Edit User'"
           type="button"
-          class="inline-flex justify-center px-4 py-2 ml-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-400 focus:outline-none"
+          class="ml-2 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400 focus:outline-none"
           @click="submitForm"
         >
           Simpan
@@ -58,18 +62,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  layout: AppLayout,
-};
-</script>
-
 <script setup>
-import AppLayout from "@/Layouts/AppLayout";
 import DataTable from "@/Components/DataTable";
 import Dialog from "@/Components/Dialog";
 import { reactive, ref } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+import { Head } from "@inertiajs/inertia-vue3";
 import { EyeIcon, PencilIcon } from "@heroicons/vue/outline";
 import eventBus from "@/eventBus";
 

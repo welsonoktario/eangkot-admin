@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
+/public/img
 /public/js
 /public/css
 /public/error.log
@@ -20,3 +21,5 @@ yarn-error.log
 /.vscode
 /eangkot-firebase-adminsdk.json
 dump.rdb
+_ide_helper.php
+_ide_helper_models.php

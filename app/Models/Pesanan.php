@@ -3,19 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use MatanYadaev\EloquentSpatial\Objects\MultiPoint;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\SpatialBuilder;
 
 class Pesanan extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'driver_id',
-        'penumpang',
-        'rute',
-        'status'
+    protected $guarded = ['id'];
+    protected $casts = [
+        'jemput' => Point::class,
+        'tujuan' => Point::class
     ];
-    protected $casts = ['rute' => MultiPoint::class];
 
     public function newEloquentBuilder($query): SpatialBuilder
     {

@@ -1,15 +1,15 @@
 <template>
+  <Head>
+    <title>eAngkot Admin - Home</title>
+  </Head>
   <h1 class="dark:text-gray-50">Ini Home</h1>
 </template>
 
-<script>
-import AppLayout from "@/Layouts/AppLayout";
+<script setup>
+import { Head } from "@inertiajs/inertia-vue3";
 
-export default {
-  layout: AppLayout,
-  props: {
-    auth: Object,
-    errors: Object,
-  }
-};
+defineProps({
+  auth: Object,
+  errors: Object,
+});
 </script>

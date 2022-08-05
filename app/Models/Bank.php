@@ -8,11 +8,6 @@ class Bank extends Model
 {
     public function driver()
     {
-        return $this->hasMany(Driver::class);
-    }
-
-    public function pengajuanDriverDetail()
-    {
-        return $this->hasMany(PengajuanDriverDetail::class);
+        return $this->belongsToMany(Driver::class, 'driver_banks');
     }
 }

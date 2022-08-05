@@ -18,9 +18,4 @@ class PengajuanDriver extends Model
     {
         return $this->belongsTo(Trayek::class);
     }
-
-    public function detail()
-    {
-        return $this->hasOne(PengajuanDriverDetail::class);
-    }
 }

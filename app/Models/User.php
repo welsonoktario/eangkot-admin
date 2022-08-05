@@ -43,7 +43,7 @@ class User extends Authenticatable
         return $this->hasOne(Driver::class);
     }
 
-    public function pesanan()
+    public function pesanans()
     {
         return $this->hasMany(Pesanan::class);
     }

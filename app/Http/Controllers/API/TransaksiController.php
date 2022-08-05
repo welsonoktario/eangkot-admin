@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Throwable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class TransaksiController extends Controller
 {
@@ -19,16 +19,10 @@ class TransaksiController extends Controller
      */
     public function index(Request $request)
     {
-        $transaksis = Transaksi::with([
-            'pesanan' => function ($q) use ($request) {
-                $q->where('user_id', $request->user_id);
-            },
-            'pesanan.driver' => function ($q) {
-                $q->with(['angkot', 'angkot.trayek', 'user']);
-            },
-            'detail',
-            'ulasan'
-        ])->get();
+        $transaksis = Transaksi::query()
+            ->with(['pesanan.driver.user', 'pesanan.driver.angkot.trayek', 'ulasan'])
+            ->whereHas('pesanan', fn ($q) => $q->where('user_id', $request->user()->id))
+            ->get();
 
         if (!$transaksis) {
             return $this->fail('Terjadi kesalahan memuat riwayat transaksi');
@@ -67,10 +61,11 @@ class TransaksiController extends Controller
      */
     public function show($id)
     {
-        $transaksi = Transaksi::with(['driver', 'ulasan'])->firstWhere('id', $id);
-
-        if ($transaksi->isEmpty()) {
-            return $this->fail('Terjadi kesalahan memuat data transaksi');
+        try {
+            $transaksi = Transaksi::query()
+                ->find($id);
+        } catch (Throwable $e) {
+            return $this->fail('Terjadi kesalahan memuat data transaksi', $e->getMessage());
         }
 
         return $this->success(null, $transaksi);
