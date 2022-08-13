@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\SpatialBuilder;
 
+/**
+ * @property Point $jemput
+ * @property Point $tujuan
+ * @method static SpatialBuilder query()
+ */
 class Pesanan extends Model
 {
     protected $guarded = ['id'];

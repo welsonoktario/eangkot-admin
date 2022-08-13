@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Transaksi extends Model
 {
     protected $guarded = ['*'];
+    protected $casts = [
+        'created_at' => 'datetime:d F Y, H:i:s'
+    ];
 
     public function user()
     {

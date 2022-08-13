@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use MatanYadaev\EloquentSpatial\SpatialBuilder;
 
+/**
+ * @property Point $lokasi
+ * @method static SpatialBuilder query()
+ */
 class Angkot extends Model
 {
 use SoftDeletes;
