@@ -26,13 +26,11 @@ class TrayekController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Trayek  $trayek
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($trayek)
     {
-        $trayek = Trayek::find($id);
-
         if (!$trayek) {
             return $this->fail('Terjadi kesalahan memuat data trayek');
         }

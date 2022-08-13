@@ -56,14 +56,13 @@ class TransaksiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Transaksi  $transaksi
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($transaksi)
     {
         try {
-            $transaksi = Transaksi::query()
-                ->find($id);
+            $transaksi->load(['pesanan.driver.user', 'pesanan.driver.angkot.trayek', 'ulasan']);
         } catch (Throwable $e) {
             return $this->fail('Terjadi kesalahan memuat data transaksi', $e->getMessage());
         }
@@ -75,7 +74,7 @@ class TransaksiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Transaksi  $transaksi
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Transaksi $transaksi)

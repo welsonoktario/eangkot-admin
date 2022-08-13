@@ -21,7 +21,10 @@ class PesananController extends Controller
      */
     public function index(Request $request)
     {
-        $pesanans = Pesanan::with('user')->where('trayek_id', $request->trayek)->get();
+        $pesanans = Pesanan::query()
+            ->with('user')
+            ->where('trayek_id', $request->trayek)
+            ->get();
 
         return $this->success(null, $pesanans);
     }
@@ -30,7 +33,7 @@ class PesananController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {

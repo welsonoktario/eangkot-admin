@@ -1,24 +1,13 @@
 <template>
   <div
-    class="
-      container
-      flex
-      items-center
-      justify-between
-      md:justify-end
-      h-full
-      px-6
-      mx-auto
-      text-indigo-600
-      dark:text-indigo-600
-    "
+    class="container mx-auto flex h-full items-center justify-between px-6 text-indigo-600 dark:text-indigo-600 md:justify-end"
   >
     <button
       @click="toggleSidebar"
-      class="md:hidden focus:outline-none text-indigo-600 dark:text-indigo-600"
+      class="text-indigo-600 focus:outline-none dark:text-indigo-600 md:hidden"
     >
       <svg
-        class="w-6 h-6"
+        class="h-6 w-6"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -32,11 +21,11 @@
         ></path>
       </svg>
     </button>
-    <ul class="flex items-center flex-shrink-0 space-x-6">
+    <ul class="flex flex-shrink-0 items-center space-x-6">
       <li class="relative">
         <img
           @click="toggleProfile"
-          class="bg-gray-200 dark:bg-gray-900 rounded-full w-8 h-8"
+          class="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-900"
           :src="`https://ui-avatars.com/api/?name=${user.nama}`"
           width="100%"
         />
@@ -48,26 +37,17 @@
   </div>
 </template>
 
-<script>
-import event from "@/eventBus";
-import { computed, ref } from "vue";
-import ProfileMenu from "@/Components/Layouts/ProfileMenu";
-import { usePage } from "@inertiajs/inertia-vue3";
+<script lang="ts" setup>
+import event from "@/eventBus"
+import { computed, ref } from "vue"
+import ProfileMenu from "@components/Layouts/ProfileMenu.vue"
+import { usePage } from "@inertiajs/inertia-vue3"
 
-export default {
-  components: {
-    ProfileMenu,
-  },
-  setup() {
-    const user = computed(() => usePage().props.value.auth.user);
+const page = usePage()
+const user = computed(() => (page.props.value as any).auth.user)
 
-    const profileMenuOpen = ref(false);
-    const toggleSidebar = () => event.$emit("sidebar-toggle");
+const profileMenuOpen = ref(false)
+const toggleSidebar = () => event.$emit("sidebar-toggle")
 
-    const toggleProfile = () =>
-      (profileMenuOpen.value = !profileMenuOpen.value);
-
-    return { user, profileMenuOpen, toggleSidebar, toggleProfile };
-  },
-};
+const toggleProfile = () => (profileMenuOpen.value = !profileMenuOpen.value)
 </script>

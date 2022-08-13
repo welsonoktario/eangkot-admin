@@ -1,19 +1,19 @@
 <template>
   <div
-    class="grid grid-cols-12 h-screen"
+    class="grid h-screen grid-cols-12"
     :class="{ 'overflow-hidden': sidebarOpen }"
   >
     <!-- Sidebar -->
     <Sidebar />
 
-    <div class="col-span-12 md:col-span-10 w-full h-full">
-      <div class="flex flex-col h-full">
+    <div class="col-span-12 h-full w-full md:col-span-10">
+      <div class="flex h-full flex-col">
         <!-- Navbar -->
-        <header class="flex-none z-10 py-4 bg-white dark:bg-gray-800">
+        <header class="z-10 flex-none bg-white py-4 dark:bg-gray-800">
           <navbar />
         </header>
 
-        <main class="flex-1 container overflow-y-auto px-6">
+        <main class="container flex-1 overflow-y-auto px-6">
           <slot></slot>
         </main>
       </div>
@@ -21,28 +21,15 @@
   </div>
 </template>
 
-<script>
-import { onMounted, ref } from "vue";
-import event from "@/eventBus";
-import Sidebar from "@/Components/Layouts/Sidebar";
-import Navbar from "@/Components/Layouts/Navbar";
+<script lang="ts" setup>
+import { onMounted, ref } from "vue"
+import event from "@/eventBus"
+import Sidebar from "@components/Layouts/Sidebar"
+import Navbar from "@components/Layouts/Navbar"
 
-export default {
-  components: {
-    Sidebar,
-    Navbar,
-  },
-  setup() {
-    const sidebarOpen = ref(false);
+const sidebarOpen = ref(false)
 
-    onMounted(() =>
-      event.$on(
-        "sidebar-toggle",
-        () => (sidebarOpen.value = !sidebarOpen.value)
-      )
-    );
-
-    return { sidebarOpen };
-  },
-};
+onMounted(() =>
+  event.$on("sidebar-toggle", () => (sidebarOpen.value = !sidebarOpen.value))
+)
 </script>

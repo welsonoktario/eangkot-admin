@@ -3,7 +3,7 @@ const Ziggy = {
     home: { uri: "/", methods: ["GET", "HEAD"], domain: null },
     login: { uri: "login", methods: ["GET", "HEAD"], domain: null },
   },
-  url: "http://ziggy.test",
+  url: "http://eangkot.test",
   port: false,
 };
 

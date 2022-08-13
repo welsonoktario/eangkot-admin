@@ -18,8 +18,8 @@ mix
     require("tailwindcss"),
     require("autoprefixer"),
   ])
-  .js("resources/js/app.js", "public/js")
-  .js("resources/js/bootstrap.js", "public/js")
+  .ts("resources/js/app.ts", "public/js")
+  .ts("resources/js/bootstrap.ts", "public/js")
   .vue({
     extractStyles: true,
   })

@@ -1,9 +1,10 @@
 import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/inertia-vue3";
 import { InertiaProgress } from "@inertiajs/progress";
+// @ts-ignore
 import { ZiggyVue } from "ziggy";
 import { Ziggy } from "./ziggy";
-import AppLayout from "./Layouts/AppLayout";
+import AppLayout from "./Layouts/AppLayout.vue";
 
 createInertiaApp({
   resolve: async (name) => {
@@ -15,9 +16,10 @@ createInertiaApp({
 
     return page;
   },
-  setup({ el, App, props, plugin }) {
-    createApp({ render: () => h(App, props) })
+  setup({ el, app, props, plugin }) {
+    createApp({ render: () => h(app, props) })
       .use(plugin, ZiggyVue, Ziggy)
+      // @ts-ignore
       .mixin({ methods: { route } })
       .mount(el);
   },

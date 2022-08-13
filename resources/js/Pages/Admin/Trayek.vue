@@ -127,19 +127,21 @@
   </Dialog>
 </template>
 
-<script setup>
-import Dialog from "@/Components/Dialog";
-import { reactive } from "vue";
-import { Inertia } from "@inertiajs/inertia";
-import { Head } from "@inertiajs/inertia-vue3";
-import eventBus from "@/eventBus";
-import Pagination from "@/Components/Pagination.vue";
+<script lang="ts" setup>
+import Dialog from "@components/Dialog.vue"
+import { reactive } from "vue"
+import { Inertia } from "@inertiajs/inertia"
+import { Head } from "@inertiajs/inertia-vue3"
+import eventBus from "@/eventBus"
+import Pagination from "@components/Pagination.vue"
 
-defineProps({
+declare var route: any
+
+const props = defineProps({
   auth: Object,
   errors: Object,
   trayeks: Object,
-});
+})
 
 const trayek = reactive({
   id: 0,
@@ -148,61 +150,61 @@ const trayek = reactive({
   berangkat: "",
   pulang: "",
   gambar: "",
-});
+})
 
 const modal = reactive({
   type: "",
   isOpen: false,
-});
+})
 
 const filters = reactive({
   show: 0,
   search: "",
-});
+})
 
-const toggleModal = () => eventBus.$emit("modal-toggle");
+const toggleModal = () => eventBus.$emit("modal-toggle")
 
 const modalTrayek = (type, id = null) => {
-  trayek.id = 0;
-  trayek.kode = "";
-  trayek.rute = "";
-  trayek.berangkat = "";
-  trayek.pulang = "";
-  trayek.gambar = "";
+  trayek.id = 0
+  trayek.kode = ""
+  trayek.rute = ""
+  trayek.berangkat = ""
+  trayek.pulang = ""
+  trayek.gambar = ""
 
   if (type == "add") {
-    modal.type = "Tambah Trayek";
+    modal.type = "Tambah Trayek"
   } else if (type == "edit") {
-    modal.type = "Edit Trayek";
-    const selected = props.trayeks.data.find((trayek) => trayek.id == id);
-    console.log(selected);
+    modal.type = "Edit Trayek"
+    const selected = props.trayeks.data.find((trayek) => trayek.id == id)
+    console.log(selected)
 
-    trayek.id = selected.id;
-    trayek.kode = selected.kode;
-    trayek.rute = selected.rute;
-    trayek.berangkat = selected.berangkat;
-    trayek.pulang = selected.pulang;
-    trayek.gambar = selected.gambar;
+    trayek.id = selected.id
+    trayek.kode = selected.kode
+    trayek.rute = selected.rute
+    trayek.berangkat = selected.berangkat
+    trayek.pulang = selected.pulang
+    trayek.gambar = selected.gambar
   }
 
-  toggleModal();
-};
+  toggleModal()
+}
 
 const onShowing = (val) => {
-  filters.show = val;
+  filters.show = val
   Inertia.get(route("admin.trayek.index"), filters, {
     preserveState: true,
-  });
-};
+  })
+}
 
 const onSearching = (q) => {
-  filters.search = q;
+  filters.search = q
   setTimeout(
     () =>
       Inertia.get(route("admin.trayek.index"), filters, {
         preserveState: true,
       }),
     150
-  );
-};
+  )
+}
 </script>

@@ -151,7 +151,7 @@
   </transition>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { Link } from "@inertiajs/inertia-vue3";
 import { onBeforeMount, onMounted, ref } from "vue";
 import event from "@/eventBus";
@@ -163,12 +163,9 @@ import {
   UsersIcon,
 } from "@heroicons/vue/outline";
 
-export default {
-  components: {
-    Link,
-  },
-  setup() {
-    const akunMenuOpen = ref(false);
+declare var route: any;
+
+const akunMenuOpen = ref(false);
     const pengajuanMenuOpen = ref(false);
     const sidebarOpen = ref(false);
     const currentRoute = ref(route().current());
@@ -242,20 +239,6 @@ export default {
     onBeforeMount(() =>
       window.removeEventListener("resize", onCurrentWidthChange)
     );
-
-    return {
-      akunMenuOpen,
-      pengajuanMenuOpen,
-      currentRoute,
-      routes,
-      akunRoute,
-      pengajuanRoute,
-      sidebarOpen,
-      currentWidth,
-      navigation,
-    };
-  },
-};
 </script>
 
 <style scoped>
