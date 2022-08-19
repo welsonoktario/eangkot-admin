@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\PengajuanDriver;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
@@ -20,7 +21,8 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::find($request->user_id);
+        $user = User::query()
+            ->find($request->user_id);
 
         // kalo user not found
         if (!$user) {
@@ -56,18 +58,23 @@ class DriverController extends Controller
      */
     public function show($id)
     {
-        $user = User::with(['driver', 'driver.angkot'])->find($id);
+        $user = User::query()
+            ->with(['driver', 'driver.angkot'])
+            ->find($id);
 
         if (!$user) {
             return $this->fail('Data driver tidak ditemukan');
         }
 
-        return $this->success(null, $user);
+        return $this->success(null, new UserResource($user));
     }
 
     public function statusPengajuan($id)
     {
-        $pengajuan = PengajuanDriver::where('user_id', $id)->orderBy('id', 'DESC')->first();
+        $pengajuan = PengajuanDriver::query()
+            ->where('user_id', $id)
+            ->orderBy('id', 'DESC')
+            ->first();
 
         if (!$pengajuan) {
             return $this->fail('Data pengajuan tidak ditemukan');

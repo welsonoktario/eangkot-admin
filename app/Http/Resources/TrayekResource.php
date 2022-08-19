@@ -19,7 +19,8 @@ class TrayekResource extends JsonResource
             'kode' => $this->kode,
             'rute' => $this->rute,
             'ruteBerangkat' => $this->rute_berangkat,
-            'rutePulang' => $this->rute_pulang
+            'rutePulang' => $this->rute_pulang,
+            'gambar' => $this->gambar
         ];
     }
 }

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TransaksiCollection;
+use App\Http\Resources\TransaksiResource;
+use App\Http\Resources\UlasanResource;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -28,7 +31,7 @@ class TransaksiController extends Controller
             return $this->fail('Terjadi kesalahan memuat riwayat transaksi');
         }
 
-        return $this->success(null, $transaksis);
+        return $this->success(null, new TransaksiCollection($transaksis));
     }
 
     /**
@@ -67,7 +70,7 @@ class TransaksiController extends Controller
             return $this->fail('Terjadi kesalahan memuat data transaksi', $e->getMessage());
         }
 
-        return $this->success(null, $transaksi);
+        return $this->success(null, new TransaksiResource($transaksi));
     }
 
     /**
@@ -89,7 +92,7 @@ class TransaksiController extends Controller
 
             DB::commit();
 
-            return $this->success(null, $ulasan);
+            return $this->success(null, new UlasanResource($ulasan));
         } catch (Throwable $e) {
             DB::rollBack();
             Log::error("Add ulasan: {$e->getMessage()}");

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Events\AngkotLokasiUpdated;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AngkotResource;
 use App\Models\Angkot;
 use Illuminate\Support\Facades\DB;
 use MatanYadaev\EloquentSpatial\Objects\Point;
@@ -51,7 +52,9 @@ class AngkotController extends Controller
      */
     public function show($id)
     {
-        $angkot = Angkot::with('drivers')->find($id);
+        $angkot = Angkot::query()
+            ->with('drivers')
+            ->find($id);
 
         if (!$angkot) {
             return response()->json([
@@ -62,7 +65,7 @@ class AngkotController extends Controller
 
         return response()->json([
             'status' => 'OK',
-            'data' => $angkot
+            'data' => new AngkotResource($angkot)
         ], 200);
     }
 
@@ -107,7 +110,8 @@ class AngkotController extends Controller
             $titikJemput = new Point($request->titikJemput->latitude, $request->titikJemput->longitude);
             $query = "ST_DISTANCE($titikJemput, lokasi) jarak";
 
-            $angkots = Angkot::select(DB::raw($query))
+            $angkots = Angkot::query()
+                ->select(DB::raw($query))
                 ->where('trayek_id', $trayek->id)
                 ->whereNotIn('id', $request->blacklist)
                 ->get();

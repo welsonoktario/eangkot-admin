@@ -5,9 +5,12 @@ namespace App\Http\Controllers\API;
 use App\Events\PesananCreated;
 use App\Events\PesananHandled;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PesananCollection;
+use App\Http\Resources\PesananResource;
 use App\Models\Pesanan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use MatanYadaev\EloquentSpatial\Objects\MultiPoint;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use Throwable;
@@ -21,12 +24,13 @@ class PesananController extends Controller
      */
     public function index(Request $request)
     {
+        $user = Auth::user();
         $pesanans = Pesanan::query()
-            ->with('user')
-            ->where('trayek_id', $request->trayek)
+        ->with(['driver.user', 'driver.angkot.trayek', 'transaksi.ulasan'])
+            ->where('user_id', $user->id)
             ->get();
 
-        return $this->success(null, $pesanans);
+        return $this->success(null, new PesananCollection($pesanans));
     }
 
     /**
@@ -53,7 +57,7 @@ class PesananController extends Controller
             return $this->fail('Terjadi kesalahan membuat pesanan', $e->getMessage());
         }
 
-        return $this->success(null, $pesanan);
+        return $this->success(null, new PesananResource($pesanan));
     }
 
     /**
@@ -70,7 +74,7 @@ class PesananController extends Controller
             return $this->fail('Terjadi kesalahan memuat data pesanan');
         }
 
-        return $this->success(null, $pesanan);
+        return $this->success(null, new PesananResource($pesanan));
     }
 
     /**
@@ -109,6 +113,6 @@ class PesananController extends Controller
             return $this->fail('Terjadi kesalahan memuat data pesanan', $e->getMessage());
         }
 
-        return $this->success(null, $pesanan);
+        return $this->success(null, new PesananResource($pesanan));
     }
 }

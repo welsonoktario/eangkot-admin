@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -16,11 +17,9 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        if ($request->driver) {
-            $user = User::with(['driver', 'pengajuan'])->firstWhere('no_hp', $request->phone);
-        } else {
-            $user = User::firstWhere('no_hp', $request->phone);
-        }
+        $user = User::query()
+            ->when($request->driver, fn ($q) => $q->with('driver'))
+            ->firstWhere('no_hp', $request->phone);
 
         if (!$user) {
             return $this->success('REGISTER');
@@ -29,9 +28,7 @@ class AuthController extends Controller
         $token = $user->createToken($user->nama)->plainTextToken;
 
         return $this->success('REGISTERED', [
-            'user' => $request->driver
-                ? $user->only(['id', 'nama', 'no_hp', 'email', 'secure', 'driver', 'pengajuan'])
-                : $user->only(['id', 'nama', 'no_hp', 'email', 'secure']),
+            'user' => new UserResource($user),
             'token' => $token
         ]);
     }
@@ -96,7 +93,7 @@ class AuthController extends Controller
         $token = $user->createToken($user->nama)->plainTextToken;
 
         return $this->success(null, [
-            'user' => $user->only(['id', 'nama', 'no_hp', 'email', 'secure']),
+            'user' => new UserResource($user),
             'token' => $token
         ]);
     }

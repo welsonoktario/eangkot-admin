@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TrayekCollection;
+use App\Http\Resources\TrayekResource;
 use App\Models\Trayek;
 
 class TrayekController extends Controller
@@ -14,13 +16,15 @@ class TrayekController extends Controller
      */
     public function index()
     {
-        $trayeks = Trayek::all(['id', 'kode', 'rute']);
+        $trayeks = Trayek::query()
+            ->orderBy('kode')
+            ->all();
 
         if (!$trayeks) {
             return $this->fail('Terjadi kesalahan memuat data trayek');
         }
 
-        return $this->success(null, $trayeks);
+        return $this->success(null, new TrayekCollection($trayeks));
     }
 
     /**
@@ -35,6 +39,6 @@ class TrayekController extends Controller
             return $this->fail('Terjadi kesalahan memuat data trayek');
         }
 
-        return $this->success(null, $trayek);
+        return $this->success(null, new TrayekResource($trayek));
     }
 }

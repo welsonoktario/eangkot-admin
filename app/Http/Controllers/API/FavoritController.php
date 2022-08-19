@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FavoritCollection;
 use App\Models\Favorit;
 use App\Models\Trayek;
 use Illuminate\Http\Request;
@@ -18,13 +19,16 @@ class FavoritController extends Controller
      */
     public function index(Request $request)
     {
-        $favorits = Favorit::with('trayek')->whereRaw('user_id = ?', $request->user_id)->get();
+        $favorits = Favorit::query()
+            ->with('trayek')
+            ->whereRaw('user_id = ?', $request->user_id)
+            ->get();
 
         if (!$favorits) {
             return $this->fail('Terjadi kesalahan sistem');
         }
 
-        return $this->success(null, $favorits);
+        return $this->success(null, new FavoritCollection($favorits));
     }
 
     /**
@@ -108,7 +112,9 @@ class FavoritController extends Controller
                 'tujuan' => $lokasi_tujuan
             ]);
 
-            if ($request->has('trayek_id')) $favorit->trayek()->associate($request->trayek);
+            if ($request->has('trayek_id')) {
+                $favorit->trayek()->associate($request->trayek);
+            }
         } catch (Throwable $err) {
             return $this->fail('Terjadi kesalahan sistem', $err->getMessage());
         }
