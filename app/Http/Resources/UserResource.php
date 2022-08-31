@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'nama' => $this->nama,
             'noHp' => $this->no_hp,
             'email' => $this->email,
+            'hasPassword' => $this->has_password,
             'roles' => $this->whenLoaded('roles', new RoleCollection($this->roles)),
             'driver' => DriverResource::make($this->whenLoaded('driver'))
         ];

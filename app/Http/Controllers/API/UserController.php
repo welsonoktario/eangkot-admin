@@ -11,10 +11,8 @@ use Throwable;
 
 class UserController extends Controller
 {
-    public function update($id, Request $request)
+    public function update(User $user, Request $request)
     {
-        $user = User::find($id);
-
         try {
             if ($request->email) {
                 $user->update([
@@ -55,7 +53,7 @@ class UserController extends Controller
         try {
             $user->update([
                 'password' => Hash::make($request->password),
-                'secure' => true
+                'has_password' => true
             ]);
         } catch (Throwable $e) {
             return $this->fail('Terjadi kesalahan mengubah password', $e->getMessage());

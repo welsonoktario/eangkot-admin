@@ -18,7 +18,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $user = User::query()
-            ->when($request->driver, fn ($q) => $q->with('driver'))
+            ->when($request->driver, fn ($q) => $q->with('driver')->whereHas('driver'))
             ->firstWhere('no_hp', $request->phone);
 
         if (!$user) {

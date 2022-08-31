@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
+            $table->boolean('has_password')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
