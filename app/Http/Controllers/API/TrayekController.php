@@ -18,7 +18,7 @@ class TrayekController extends Controller
     {
         $trayeks = Trayek::query()
             ->orderBy('kode')
-            ->all();
+            ->get();
 
         if (!$trayeks) {
             return $this->fail('Terjadi kesalahan memuat data trayek');
