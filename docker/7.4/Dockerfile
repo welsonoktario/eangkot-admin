@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
+RUN sed -i -e 's/http:\/\/archive\.ubuntu\.com\/ubuntu\//mirror:\/\/mirrors\.ubuntu\.com\/mirrors\.txt/' /etc/apt/sources.list
 RUN apt-get update \
     && apt-get install -y gnupg gosu curl ca-certificates zip unzip git supervisor sqlite3 libcap2-bin libpng-dev python2 \
     && mkdir -p ~/.gnupg \
@@ -24,13 +24,13 @@ RUN apt-get update \
     && echo "deb [signed-by=/usr/share/keyrings/ppa_ondrej_php.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ppa_ondrej_php.list \
     && apt-get update \
     && apt-get install -y php7.4-cli php7.4-dev \
-       php7.4-pgsql php7.4-sqlite3 php7.4-gd \
-       php7.4-curl php7.4-memcached \
-       php7.4-imap php7.4-mysql php7.4-mbstring \
-       php7.4-xml php7.4-zip php7.4-bcmath php7.4-soap \
-       php7.4-intl php7.4-readline php7.4-pcov \
-       php7.4-msgpack php7.4-igbinary php7.4-ldap \
-       php7.4-redis php7.4-xdebug \
+    php7.4-pgsql php7.4-sqlite3 php7.4-gd \
+    php7.4-curl php7.4-memcached \
+    php7.4-imap php7.4-mysql php7.4-mbstring \
+    php7.4-xml php7.4-zip php7.4-bcmath php7.4-soap \
+    php7.4-intl php7.4-readline php7.4-pcov \
+    php7.4-msgpack php7.4-igbinary php7.4-ldap \
+    php7.4-redis php7.4-xdebug \
     && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && curl -sLS https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
     && apt-get install -y nodejs \
