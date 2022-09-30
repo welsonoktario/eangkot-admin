@@ -2,7 +2,7 @@
   <transition name="fade" mode="out-in">
     <div
       v-if="sidebarOpen"
-      class="absolute inset-0 z-40 w-screen mt-16 bg-gray-900 opacity-75"
+      class="absolute inset-0 z-40 mt-16 w-screen bg-gray-900 opacity-75"
       @click="sidebarOpen = !sidebarOpen"
     ></div>
   </transition>
@@ -17,10 +17,10 @@
   >
     <aside
       v-if="sidebarOpen || currentWidth >= 768"
-      class="fixed inset-y-0 z-50 flex-shrink-0 w-full col-span-2 py-4 mt-16 bg-white border-r border-gray-100 dark:bg-gray-800 dark:text-white md:static md:mt-0 md:block"
+      class="fixed inset-y-0 z-50 col-span-2 mt-16 w-full flex-shrink-0 border-r border-gray-100 bg-white py-4 dark:bg-gray-800 dark:text-white md:static md:mt-0 md:block"
       :class="{ hidden: !sidebarOpen }"
     >
-      <h1 class="text-xl font-bold text-center">eAngkot</h1>
+      <h1 class="text-center text-xl font-bold">eAngkot</h1>
 
       <ul class="mt-6">
         <li
@@ -32,7 +32,7 @@
             :href="route.url"
             @click="navigation(route.name)"
             as="button"
-            class="inline-flex items-center w-full p-2 font-semibold focus:outline-none"
+            class="inline-flex w-full items-center p-2 font-semibold focus:outline-none"
             :class="{
               'text-indigo-500 hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300':
                 route.name == currentRoute,
@@ -40,22 +40,22 @@
                 route.name != currentRoute,
             }"
           >
-            <component :is="route.icon" class="w-5 h-5"></component>
+            <component :is="route.icon" class="h-5 w-5"></component>
             <span class="ml-4">{{ route.label }}</span>
           </Link>
         </li>
         <li class="relative px-4 py-2">
           <button
-            class="inline-flex items-center justify-between w-full p-2 font-semibold text-gray-700 hover:text-black focus:outline-none dark:text-gray-50 dark:hover:text-gray-300"
+            class="inline-flex w-full items-center justify-between p-2 font-semibold text-gray-700 hover:text-black focus:outline-none dark:text-gray-50 dark:hover:text-gray-300"
             @click="akunMenuOpen = !akunMenuOpen"
           >
             <span class="inline-flex items-center">
-              <component :is="akunRoute.icon" class="w-5 h-5"></component>
+              <component :is="akunRoute.icon" class="h-5 w-5"></component>
               <span class="ml-4">Akun</span>
             </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="w-4 h-4"
+              class="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -78,15 +78,16 @@
           </button>
           <ul
             v-show="akunMenuOpen"
-            class="p-2 mt-2 space-y-2 overflow-hidden font-medium text-gray-700 rounded-md bg-gray-50 dark:bg-gray-900 dark:text-gray-50"
+            class="mt-2 space-y-2 overflow-hidden rounded-md bg-gray-50 p-2 font-medium text-gray-700 dark:bg-gray-900 dark:text-gray-50"
           >
             <li v-for="route in akunRoute.routes" :key="route.name">
               <Link
+                as="button"
                 :href="route.url"
                 @click="navigation(route.name)"
-                class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                class="w-full px-2 py-1 text-left transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 :class="{
-                  'bg-indigo-600 text-gray-50 dark:bg-indigo-600':
+                  'rounded-md bg-indigo-600 text-gray-50 dark:bg-indigo-600':
                     currentRoute === route.name,
                 }"
               >
@@ -97,16 +98,16 @@
         </li>
         <li class="relative px-4 py-2">
           <button
-            class="inline-flex items-center justify-between w-full p-2 font-semibold text-gray-700 hover:text-black focus:outline-none dark:text-gray-50 dark:hover:text-gray-300"
+            class="inline-flex w-full items-center justify-between p-2 font-semibold text-gray-700 hover:text-black focus:outline-none dark:text-gray-50 dark:hover:text-gray-300"
             @click="pengajuanMenuOpen = !pengajuanMenuOpen"
           >
             <span class="inline-flex items-center">
-              <component :is="pengajuanRoute.icon" class="w-5 h-5"></component>
+              <component :is="pengajuanRoute.icon" class="h-5 w-5"></component>
               <span class="ml-4">Pengajuan</span>
             </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="w-4 h-4"
+              class="h-4 w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -129,15 +130,16 @@
           </button>
           <ul
             v-show="pengajuanMenuOpen"
-            class="p-2 mt-2 space-y-2 overflow-hidden font-medium text-gray-700 rounded-md bg-gray-50 dark:bg-gray-900 dark:text-gray-50"
+            class="mt-2 space-y-2 overflow-hidden rounded-md bg-gray-50 p-2 font-medium text-gray-700 dark:bg-gray-900 dark:text-gray-50"
           >
             <li v-for="route in pengajuanRoute.routes" :key="route.name">
               <Link
+                as="button"
                 :href="route.url"
                 @click="navigation(route.name)"
-                class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                class="w-full px-2 py-1 text-left transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 :class="{
-                  'bg-indigo-600 text-gray-50 dark:bg-indigo-600':
+                  'rounded-md bg-indigo-600 text-gray-50 dark:bg-indigo-600':
                     currentRoute === route.name,
                 }"
               >
@@ -151,94 +153,89 @@
   </transition>
 </template>
 
-<script lang="ts" setup>
-import { Link } from "@inertiajs/inertia-vue3";
-import { onBeforeMount, onMounted, ref } from "vue";
-import event from "@/eventBus";
+<script setup>
+import { Link } from "@inertiajs/inertia-vue3"
+import { onBeforeMount, onMounted, ref } from "vue"
+import event from "@/eventBus"
 import {
   DocumentTextIcon,
   HomeIcon,
   MapIcon,
   TruckIcon,
   UsersIcon,
-} from "@heroicons/vue/outline";
+} from "@heroicons/vue/outline"
 
-declare var route: any;
+const akunMenuOpen = ref(false)
+const pengajuanMenuOpen = ref(false)
+const sidebarOpen = ref(false)
+const currentRoute = ref(route().current())
+const currentWidth = ref(window.innerWidth)
+const routes = [
+  {
+    name: "admin.home.index",
+    label: "Home",
+    url: route("admin.home.index"),
+    icon: HomeIcon,
+  },
+  {
+    name: "admin.angkot.index",
+    label: "Angkot",
+    url: route("admin.angkot.index"),
+    icon: TruckIcon,
+  },
+  {
+    name: "admin.trayek.index",
+    label: "Trayek",
+    url: route("admin.trayek.index"),
+    icon: MapIcon,
+  },
+]
+const akunRoute = {
+  icon: UsersIcon,
+  routes: [
+    {
+      name: "admin.akun.driver.index",
+      label: "Driver",
+      url: route("admin.akun.driver.index"),
+    },
+    {
+      name: "admin.akun.user.index",
+      label: "User",
+      url: route("admin.akun.user.index"),
+    },
+  ],
+}
+const pengajuanRoute = {
+  icon: DocumentTextIcon,
+  routes: [
+    {
+      name: "admin.pengajuan.driver.index",
+      label: "Driver",
+      url: route("admin.pengajuan.driver.index"),
+    },
+  ],
+}
 
-const akunMenuOpen = ref(false);
-    const pengajuanMenuOpen = ref(false);
-    const sidebarOpen = ref(false);
-    const currentRoute = ref(route().current());
-    const currentWidth = ref(window.innerWidth);
-    const routes = [
-      {
-        name: "admin.home.index",
-        label: "Home",
-        url: route("admin.home.index"),
-        icon: HomeIcon,
-      },
-      {
-        name: "admin.angkot.index",
-        label: "Angkot",
-        url: route("admin.angkot.index"),
-        icon: TruckIcon,
-      },
-      {
-        name: "admin.trayek.index",
-        label: "Trayek",
-        url: route("admin.trayek.index"),
-        icon: MapIcon,
-      },
-    ];
-    const akunRoute = {
-      icon: UsersIcon,
-      routes: [
-        {
-          name: "admin.akun.driver.index",
-          label: "Driver",
-          url: route("admin.akun.driver.index"),
-        },
-        {
-          name: "admin.akun.user.index",
-          label: "User",
-          url: route("admin.akun.user.index"),
-        },
-      ],
-    };
-    const pengajuanRoute = {
-      icon: DocumentTextIcon,
-      routes: [
-        {
-          name: "admin.pengajuan.driver.index",
-          label: "Driver",
-          url: route("admin.pengajuan.driver.index"),
-        },
-      ],
-    };
+const onCurrentWidthChange = () => {
+  if (window.innerWidth >= 768) sidebarOpen.value = false
+  currentWidth.value = window.innerWidth
+}
 
-    const onCurrentWidthChange = () => {
-      if (window.innerWidth >= 768) sidebarOpen.value = false;
-      currentWidth.value = window.innerWidth;
-    };
+const navigation = (name) => {
+  currentRoute.value = name
+  if (window.innerWidth <= 768) sidebarOpen.value = false
+}
 
-    const navigation = (name) => {
-      currentRoute.value = name;
-      if (window.innerWidth <= 768) sidebarOpen.value = false;
-    };
+onMounted(() => {
+  window.addEventListener("resize", onCurrentWidthChange)
+  if (currentRoute.value.includes("akun")) akunMenuOpen.value = true
+  if (currentRoute.value.includes("pengajuan")) pengajuanMenuOpen.value = true
+  event.$on("sidebar-toggle", () => {
+    sidebarOpen.value = !sidebarOpen.value
+  })
+})
 
-    onMounted(() => {
-      window.addEventListener("resize", onCurrentWidthChange);
-      if (currentRoute.value.includes("akun")) akunMenuOpen.value = true;
-      if (currentRoute.value.includes("pengajuan"))
-        pengajuanMenuOpen.value = true;
-      event.$on("sidebar-toggle", () => {
-        sidebarOpen.value = !sidebarOpen.value;
-      });
-    });
-
-    onBeforeMount(() =>
-      window.removeEventListener("resize", onCurrentWidthChange)
-    );
+onBeforeMount(() => window.removeEventListener("resize", onCurrentWidthChange))
 </script>
 
 <style scoped>

@@ -16,7 +16,7 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "matanyadaev/laravel-eloquent-spatial": "^1.0",
-        "predis/predis": "^1.1",
+        "predis/predis": "^2.0",
         "pusher/pusher-php-server": "^7.0",
         "pusher/pusher-push-notifications": "^1.1",
         "tightenco/ziggy": "^1.4"

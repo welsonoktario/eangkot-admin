@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TrayekCollection;
 use App\Http\Resources\TrayekResource;
 use App\Models\Trayek;
+use Illuminate\Support\Facades\Cache;
 
 class TrayekController extends Controller
 {
@@ -16,9 +17,15 @@ class TrayekController extends Controller
      */
     public function index()
     {
-        $trayeks = Trayek::query()
-            ->orderBy('kode')
-            ->get();
+        $trayeks = Cache::store('redis')->get('trayeks');
+
+        if (!$trayeks) {
+            $trayeks = Trayek::query()
+                ->orderBy('kode')
+                ->get();
+
+            Cache::store('redis')->set('trayeks', $trayeks);
+        }
 
         if (!$trayeks) {
             return $this->fail('Terjadi kesalahan memuat data trayek');
