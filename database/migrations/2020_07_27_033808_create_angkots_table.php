@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('no_kendaraan', 10)->unique();
             $table->boolean('aktif')->default(false);
             $table->point('lokasi')->nullable();
+            $table->string('doc_id', 20)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

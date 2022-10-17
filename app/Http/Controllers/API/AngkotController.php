@@ -103,6 +103,21 @@ class AngkotController extends Controller
         //
     }
 
+    public function updateDoc(Angkot $angkot, Request $request)
+    {
+        try {
+            $angkot->query()
+                ->update(['doc_id' => $request->docId]);
+        } catch (Throwable $err) {
+            return $this->fail(
+                'Terjadi kesalahan mengubah data $angkot',
+                $err->getMessage(),
+            );
+        }
+
+        return $this->success('Data angkot berhasil diperbarui');
+    }
+
     public function cariAngkot(Request $request)
     {
         try {
@@ -133,7 +148,7 @@ class AngkotController extends Controller
     {
         try {
             $lokasi = new Point($request->lat, $request->lang);
-            $angkot = Angkot::find($id)->update(['lokasi' => $lokasi]);
+            $angkot = tap(Angkot::find($id)->update(['lokasi' => $lokasi]));
             broadcast(new AngkotLokasiUpdated($angkot))->toOthers();
         } catch (Throwable $err) {
             return response()->json([

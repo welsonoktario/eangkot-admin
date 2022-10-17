@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AngkotController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\DriverController;
 use App\Http\Controllers\API\FavoritController;
@@ -38,6 +39,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::group(['prefix' => 'user'], function () {
         Route::patch('{user}/ubah-password', [UserController::class, 'ubahPassword'])->name('api.user.ubahPassword');
+    });
+
+    Route::group(['prefix' => 'angkot'], function() {
+        Route::post('{id}/doc', [AngkotController::class, 'updateDoc'])->name('api.angkot.updateDoc');
     });
 
     Route::resource('driver', DriverController::class, ['as' => 'api', 'only' => ['show', 'store']]);
