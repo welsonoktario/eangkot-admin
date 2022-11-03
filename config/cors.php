@@ -24,6 +24,8 @@ return [
         'http://localhost:8100',
         'http://localhost:8101/*',
         'http://localhost:8101',
+        'http://localhost:5173/*',
+        'http://localhost:5173',
         'http://localhost/*',
         'http://localhost'
     ],
