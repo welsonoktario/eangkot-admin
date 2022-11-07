@@ -35,13 +35,14 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['prefix' => 'driver'], function () {
         Route::get('{id}/status', [DriverController::class, 'statusPengajuan'])->name('api.driver.statusPengajuan');
+        Route::get('statistik', [DriverController::class, 'statistik'])->name('api.driver.statistik');
     });
 
     Route::group(['prefix' => 'user'], function () {
         Route::patch('{user}/ubah-password', [UserController::class, 'ubahPassword'])->name('api.user.ubahPassword');
     });
 
-    Route::group(['prefix' => 'angkot'], function() {
+    Route::group(['prefix' => 'angkot'], function () {
         Route::post('{id}/doc', [AngkotController::class, 'updateDoc'])->name('api.angkot.updateDoc');
     });
 

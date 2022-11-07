@@ -6,8 +6,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\PengajuanDriver;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TransaksiCollection;
 use App\Http\Resources\UserResource;
+use App\Models\Pesanan;
+use App\Models\Transaksi;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
 
@@ -81,6 +85,42 @@ class DriverController extends Controller
         }
 
         return $this->success(null, $pengajuan);
+    }
+
+    public function statistik(Request $request)
+    {
+        $driver = Auth::user()->driver;
+        $days = Carbon::now()->subDays($request->days ?: 7);
+
+        $data = [];
+        $transaksis = Transaksi::query()
+            ->whereHas('pesanan', fn ($q) => $q->where('driver_id', $driver->id))
+            ->whereDate('created_at', '>=', $days)
+            ->get();
+        $transaksis = $transaksis->map(function ($transaksi) {
+            $tmp = $transaksi;
+            $tmp['tanggal'] = $transaksi->created_at->format('Y-m-d');
+            unset($tmp['created_at']);
+            unset($tmp['updated_at']);
+
+            return $tmp;
+        });
+        $transaksis = $transaksis->groupBy('tanggal');
+        $transaksis = $transaksis->map(function ($tanggal) {
+            $tmp = [
+                'total' => 0,
+                'transaksi' => 0
+            ];
+
+            foreach ($tanggal as $transaksi) {
+                $tmp['transaksi'] += 1;
+                $tmp['total'] += $transaksi->ongkos;
+            }
+
+            return $tmp;
+        });
+
+        return response()->json($transaksis);
     }
 
     // Function upload file
