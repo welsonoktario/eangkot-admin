@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\PengajuanDriver;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PesananCollection;
 use App\Http\Resources\TransaksiCollection;
 use App\Http\Resources\UserResource;
 use App\Models\Pesanan;
@@ -13,6 +14,7 @@ use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Log;
 use Throwable;
 
 class DriverController extends Controller
@@ -90,9 +92,14 @@ class DriverController extends Controller
     public function statistik(Request $request)
     {
         $driver = Auth::user()->driver;
-        $days = Carbon::now()->subDays($request->days ?: 7);
+        $days = Carbon::now()->subDays((int) $request->days ?: 7);
 
-        $data = [];
+        $pesanans = Pesanan::query()
+            ->with('transaksi')
+            ->where('driver_id', $driver->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
         $transaksis = Transaksi::query()
             ->whereHas('pesanan', fn ($q) => $q->where('driver_id', $driver->id))
             ->whereDate('created_at', '>=', $days)
@@ -119,8 +126,9 @@ class DriverController extends Controller
 
             return $tmp;
         });
+        $pesanans = new PesananCollection($pesanans);
 
-        return response()->json($transaksis);
+        return response()->json(compact('transaksis', 'pesanans'));
     }
 
     // Function upload file
