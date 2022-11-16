@@ -51,8 +51,6 @@ class PesananController extends Controller
                 'rute' => new MultiPoint([$lokasi_jemput, $lokasi_tujuan]),
                 'penumpang' => $request->penumpang
             ]);
-
-            event(new PesananCreated($request->driver_id, $pesanan));
         } catch (Throwable $e) {
             return $this->fail('Terjadi kesalahan membuat pesanan', $e->getMessage());
         }

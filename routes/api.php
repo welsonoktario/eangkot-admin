@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AngkotController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\Driver\AngkotController as DriverAngkotController;
 use App\Http\Controllers\API\Driver\PesananController as DriverPesananController;
 use App\Http\Controllers\API\DriverController;
 use App\Http\Controllers\API\FavoritController;
@@ -38,6 +39,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('{id}/status', [DriverController::class, 'statusPengajuan'])->name('api.driver.statusPengajuan');
         Route::get('statistik', [DriverController::class, 'statistik'])->name('api.driver.statistik');
         Route::resource('pesanan', DriverPesananController::class, ['as' => 'api.driver']);
+        Route::apiResource('angkot', DriverAngkotController::class, ['as' => 'api.angkot']);
     });
 
     Route::group(['prefix' => 'user'], function () {

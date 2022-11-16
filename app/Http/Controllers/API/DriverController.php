@@ -97,7 +97,7 @@ class DriverController extends Controller
         $pesanans = Pesanan::query()
             ->with('transaksi')
             ->where('driver_id', $driver->id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->limit(5)
             ->get();
         $transaksis = Transaksi::query()
