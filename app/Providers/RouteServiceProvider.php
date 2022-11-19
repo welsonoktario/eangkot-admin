@@ -44,9 +44,9 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
-            Route::domain('admin.eangkot.test')
-                ->middleware('web')
+            Route::middleware('web')
                 ->namespace($this->namespace)
+                ->prefix('admin')
                 ->group(base_path('routes/admin.php'));
 
             Route::middleware('web')

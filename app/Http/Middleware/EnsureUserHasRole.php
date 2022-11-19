@@ -24,7 +24,7 @@ class EnsureUserHasRole
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-            return redirect('http://eangkot.test');
+            return redirect('https://eangkot.fly.io');
         }
 
         return $next($request);
