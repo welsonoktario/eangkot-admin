@@ -15,14 +15,8 @@ return new class extends Migration {
         Schema::create('favorits', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('trayek_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('trayek_id');
             $table->string('alamat');
             $table->point('tujuan');
         });

@@ -13,14 +13,8 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('driver_banks', function (Blueprint $table) {
-            $table->foreignId('driver_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('bank_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('driver_id');
+            $table->unsignedBigInteger('bank_id');
             $table->string('rekening');
         });
     }

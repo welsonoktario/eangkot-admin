@@ -14,14 +14,8 @@ return new class extends Migration {
     {
         Schema::create('pengajuan_drivers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('trayek_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('trayek_id');
             $table->string('nik', 16);
             $table->string('sim', 16);
             $table->string('alamat');

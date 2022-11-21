@@ -14,10 +14,7 @@ return new class extends Migration {
     {
         Schema::create('ulasans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('transaksi_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('transaksi_id');
             $table->tinyInteger('rating');
             $table->string('komentar')->nullable();
         });

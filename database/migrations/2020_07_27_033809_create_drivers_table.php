@@ -14,18 +14,10 @@ return new class extends Migration {
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('angkot_id')
-                ->nullable()
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('angkot_id');
             $table->string('alamat');
-            $table->string('nik', 16)
-                ->unique();
+            $table->string('nik', 16)->unique();
             $table->timestamps();
             $table->softDeletes();
         });

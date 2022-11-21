@@ -14,14 +14,8 @@ return new class extends Migration {
     {
         Schema::create('pesanans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('driver_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('driver_id');
             $table->point('jemput');
             $table->point('tujuan');
             $table->integer('penumpang')->default(1);

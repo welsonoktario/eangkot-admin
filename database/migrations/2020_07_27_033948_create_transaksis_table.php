@@ -14,10 +14,7 @@ return new class extends Migration {
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pesanan_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('pesanan_id');
             $table->integer('ongkos');
             $table->integer('durasi_perjalanan');
             $table->decimal('jarak_perjalanan', 3, 2);
