@@ -63,8 +63,8 @@
 </template>
 
 <script setup>
-import DataTable from "@/Components/DataTable";
-import Dialog from "@/Components/Dialog";
+import DataTable from "@components/DataTable.vue";
+import Dialog from "@components/Dialog.vue";
 import { reactive, ref } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { Head } from "@inertiajs/inertia-vue3";

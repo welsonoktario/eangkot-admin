@@ -69,7 +69,7 @@ export default {
   },
   setup(props) {
     const logout = () => {
-      Inertia.post("/logout", {
+      Inertia.post(route('logout'), {
         _token: props.csrf_token,
       });
     };

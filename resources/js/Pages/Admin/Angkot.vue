@@ -172,7 +172,7 @@
 </template>
 
 <script setup>
-import DataTable from "@/Components/DataTable";
+import DataTable from "@components/DataTable.vue";
 import {
   Listbox,
   ListboxButton,
@@ -182,7 +182,7 @@ import {
   SwitchGroup,
 } from "@headlessui/vue";
 import { CheckIcon, SelectorIcon } from "@heroicons/vue/solid";
-import Dialog from "@/Components/Dialog";
+import Dialog from "@components/Dialog.vue";
 import { reactive } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { Head } from "@inertiajs/inertia-vue3";

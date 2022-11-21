@@ -10,22 +10,14 @@
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="{{ mix('css/app.css') }}">
   @inertiaHead
 </head>
 
 <body class="font-sans antialiased bg-gray-100 dark:bg-gray-900">
   @inertia
-
-  {{-- @env('local')
-  <script src="http://localhost:3000/browser-sync/browser-sync-client.js"></script>
-  @endenv --}}
-
   <!-- Scripts -->
   @routes
-  <script src="{{ mix('js/manifest.js') }}"></script>
-  <script src="{{ mix('js/vendor.js') }}"></script>
-  <script src="{{ mix('js/app.js') }}"></script>
+  @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
 </body>
 
 </html>

@@ -23,8 +23,8 @@ class TransaksiController extends Controller
     public function index(Request $request)
     {
         $transaksis = Transaksi::query()
-            ->with(['pesanan.driver.user', 'pesanan.driver.angkot.trayek', 'ulasan'])
-            ->whereHas('pesanan', fn ($q) => $q->where('user_id', $request->user()->id))
+            ->with(['driver.user', 'driver.angkot.trayek', 'ulasan'])
+            ->where('user_id', $request->user()->id)
             ->get();
 
         if (!$transaksis) {
@@ -47,7 +47,9 @@ class TransaksiController extends Controller
                 'pesanan_id' => $request->pesanan_id,
                 'tanggal' => Carbon::now(),
                 'durasi_perjalanan' => $request->durasi,
-                'jarak_perjalanan' => $request->jarak
+                'jarak_perjalanan' => $request->jarak,
+                'lokasi_jemput' => $request->lokasi_jemput,
+                'lokasi_tujuan' => $request->lokasi_tujuan
             ]);
         } catch (Throwable $e) {
             return $this->fail('Terjadi kesalahan menambah transaksi', $e->getMessage());

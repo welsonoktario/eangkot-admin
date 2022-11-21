@@ -1,0 +1,138 @@
+{
+  "resources/js/app.js": {
+    "file": "assets/app.25578da0.js",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/Pages/Admin/Angkot.vue",
+      "resources/js/Pages/Admin/Driver.vue",
+      "resources/js/Pages/Admin/Home.vue",
+      "resources/js/Pages/Admin/Trayek.vue",
+      "resources/js/Pages/Admin/User.vue",
+      "resources/js/Pages/Auth/Login.vue",
+      "resources/js/Pages/Web/Welcome.vue"
+    ],
+    "css": [
+      "assets/app.0d6d62e2.css",
+      "assets/app.1cfa0075.css"
+    ]
+  },
+  "resources/js/Pages/Admin/Angkot.vue": {
+    "file": "assets/Angkot.025853d5.js",
+    "src": "resources/js/Pages/Admin/Angkot.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js",
+      "_DataTable.f67287aa.js",
+      "_Dialog.80f995b9.js"
+    ],
+    "css": [
+      "assets/app.1cfa0075.css"
+    ]
+  },
+  "_DataTable.f67287aa.js": {
+    "file": "assets/DataTable.f67287aa.js",
+    "imports": [
+      "resources/js/app.js",
+      "_Dialog.80f995b9.js"
+    ],
+    "css": [
+      "assets/DataTable.5c658836.css"
+    ]
+  },
+  "_Dialog.80f995b9.js": {
+    "file": "assets/Dialog.80f995b9.js",
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
+  "resources/js/Pages/Admin/Driver.vue": {
+    "file": "assets/Driver.3533a50c.js",
+    "src": "resources/js/Pages/Admin/Driver.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_DataTable.f67287aa.js",
+      "_Dialog.80f995b9.js",
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/app.1cfa0075.css"
+    ]
+  },
+  "resources/js/Pages/Admin/Home.vue": {
+    "file": "assets/Home.a1da1bca.js",
+    "src": "resources/js/Pages/Admin/Home.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/app.1cfa0075.css"
+    ]
+  },
+  "resources/js/Pages/Admin/Trayek.vue": {
+    "file": "assets/Trayek.94c50b7d.js",
+    "src": "resources/js/Pages/Admin/Trayek.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js",
+      "_Dialog.80f995b9.js"
+    ],
+    "css": [
+      "assets/app.1cfa0075.css"
+    ]
+  },
+  "resources/js/Pages/Admin/User.vue": {
+    "file": "assets/User.375abb17.js",
+    "src": "resources/js/Pages/Admin/User.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_DataTable.f67287aa.js",
+      "_Dialog.80f995b9.js",
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/app.1cfa0075.css"
+    ]
+  },
+  "resources/js/Pages/Auth/Login.vue": {
+    "file": "assets/Login.ec3d10a4.js",
+    "src": "resources/js/Pages/Auth/Login.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/app.1cfa0075.css"
+    ]
+  },
+  "resources/js/Pages/Web/Welcome.vue": {
+    "file": "assets/Welcome.ffdf444a.js",
+    "src": "resources/js/Pages/Web/Welcome.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "css": [
+      "assets/Welcome.b87833e8.css",
+      "assets/app.1cfa0075.css"
+    ]
+  },
+  "DataTable.css": {
+    "file": "assets/DataTable.5c658836.css",
+    "src": "DataTable.css"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app.1cfa0075.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/Pages/Web/Welcome.css": {
+    "file": "assets/Welcome.b87833e8.css",
+    "src": "resources/js/Pages/Web/Welcome.css"
+  },
+  "resources/js/app.css": {
+    "file": "assets/app.0d6d62e2.css",
+    "src": "resources/js/app.css"
+  }
+}

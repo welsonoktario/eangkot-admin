@@ -68,7 +68,7 @@ COPY --from=base /var/www/html/vendor /app/vendor
 RUN if [ -f "vite.config.js" ]; then \
         ASSET_CMD="build"; \
     else \
-        ASSET_CMD="development"; \
+        ASSET_CMD="production"; \
     fi; \
     if [ -f "yarn.lock" ]; then \
         yarn install --frozen-lockfile; \

@@ -108,7 +108,7 @@
 <script>
 import { ArrowDownIcon, SearchIcon } from "@heroicons/vue/solid";
 import { ref, watch } from "vue";
-import Pagination from "@/Components/Pagination";
+import Pagination from "@components/Pagination.vue";
 
 export default {
   components: {

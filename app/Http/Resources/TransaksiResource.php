@@ -20,7 +20,11 @@ class TransaksiResource extends JsonResource
             'ongkos' => $this->ongkos,
             'durasiPerjalanan' => $this->durasi_perjalanan,
             'jarakPerjalanan' => $this->jarak_perjalanan,
+            'lokasiJemput' => $this->lokasi_jemput,
+            'lokasiTujuan' => $this->lokasi_tujuan,
             'tanggal' => Carbon::parse($this->created_at, 'Asia/Jakarta')->translatedFormat('d F Y, H:i:s'),
+            'driver' => DriverResource::make($this->whenLoaded('driver')),
+            'user' => UserResource::make($this->whenLoaded('user')),
             'ulasan' => UlasanResource::make($this->whenLoaded('ulasan'))
         ];
     }

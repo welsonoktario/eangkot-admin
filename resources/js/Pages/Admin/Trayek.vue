@@ -127,15 +127,13 @@
   </Dialog>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import Dialog from "@components/Dialog.vue"
 import { reactive } from "vue"
 import { Inertia } from "@inertiajs/inertia"
 import { Head } from "@inertiajs/inertia-vue3"
 import eventBus from "@/eventBus"
 import Pagination from "@components/Pagination.vue"
-
-declare var route: any
 
 const props = defineProps({
   auth: Object,

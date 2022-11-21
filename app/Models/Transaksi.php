@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaksi extends Model
 {
-    protected $guarded = ['id', 'pesanan_id'];
+    protected $guarded = ['id'];
     protected $casts = [
         'created_at' => 'datetime:d F Y, H:i:s'
     ];
@@ -19,11 +19,6 @@ class Transaksi extends Model
     public function driver()
     {
         return $this->belongsTo(Driver::class);
-    }
-
-    public function pesanan()
-    {
-        return $this->belongsTo(Pesanan::class);
     }
 
     public function ulasan()
