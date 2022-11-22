@@ -20,7 +20,7 @@ processes = []
   REDIS_HOST = "eangkot-redis.internal"
   DB_CONNECTION = "mysql"
   DB_HOST = "ap-southeast.connect.psdb.cloud"
-  DB_DATABASE= "eangkot"
+  DB_DATABASE = "eangkot"
   MYSQL_ATTR_SSL_CA = "/etc/ssl/certs/ca-certificates.crt"
 
 [experimental]
