@@ -19,8 +19,8 @@ class AngkotResource extends JsonResource
             'noKendaraan' => $this->no_kendaraan,
             'aktif' => $this->aktif,
             'lokasi' => [
-                'lat' => $this->lokasi->latitude,
-                'long' => $this->lokasi->longitude
+                'lat' => $this->lokasi->latitude ?? 0.0,
+                'long' => $this->lokasi->longitude ?? 0.0,
             ],
             'docId' => $this->doc_id,
             'trayek' => TrayekResource::make($this->whenLoaded('trayek'))
