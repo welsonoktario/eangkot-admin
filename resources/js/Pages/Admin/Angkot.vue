@@ -68,7 +68,7 @@
               <span
                 class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
               >
-                <SelectorIcon
+                <ChevronUpDownIcon
                   class="h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
@@ -172,7 +172,7 @@
 </template>
 
 <script setup>
-import DataTable from "@components/DataTable.vue";
+import DataTable from "@components/DataTable.vue"
 import {
   Listbox,
   ListboxButton,
@@ -180,20 +180,20 @@ import {
   ListboxOption,
   Switch,
   SwitchGroup,
-} from "@headlessui/vue";
-import { CheckIcon, SelectorIcon } from "@heroicons/vue/solid";
-import Dialog from "@components/Dialog.vue";
-import { reactive } from "vue";
-import { Inertia } from "@inertiajs/inertia";
-import { Head } from "@inertiajs/inertia-vue3";
-import eventBus from "@/eventBus";
+} from "@headlessui/vue"
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/24/solid"
+import Dialog from "@components/Dialog.vue"
+import { reactive } from "vue"
+import { Inertia } from "@inertiajs/inertia"
+import { Head } from "@inertiajs/inertia-vue3"
+import eventBus from "@/eventBus"
 
 const props = defineProps({
   auth: Object,
   errors: Object,
   angkots: Object,
   trayeks: Array,
-});
+})
 
 const angkot = reactive({
   id: 0,
@@ -203,82 +203,82 @@ const angkot = reactive({
   },
   plat: "",
   status: false,
-});
+})
 
 const modal = reactive({
   type: "",
   isOpen: false,
-});
+})
 
 const filters = reactive({
   show: 0,
   search: "",
-});
+})
 
-const columns = ["ID", "Trayek", "No. Kendaraan", "Status"];
+const columns = ["ID", "Trayek", "No. Kendaraan", "Status"]
 
-const toggleModal = () => eventBus.$emit("modal-toggle");
+const toggleModal = () => eventBus.$emit("modal-toggle")
 
 const modalAngkot = (type, id = null) => {
-  angkot.id = 0;
+  angkot.id = 0
   angkot.trayek = {
     id: props.trayeks[0].id,
     kode: props.trayeks[0].kode,
-  };
-  angkot.plat = "";
-  angkot.status = false;
+  }
+  angkot.plat = ""
+  angkot.status = false
 
   if (type == "add") {
-    modal.type = "Tambah Angkot";
+    modal.type = "Tambah Angkot"
   } else if (type == "edit") {
-    modal.type = "Edit Angkot";
-    const selected = props.angkots.data.find((angkot) => angkot.id == id);
+    modal.type = "Edit Angkot"
+    const selected = props.angkots.data.find((angkot) => angkot.id == id)
 
-    angkot.id = id;
+    angkot.id = id
     angkot.trayek = {
       id: selected.trayek.id,
       kode: selected.trayek.kode,
-    };
-    angkot.plat = selected.no_kendaraan;
-    angkot.status = selected.aktif ? true : false;
+    }
+    angkot.plat = selected.no_kendaraan
+    angkot.status = selected.aktif ? true : false
   }
 
-  toggleModal();
-};
+  toggleModal()
+}
 
 const onShowing = (val) => {
-  filters.show = val;
+  filters.show = val
   Inertia.get(route("admin.angkot.index"), filters, {
     preserveState: true,
-  });
-};
+  })
+}
 
 const onSearching = (q) => {
-  filters.search = q;
+  filters.search = q
   setTimeout(
     () =>
       Inertia.get(route("admin.angkot.index"), filters, {
         preserveState: true,
       }),
     150
-  );
-};
+  )
+}
 
 const submitForm = () => {
   if (modal.type == "Tambah Angkot") {
     Inertia.post(route("admin.angkot.store"), angkot, {
       preserveState: true,
       onSuccess: () => toggleModal(),
-    });
+    })
   } else if (modal.type == "Edit Angkot") {
     Inertia.patch(route("admin.angkot.update", angkot.id), angkot, {
       preserveState: true,
       onSuccess: () => toggleModal(),
-    });
+    })
   }
-};
+}
 
 const deleteAngkot = (id) => {
-  Inertia.delete(route("admin.angkot.destroy", id));
-};
+  Inertia.delete(route("admin.angkot.destroy", id))
+}
 </script>

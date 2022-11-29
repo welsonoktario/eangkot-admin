@@ -1,6 +1,6 @@
 {
   "resources/js/app.js": {
-    "file": "assets/app.25578da0.js",
+    "file": "assets/app.7aa63c6c.js",
     "src": "resources/js/app.js",
     "isEntry": true,
     "dynamicImports": [
@@ -13,126 +13,106 @@
       "resources/js/Pages/Web/Welcome.vue"
     ],
     "css": [
-      "assets/app.0d6d62e2.css",
-      "assets/app.1cfa0075.css"
+      "assets/app.e10db99e.css"
     ]
   },
   "resources/js/Pages/Admin/Angkot.vue": {
-    "file": "assets/Angkot.025853d5.js",
+    "file": "assets/Angkot.5755b578.js",
     "src": "resources/js/Pages/Admin/Angkot.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_DataTable.f67287aa.js",
-      "_Dialog.80f995b9.js"
-    ],
-    "css": [
-      "assets/app.1cfa0075.css"
+      "_DataTable.30df8862.js",
+      "_Dialog.f95bcdaa.js"
     ]
   },
-  "_DataTable.f67287aa.js": {
-    "file": "assets/DataTable.f67287aa.js",
+  "_DataTable.30df8862.js": {
+    "file": "assets/DataTable.30df8862.js",
     "imports": [
       "resources/js/app.js",
-      "_Dialog.80f995b9.js"
+      "_Dialog.f95bcdaa.js"
     ],
     "css": [
-      "assets/DataTable.5c658836.css"
+      "assets/DataTable.36eb5c09.css"
     ]
   },
-  "_Dialog.80f995b9.js": {
-    "file": "assets/Dialog.80f995b9.js",
+  "_Dialog.f95bcdaa.js": {
+    "file": "assets/Dialog.f95bcdaa.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
   "resources/js/Pages/Admin/Driver.vue": {
-    "file": "assets/Driver.3533a50c.js",
+    "file": "assets/Driver.8d59c789.js",
     "src": "resources/js/Pages/Admin/Driver.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_DataTable.f67287aa.js",
-      "_Dialog.80f995b9.js",
+      "_DataTable.30df8862.js",
+      "_Dialog.f95bcdaa.js",
       "resources/js/app.js"
-    ],
-    "css": [
-      "assets/app.1cfa0075.css"
     ]
   },
   "resources/js/Pages/Admin/Home.vue": {
-    "file": "assets/Home.a1da1bca.js",
+    "file": "assets/Home.bc1ba3c8.js",
     "src": "resources/js/Pages/Admin/Home.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js"
-    ],
-    "css": [
-      "assets/app.1cfa0075.css"
     ]
   },
   "resources/js/Pages/Admin/Trayek.vue": {
-    "file": "assets/Trayek.94c50b7d.js",
+    "file": "assets/Trayek.16e2be39.js",
     "src": "resources/js/Pages/Admin/Trayek.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js",
-      "_Dialog.80f995b9.js"
-    ],
-    "css": [
-      "assets/app.1cfa0075.css"
+      "_Dialog.f95bcdaa.js"
     ]
   },
   "resources/js/Pages/Admin/User.vue": {
-    "file": "assets/User.375abb17.js",
+    "file": "assets/User.2e7bd85b.js",
     "src": "resources/js/Pages/Admin/User.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_DataTable.f67287aa.js",
-      "_Dialog.80f995b9.js",
+      "_DataTable.30df8862.js",
+      "_Dialog.f95bcdaa.js",
       "resources/js/app.js"
-    ],
-    "css": [
-      "assets/app.1cfa0075.css"
     ]
   },
   "resources/js/Pages/Auth/Login.vue": {
-    "file": "assets/Login.ec3d10a4.js",
+    "file": "assets/Login.bc62f4eb.js",
     "src": "resources/js/Pages/Auth/Login.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js"
-    ],
-    "css": [
-      "assets/app.1cfa0075.css"
     ]
   },
   "resources/js/Pages/Web/Welcome.vue": {
-    "file": "assets/Welcome.ffdf444a.js",
+    "file": "assets/Welcome.c03b251e.js",
     "src": "resources/js/Pages/Web/Welcome.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/app.js"
     ],
     "css": [
-      "assets/Welcome.b87833e8.css",
-      "assets/app.1cfa0075.css"
+      "assets/Welcome.3e0ef787.css"
     ]
   },
   "DataTable.css": {
-    "file": "assets/DataTable.5c658836.css",
+    "file": "assets/DataTable.36eb5c09.css",
     "src": "DataTable.css"
   },
+  "resources/js/Pages/Web/Welcome.css": {
+    "file": "assets/Welcome.3e0ef787.css",
+    "src": "resources/js/Pages/Web/Welcome.css"
+  },
   "resources/css/app.css": {
-    "file": "assets/app.1cfa0075.css",
+    "file": "assets/app.4358f383.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
-  "resources/js/Pages/Web/Welcome.css": {
-    "file": "assets/Welcome.b87833e8.css",
-    "src": "resources/js/Pages/Web/Welcome.css"
-  },
   "resources/js/app.css": {
-    "file": "assets/app.0d6d62e2.css",
+    "file": "assets/app.e10db99e.css",
     "src": "resources/js/app.css"
   }
 }

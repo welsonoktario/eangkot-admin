@@ -47,7 +47,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
     Route::group(['prefix' => 'angkot'], function () {
-        Route::post('{id}/doc', [AngkotController::class, 'updateDoc'])->name('api.angkot.updateDoc');
+        Route::patch('{angkot}/doc', [AngkotController::class, 'updateDoc'])->name('api.angkot.updateDoc');
     });
 
     Route::resource('driver', DriverController::class, ['as' => 'api', 'only' => ['show', 'store']]);

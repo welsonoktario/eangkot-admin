@@ -163,7 +163,7 @@ import {
   MapIcon,
   TruckIcon,
   UsersIcon,
-} from "@heroicons/vue/outline"
+} from "@heroicons/vue/24/solid"
 
 const akunMenuOpen = ref(false)
 const pengajuanMenuOpen = ref(false)

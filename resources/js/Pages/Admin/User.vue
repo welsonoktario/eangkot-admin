@@ -68,7 +68,7 @@ import Dialog from "@components/Dialog.vue";
 import { reactive, ref } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { Head } from "@inertiajs/inertia-vue3";
-import { EyeIcon, PencilIcon } from "@heroicons/vue/outline";
+import { EyeIcon, PencilIcon } from "@heroicons/vue/24/solid";
 import eventBus from "@/eventBus";
 
 const props = defineProps({

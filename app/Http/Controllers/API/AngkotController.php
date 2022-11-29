@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AngkotResource;
 use App\Models\Angkot;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use Throwable;
 
@@ -106,8 +107,8 @@ class AngkotController extends Controller
     public function updateDoc(Angkot $angkot, Request $request)
     {
         try {
-            $angkot->query()
-                ->update(['doc_id' => $request->docId]);
+            Log::debug($angkot);
+            $angkot->update(['doc_id' => $request->doc_id]);
         } catch (Throwable $err) {
             return $this->fail(
                 'Terjadi kesalahan mengubah data $angkot',

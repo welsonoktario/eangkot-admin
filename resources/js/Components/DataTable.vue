@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col md:flex-row justify-between mb-4">
-    <div class="dark:text-white mb-4 md:mb-0 mx-auto md:mx-0">
+  <div class="mb-4 flex flex-col justify-between md:flex-row">
+    <div class="mx-auto mb-4 dark:text-white md:mx-0 md:mb-0">
       <label for="showing">Tampilkan</label>
       <select
-        class="bg-white dark:bg-gray-800 rounded-lg border-none mx-2 px-2 py-1"
+        class="mx-2 rounded-lg border-none bg-white px-2 py-1 dark:bg-gray-800"
         name="showing"
         v-model="showing"
       >
@@ -14,25 +14,13 @@
       <span>item</span>
     </div>
     <div
-      class="relative text-gray-400 dark:text-gray-500 focus-within:text-white"
+      class="relative text-gray-400 focus-within:text-white dark:text-gray-500"
     >
-      <span class="absolute inset-y-0 left-0 pl-2 flex">
-        <SearchIcon class="h-5 my-auto"
+      <span class="absolute inset-y-0 left-0 flex pl-2">
+        <magnifying-glass-icon class="my-auto h-5"
       /></span>
       <input
-        class="
-          search-input
-          pl-8
-          border-none
-          w-full
-          rounded-lg
-          px-2
-          py-1
-          block
-          bg-white
-          dark:bg-gray-800
-          placeholder-gray-500
-        "
+        class="search-input block w-full rounded-lg border-none bg-white px-2 py-1 pl-8 placeholder-gray-500 dark:bg-gray-800"
         v-model="query"
         type="text"
         name="search"
@@ -42,22 +30,11 @@
     </div>
   </div>
   <div class="mx-auto w-full rounded-lg shadow-lg">
-    <div class="rounded-t-lg overflow-x-auto">
-      <table class="table-auto w-full whitespace-nowrap dark:text-white">
+    <div class="overflow-x-auto rounded-t-lg">
+      <table class="w-full table-auto whitespace-nowrap dark:text-white">
         <thead>
           <tr
-            class="
-              text-xs
-              font-semibold
-              tracking-wide
-              text-left text-gray-500
-              uppercase
-              border-b
-              dark:border-gray-700
-              bg-gray-50
-              dark:text-gray-400
-              dark:bg-gray-800
-            "
+            class="border-b bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
           >
             <th
               v-for="(column, index) in columns"
@@ -70,7 +47,7 @@
           </tr>
         </thead>
 
-        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+        <tbody class="divide-y bg-white dark:divide-gray-700 dark:bg-gray-800">
           <slot></slot>
         </tbody>
       </table>
@@ -78,23 +55,7 @@
 
     <div>
       <Pagination
-        class="
-          grid
-          px-4
-          py-3
-          text-xs
-          font-semibold
-          tracking-wide
-          text-gray-500
-          uppercase
-          border-t
-          dark:border-gray-700
-          bg-gray-50
-          sm:grid-cols-9
-          dark:text-gray-400
-          dark:bg-gray-800
-          rounded-b-lg
-        "
+        class="grid rounded-b-lg border-t bg-gray-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 sm:grid-cols-9"
         :showLabel="true"
         :from="data.from"
         :to="data.to"
@@ -105,32 +66,22 @@
   </div>
 </template>
 
-<script>
-import { ArrowDownIcon, SearchIcon } from "@heroicons/vue/solid";
-import { ref, watch } from "vue";
-import Pagination from "@components/Pagination.vue";
+<script setup>
+import { MagnifyingGlassIcon } from "@heroicons/vue/24/solid"
+import { ref, watch } from "vue"
+import Pagination from "@components/Pagination.vue"
 
-export default {
-  components: {
-    ArrowDownIcon,
-    Pagination,
-    SearchIcon,
-  },
-  props: {
-    columns: Array,
-    data: Object,
-  },
-  emits: ["showing", "searching"],
-  setup(props, { emit }) {
-    const showing = ref(5);
-    const query = ref("");
+const props = defineProps({
+  columns: Array,
+  data: Object,
+})
+const emits = defineEmits(["showing", "searching"])
 
-    watch(showing, (newVal) => emit("showing", newVal));
-    watch(query, (newVal) => emit("searching", newVal));
+const showing = ref(5)
+const query = ref("")
 
-    return { showing, query };
-  },
-};
+watch(showing, (newVal) => emits("showing", newVal))
+watch(query, (newVal) => emits("searching", newVal))
 </script>
 
 <style scoped>
@@ -138,6 +89,7 @@ export default {
   border-width: 0px;
   outline: 0; /* I have also tried outline:none */
   -webkit-appearance: none;
+  appearance: none;
   box-shadow: 0;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
@@ -147,6 +99,7 @@ export default {
   border-width: 0px;
   outline: 0; /* I have also tried outline:none */
   -webkit-appearance: none;
+  appearance: none;
   box-shadow: 0;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;

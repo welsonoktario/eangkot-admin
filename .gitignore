@@ -1,11 +1,9 @@
 /node_modules
 /public/hot
 /public/storage
-/public/img
-/public/js
-/public/css
 /public/error.log
-/public/mix-manifest.json
+/public/build/
+/public/build/manifest.json
 /storage/*.key
 /vendor
 /data
