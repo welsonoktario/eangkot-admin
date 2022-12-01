@@ -5,7 +5,6 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\Driver\AngkotController as DriverAngkotController;
 use App\Http\Controllers\API\Driver\PesananController as DriverPesananController;
 use App\Http\Controllers\API\DriverController;
-use App\Http\Controllers\API\FavoritController;
 use App\Http\Controllers\API\PesananController;
 use App\Http\Controllers\API\TransaksiController;
 use App\Http\Controllers\API\TrayekController;
@@ -52,7 +51,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::resource('driver', DriverController::class, ['as' => 'api', 'only' => ['show', 'store']]);
     Route::resource('user', UserController::class, ['as' => 'api', 'only' => 'update']);
-    Route::resource('favorit', FavoritController::class, ['as' => 'api']);
     Route::resource('transaksi', TransaksiController::class, ['as' => 'api']);
     Route::resource('pesanan', PesananController::class, ['as' => 'api']);
     Route::resource('trayek', TrayekController::class, ['as' => 'api', 'only' => ['index', 'show']]);

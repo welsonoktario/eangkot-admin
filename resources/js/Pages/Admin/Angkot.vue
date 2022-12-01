@@ -27,18 +27,7 @@
       <td class="px-4 py-3">{{ angkot.id }}</td>
       <td class="px-4 py-3">{{ angkot.trayek.kode }}</td>
       <td class="px-4 py-3">{{ angkot.no_kendaraan }}</td>
-      <td class="px-4 py-3 text-sm">
-        <span
-          class="rounded-full px-2 py-1 font-semibold leading-tight"
-          :class="{
-            'bg-indigo-100 text-indigo-700': angkot.aktif,
-            'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-100':
-              !angkot.aktif,
-          }"
-          >{{ angkot.aktif ? "Aktif" : "Non-Aktif" }}</span
-        >
-      </td>
-      <td class="mx-auto px-4 py-3">
+      <td class="w-auto px-4 py-3 text-right">
         <button @click="modalAngkot('edit', angkot.id)" class="mr-2">
           Edit
         </button>
@@ -130,26 +119,6 @@
           v-model="angkot.plat"
         />
       </label>
-
-      <label class="mt-6 flex flex-row justify-between">
-        <span class="w-full dark:text-white">Aktif</span>
-        <SwitchGroup>
-          <Switch
-            v-model="angkot.status"
-            :class="
-              angkot.status
-                ? 'bg-indigo-500 dark:bg-indigo-400'
-                : 'bg-gray-200 dark:bg-gray-700'
-            "
-            class="relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus:outline-none"
-          >
-            <span
-              :class="angkot.status ? 'translate-x-6' : 'translate-x-1'"
-              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
-            />
-          </Switch>
-        </SwitchGroup>
-      </label>
     </template>
 
     <template v-slot:footer>
@@ -215,7 +184,7 @@ const filters = reactive({
   search: "",
 })
 
-const columns = ["ID", "Trayek", "No. Kendaraan", "Status"]
+const columns = ["ID", "Trayek", "No. Kendaraan"]
 
 const toggleModal = () => eventBus.$emit("modal-toggle")
 

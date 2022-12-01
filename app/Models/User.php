@@ -48,11 +48,6 @@ class User extends Authenticatable
         return $this->hasMany(Pesanan::class);
     }
 
-    public function favorits()
-    {
-        return $this->hasMany(Favorit::class);
-    }
-
     public function pengajuan()
     {
         return $this->hasOne(PengajuanDriver::class);

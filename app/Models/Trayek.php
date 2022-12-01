@@ -11,11 +11,6 @@ class Trayek extends Model
         return $this->hasMany(Angkot::class);
     }
 
-    public function favorits()
-    {
-        return $this->hasMany(Favorit::class);
-    }
-
     public function trayeks()
     {
         return $this->hasMany(PengajuanDriver::class);

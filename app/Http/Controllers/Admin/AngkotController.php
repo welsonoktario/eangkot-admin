@@ -24,7 +24,6 @@ class AngkotController extends Controller
             ->get(['id', 'kode']);
         $angkots = Angkot::query()
             ->with('trayek')
-            ->exclude(['lokasi'])
             ->whereRaw('LOWER(no_kendaraan) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
             ->paginate($request->show ?: 5)
             ->withQueryString()
@@ -34,7 +33,6 @@ class AngkotController extends Controller
                     'id' => $item->id,
                     'trayek' => $item->trayek,
                     'no_kendaraan' => $item->no_kendaraan,
-                    'aktif' => $item->aktif
                 ]
             );
 

@@ -27,7 +27,7 @@ class TrayekController extends Controller
                     'kode' => $item->kode,
                     'rute' => $item->rute,
                     'berangkat' => $item->rute_berangkat,
-                    'pulang' => $item->rute_pulang,
+                    'pulang' => $item->rute_kembali,
                     'gambar' => $item->gambar
                 ]
             );
