@@ -31,19 +31,16 @@
         <button @click="modalAngkot('edit', angkot.id)" class="mr-2">
           Edit
         </button>
-        <button @click="deleteAngkot(angkot.id)" class="ml-2 text-red-500">
-          Hapus
-        </button>
       </td>
     </tr>
   </DataTable>
 
   <Dialog class="grid grid-cols-1">
-    <template v-slot:title>
+    <template #title>
       {{ modal.type }}
     </template>
 
-    <template v-slot:content>
+    <template #content>
       <label for="block">
         <span class="dark:text-white">Trayek</span>
         <Listbox v-model="angkot.trayek">
@@ -121,10 +118,18 @@
       </label>
     </template>
 
-    <template v-slot:footer>
+    <template #footer>
       <button
         type="button"
-        class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none"
+        class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-rose-500 transition-all duration-150 hover:bg-rose-700 hover:bg-opacity-30 hover:text-rose-200 focus:outline-none"
+        @click="deleteAngkot(angkot.id)"
+      >
+        Hapus
+      </button>
+      <div class="flex-1"></div>
+      <button
+        type="button"
+        class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:bg-gray-700 focus:outline-none"
         @click="toggleModal"
       >
         Batal
@@ -147,8 +152,6 @@ import {
   ListboxButton,
   ListboxOptions,
   ListboxOption,
-  Switch,
-  SwitchGroup,
 } from "@headlessui/vue"
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/24/solid"
 import Dialog from "@components/Dialog.vue"
@@ -195,7 +198,6 @@ const modalAngkot = (type, id = null) => {
     kode: props.trayeks[0].kode,
   }
   angkot.plat = ""
-  angkot.status = false
 
   if (type == "add") {
     modal.type = "Tambah Angkot"
@@ -209,7 +211,6 @@ const modalAngkot = (type, id = null) => {
       kode: selected.trayek.kode,
     }
     angkot.plat = selected.no_kendaraan
-    angkot.status = selected.aktif ? true : false
   }
 
   toggleModal()

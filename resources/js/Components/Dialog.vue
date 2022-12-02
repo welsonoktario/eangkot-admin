@@ -39,7 +39,7 @@
                 <slot name="content"></slot>
               </div>
 
-              <div class="flex flex-row justify-end mt-4">
+              <div class="flex flex-row justify-end mt-8">
                 <slot name="footer"></slot>
               </div>
             </DialogPanel>
