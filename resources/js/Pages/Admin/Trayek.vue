@@ -75,20 +75,20 @@
         <textarea
           class="form-textarea mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
           rows="3"
-          name="berangkat"
+          name="rute_berangkat"
           id="berangkat"
           v-model="trayek.berangkat"
         ></textarea>
       </label>
 
       <label class="mt-4 block">
-        <span class="dark:text-white">Rute Pulang</span>
+        <span class="dark:text-white">Rute Kembali</span>
         <textarea
           class="form-textarea mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
           rows="3"
-          name="pulang"
-          id="pulang"
-          v-model="trayek.pulang"
+          name="rute_kembali"
+          id="kembali"
+          v-model="trayek.kembali"
         ></textarea>
       </label>
 
@@ -112,6 +112,14 @@
     <template v-slot:footer>
       <button
         type="button"
+        class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-rose-500 transition-all duration-150 hover:bg-rose-700 hover:bg-opacity-30 hover:text-rose-200 focus:outline-none"
+        @click="deleteTrayek(trayek.id)"
+      >
+        Hapus
+      </button>
+      <div class="flex-1"></div>
+      <button
+        type="button"
         class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none dark:text-gray-50 dark:hover:bg-gray-700"
         @click="toggleModal"
       >
@@ -120,8 +128,9 @@
       <button
         type="button"
         class="ml-2 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400 focus:outline-none"
+        @click="submitForm()"
       >
-        Simpan
+        {{ modal.type }}
       </button>
     </template>
   </Dialog>
@@ -146,7 +155,7 @@ const trayek = reactive({
   kode: "",
   rute: "",
   berangkat: "",
-  pulang: "",
+  kembali: "",
   gambar: "",
 })
 
@@ -167,7 +176,7 @@ const modalTrayek = (type, id = null) => {
   trayek.kode = ""
   trayek.rute = ""
   trayek.berangkat = ""
-  trayek.pulang = ""
+  trayek.kembali = ""
   trayek.gambar = ""
 
   if (type == "add") {
@@ -181,7 +190,7 @@ const modalTrayek = (type, id = null) => {
     trayek.kode = selected.kode
     trayek.rute = selected.rute
     trayek.berangkat = selected.berangkat
-    trayek.pulang = selected.pulang
+    trayek.kembali = selected.kembali
     trayek.gambar = selected.gambar
   }
 
@@ -205,4 +214,23 @@ const onSearching = (q) => {
     150
   )
 }
+
+const submitForm = () => {
+  if (modal.type == "Tambah Trayek") {
+    const data = trayek
+    delete data.id
+
+    Inertia.post(route("admin.trayek.store"), data, {
+      preserveState: true,
+      onSuccess: () => toggleModal(),
+    })
+  } else if (modal.type == "Edit Trayek") {
+    Inertia.patch(route("admin.trayek.update", trayek.id), trayek, {
+      preserveState: true,
+      onSuccess: () => toggleModal(),
+    })
+  }
+}
+
+const deleteTrayek = (id) => Inertia.delete(route("admin.trayek.destroy", id))
 </script>

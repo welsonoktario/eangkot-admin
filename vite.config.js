@@ -1,6 +1,7 @@
 import { defineConfig } from "vite"
 import laravel from "laravel-vite-plugin"
 import vue from "@vitejs/plugin-vue"
+import AutoImport from "unplugin-auto-import/vite"
 
 export default defineConfig({
   plugins: [
@@ -15,6 +16,24 @@ export default defineConfig({
           includeAbsolute: false,
         },
       },
+    }),
+    AutoImport({
+      eslintrc: {
+        enabled: true,
+      }, // targets to transform
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/,
+        /\.vue\?vue/, // .vue
+        /\.md$/, // .md
+      ],
+
+      // global imports to register
+      imports: [
+        // presets
+        "vue",
+        "vue-router",
+      ],
     }),
   ],
   resolve: {

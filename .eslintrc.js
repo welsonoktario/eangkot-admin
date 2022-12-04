@@ -2,7 +2,12 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: ["eslint:recommended", "plugin:vue/vue3-recommended", "prettier"],
+  extends: [
+    "eslint:recommended",
+    "plugin:vue/vue3-recommended",
+    "prettier",
+    "./.eslintrc-auto-import.json",
+  ],
   rules: {
     "vue/no-unused-vars": 1,
     "vue/multi-word-component-names": 0,

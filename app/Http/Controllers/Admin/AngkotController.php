@@ -102,6 +102,6 @@ class AngkotController extends Controller
     {
         $angkot->delete();
 
-        return Redirect::route('admin.angkot.index');
+        return Redirect::back();
     }
 }

@@ -63,12 +63,11 @@
 <script setup>
 import DataTable from "@components/DataTable.vue"
 import Dialog from "@components/Dialog.vue"
-import { reactive } from "vue"
 import { Inertia } from "@inertiajs/inertia"
 import { Head } from "@inertiajs/inertia-vue3"
 import eventBus from "@/eventBus"
 
-defineProps({
+const props = defineProps({
   auth: Object,
   errors: Object,
   drivers: Object,
@@ -94,12 +93,12 @@ const driver = reactive({
   alamat: "",
 })
 
-const modal = reactive({
+const modal = ref({
   type: "",
   isOpen: false,
 })
 
-const filters = reactive({
+const filters = ref({
   show: 0,
   search: "",
 })
@@ -138,14 +137,15 @@ const modalDriver = (type, id = null) => {
       hp: selected.user.no_hp,
       email: selected.user.email,
     }
-    driver.angkot = {
-      id: selected.angkot.id,
-      plat: selected.angkot.no_kendaraan,
-      aktif: selected.angkot.aktif ? true : false,
-      trayek: {
-        id: selected.angkot.trayek.id,
-        kode: selected.angkot.trayek.kode,
-      },
+    if (selected.driver) {
+      driver.angkot = {
+        id: selected.angkot.id,
+        plat: selected.angkot.no_kendaraan,
+        trayek: {
+          id: selected.angkot.trayek.id,
+          kode: selected.angkot.trayek.kode,
+        },
+      }
     }
     driver.alamat = selected.alamat
   } else if (type == "edit") {
@@ -159,14 +159,15 @@ const modalDriver = (type, id = null) => {
       hp: selected.user.no_hp,
       email: selected.user.email,
     }
-    driver.angkot = {
-      id: selected.angkot.id,
-      plat: selected.angkot.no_kendaraan,
-      aktif: selected.angkot.aktif ? true : false,
-      trayek: {
-        id: selected.angkot.trayek.id,
-        kode: selected.angkot.trayek.kode,
-      },
+    if (selected.driver) {
+      driver.angkot = {
+        id: selected.angkot.id,
+        plat: selected.angkot.no_kendaraan,
+        trayek: {
+          id: selected.angkot.trayek.id,
+          kode: selected.angkot.trayek.kode,
+        },
+      }
     }
     driver.alamat = selected.alamat
   }

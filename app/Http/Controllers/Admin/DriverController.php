@@ -20,9 +20,21 @@ class DriverController extends Controller
      */
     public function index(Request $request)
     {
-        $drivers = Driver::with(['user', 'angkot.trayek'])->whereRaw('LOWER(alamat) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
+        $drivers = Driver::with(['user', 'angkot.trayek'])
+            ->when(
+                $request->search,
+                fn ($q) =>
+                    $q->whereHas(
+                        'user',
+                        fn ($q) =>
+                        $q->whereRaw(
+                            'LOWER(nama) LIKE ? ',
+                            ['%' . strtolower($request->search ?: '') . '%']
+                        )
+                    )
+            )
             ->paginate($request->show ?: 5)
-            ->withQueryString()
+            ->appends($request->all())
             ->through(
                 fn ($item) =>
                 [
@@ -103,11 +115,9 @@ class DriverController extends Controller
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-
-            return Redirect::back();
         }
 
-        return Redirect::route('admin.akun.driver.index');
+        return Redirect::back();
     }
 
     /**

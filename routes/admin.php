@@ -36,5 +36,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ]);
     });
 
-    Route::resource('pengajuan/driver', Admin\PengajuanDriverController::class, ['as' => 'admin.pengajuan']);
+    Route::resource('pengajuan-driver', Admin\PengajuanDriverController::class, ['as' => 'admin']);
 });

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Trayek;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Throwable;
 
 class TrayekController extends Controller
 {
@@ -27,22 +29,12 @@ class TrayekController extends Controller
                     'kode' => $item->kode,
                     'rute' => $item->rute,
                     'berangkat' => $item->rute_berangkat,
-                    'pulang' => $item->rute_kembali,
+                    'kembali' => $item->rute_kembali,
                     'gambar' => $item->gambar
                 ]
             );
 
         return Inertia::render('Admin/Trayek', ['trayeks' => $trayeks]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -53,51 +45,47 @@ class TrayekController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        Trayek::query()->create([
+            'kode' => $request->kode,
+            'rute' => $request->rute,
+            'rute_berangkat' => $request->berangkat,
+            'rute_kembali' => $request->kembali,
+            'gambar' => $request->gambar
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return Redirect::back();
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Trayek  $trayek
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Trayek $trayek)
     {
-        //
+        $trayek->update([
+            'kode' => $request->kode,
+            'rute' => $request->rute,
+            'rute_berangkat' => $request->berangkat,
+            'rute_kembali' => $request->kembali,
+            'gambar' => $request->gambar
+        ]);
+
+        return Redirect::back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Trayek  $trayek
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Trayek $trayek)
     {
-        //
+        $trayek->delete();
+
+        return Redirect::back();
     }
 }
