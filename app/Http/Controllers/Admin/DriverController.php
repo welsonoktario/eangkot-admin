@@ -40,7 +40,6 @@ class DriverController extends Controller
                 [
                     'id' => $item->id,
                     'user' => $item->user,
-                    'alamat' => $item->alamat,
                     'angkot' => $item->angkot
                 ]
             );

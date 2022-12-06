@@ -15,14 +15,16 @@
   >
     <tr
       class="text-gray-700 dark:text-gray-400"
-      v-for="driver in drivers.data"
+      v-for="(driver, index) in drivers.data"
       :key="driver.id"
     >
-      <td class="px-4 py-3">{{ driver.id }}</td>
+      <td class="px-4 py-3">{{ index + 1 }}</td>
       <td class="px-4 py-3">{{ driver.user.nama }}</td>
       <td class="px-4 py-3">{{ driver.user.no_hp }}</td>
-      <td class="px-4 py-3">{{ driver.user.email }}</td>
-      <td class="px-4 py-3">{{ driver.alamat }}</td>
+      <td class="px-4 py-3">{{ driver.user.email ?? "-" }}</td>
+      <td class="px-4 py-3">
+        {{ driver.angkot?.no_kendaraan ?? "Belum memiliki angkot" }}
+      </td>
       <td class="px-12 py-3 text-right">
         <button @click="modalDriver('detail', driver.id)" class="mr-2">
           Detail
@@ -103,7 +105,7 @@ const filters = ref({
   search: "",
 })
 
-const columns = ["ID", "Nama", "No. HP", "Email", "Alamat"]
+const columns = ["No. ", "Nama", "No. HP", "Email", "Angkot"]
 
 const toggleModal = () => eventBus.$emit("modal-toggle")
 

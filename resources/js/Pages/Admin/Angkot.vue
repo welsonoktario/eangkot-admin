@@ -120,6 +120,7 @@
 
     <template #footer>
       <button
+        v-if="modal.type == 'Edit Angkot'"
         type="button"
         class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-rose-500 transition-all duration-150 hover:bg-rose-700 hover:bg-opacity-30 hover:text-rose-200 focus:outline-none"
         @click="deleteAngkot(angkot.id)"

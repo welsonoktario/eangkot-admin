@@ -46,10 +46,11 @@ class TransaksiController extends Controller
             $transaksi = Transaksi::create([
                 'pesanan_id' => $request->pesanan_id,
                 'tanggal' => Carbon::now(),
+                'ongkot' => $request->ongkos,
                 'durasi_perjalanan' => $request->durasi,
                 'jarak_perjalanan' => $request->jarak,
-                'lokasi_jemput' => $request->lokasi_jemput,
-                'lokasi_tujuan' => $request->lokasi_tujuan
+                'lokasi_jemput' => $request->lokasiJemput,
+                'lokasi_tujuan' => $request->lokasiTujuan
             ]);
         } catch (Throwable $e) {
             return $this->fail('Terjadi kesalahan menambah transaksi', $e->getMessage());
