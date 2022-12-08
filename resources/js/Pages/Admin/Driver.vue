@@ -39,8 +39,46 @@
     </template>
 
     <template v-slot:content>
-      {{ driver.id }}
+      <label class="block">
+        <span class="dark:text-white">Nama</span>
+        <input
+          class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
+          type="text"
+          :value="driver.user.nama"
+          readonly
+        />
+      </label>
+
+      <label class="mt-4 block">
+        <span class="dark:text-white">No. HP</span>
+        <input
+          class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
+          type="text"
+          :value="driver.user.hp"
+          readonly
+        />
+      </label>
+
+      <label class="mt-4 block">
+        <span class="dark:text-white">Email</span>
+        <input
+          class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
+          type="text"
+          :value="driver.user.email ?? '-'"
+          readonly
+        />
+      </label>
     </template>
+
+    <label class="mt-4 block">
+      <span class="dark:text-white">Alamat</span>
+      <textarea
+        class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
+        rows="2"
+        readonly
+        >{{ driver.alamat }}</textarea
+      >
+    </label>
 
     <template v-slot:footer>
       <button
