@@ -116,6 +116,7 @@ class PengajuanDriverController extends Controller
                 $user = $pengajuanDriver->user;
                 $user->roles()->attach(3);
                 $user->driver()->create([
+                    'trayek_id' => $pengajuanDriver->trayek_id,
                     'alamat' => $pengajuanDriver->alamat,
                 ]);
             }

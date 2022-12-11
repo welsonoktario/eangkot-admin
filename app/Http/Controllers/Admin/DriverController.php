@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Angkot;
 use App\Models\Driver;
+use App\Models\Trayek;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Inertia\Inertia;
 use Throwable;
 
@@ -20,7 +22,8 @@ class DriverController extends Controller
      */
     public function index(Request $request)
     {
-        $drivers = Driver::with(['user', 'angkot.trayek'])
+        $trayeks = Trayek::all();
+        $drivers = Driver::with(['user', 'trayek', 'angkot'])
             ->when(
                 $request->search,
                 fn ($q) =>
@@ -40,11 +43,15 @@ class DriverController extends Controller
                 [
                     'id' => $item->id,
                     'user' => $item->user,
+                    'trayek' => $item->trayek,
                     'angkot' => $item->angkot
                 ]
             );
 
-        return Inertia::render('Admin/Driver', ['drivers' => $drivers]);
+        return Inertia::render(
+            'Admin/Driver',
+            compact('drivers', 'trayeks')
+        );
     }
 
     /**
@@ -140,5 +147,15 @@ class DriverController extends Controller
         }
 
         return Redirect::route('admin.akun.driver.index');
+    }
+
+    public function loadAngkot(int $trayek)
+    {
+        $angkots = Angkot::query()
+            ->whereDoesntHave('driver')
+            ->where('trayek_id', $trayek)
+            ->get();
+
+        return Response::json(compact('angkots'));
     }
 }

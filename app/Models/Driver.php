@@ -10,11 +10,16 @@ class Driver extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
-    protected $hidden = ['nik', 'alamat'];
+    protected $hidden = ['alamat'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function trayek()
+    {
+        return $this->belongsTo(Trayek::class);
     }
 
     public function angkot()

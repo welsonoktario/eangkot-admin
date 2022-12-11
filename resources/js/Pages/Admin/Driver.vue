@@ -26,7 +26,7 @@
         {{ driver.angkot?.no_kendaraan ?? "Belum memiliki angkot" }}
       </td>
       <td class="px-12 py-3 text-right">
-        <button @click="modalDriver('detail', driver.id)" class="mr-2">
+        <button @click="modalDriver('Detail Driver', driver)" class="mr-2">
           Detail
         </button>
       </td>
@@ -44,7 +44,7 @@
         <input
           class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
           type="text"
-          :value="driver.user.nama"
+          :value="selected.user.nama"
           readonly
         />
       </label>
@@ -54,7 +54,7 @@
         <input
           class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
           type="text"
-          :value="driver.user.hp"
+          :value="selected.user.no_hp"
           readonly
         />
       </label>
@@ -64,9 +64,53 @@
         <input
           class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
           type="text"
-          :value="driver.user.email ?? '-'"
+          :value="selected.user.email ?? '-'"
           readonly
         />
+      </label>
+
+      <label class="mt-4 block">
+        <span class="dark:text-white">Trayek</span>
+        <select
+          v-model="selectedTrayek"
+          class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
+        >
+          <option value="0" selected disabled>Pilih trayek...</option>
+          <option
+            v-for="trayek in trayeks"
+            :key="trayek.kode"
+            :value="trayek.id"
+          >
+            {{ trayek.kode }}
+          </option>
+        </select>
+      </label>
+
+      <label class="mt-4 block">
+        <span class="dark:text-white">Angkot</span>
+        <div
+          v-if="selected.angkot"
+          class="form-input mt-2 flex w-full justify-between rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
+        >
+          <span>{{ selected.angkot.no_kendaraan }}</span>
+          <span @click="ubahAngkot()" class="cursor-pointer text-indigo-400"
+            >Ubah</span
+          >
+        </div>
+        <select
+          v-else
+          v-model="angkotId"
+          class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
+        >
+          <option value="0" selected disabled>Pilih angkot...</option>
+          <option
+            v-for="angkot in angkots"
+            :key="angkot.no_kendaraan"
+            :value="angkot.id"
+          >
+            {{ angkot.no_kendaraan }}
+          </option>
+        </select>
       </label>
     </template>
 
@@ -76,7 +120,7 @@
         class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
         rows="2"
         readonly
-        >{{ driver.alamat }}</textarea
+        >{{ selected.alamat }}</textarea
       >
     </label>
 
@@ -86,13 +130,12 @@
         class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none"
         @click="toggleModal"
       >
-        {{ modal.type == "Detail Driver" ? "Tutup" : "Batal" }}
+        Batal
       </button>
       <button
-        v-if="modal.type == 'Edit Driver'"
         type="button"
         class="ml-2 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400 focus:outline-none"
-        @click="submitForm"
+        @click="updateDriver"
       >
         Simpan
       </button>
@@ -111,33 +154,17 @@ const props = defineProps({
   auth: Object,
   errors: Object,
   drivers: Object,
+  trayeks: Array,
 })
 
-const driver = reactive({
-  id: 0,
-  user: {
-    id: 0,
-    nama: "",
-    hp: "",
-    email: "",
-  },
-  angkot: {
-    id: 0,
-    plat: "",
-    aktif: "",
-    trayek: {
-      id: 0,
-      kode: "",
-    },
-  },
-  alamat: "",
-})
-
+const angkots = ref([])
+const selected = ref({})
+const selectedTrayek = ref()
+const selectedAngkot = ref()
 const modal = ref({
   type: "",
   isOpen: false,
 })
-
 const filters = ref({
   show: 0,
   search: "",
@@ -147,70 +174,28 @@ const columns = ["No. ", "Nama", "No. HP", "Email", "Angkot"]
 
 const toggleModal = () => eventBus.$emit("modal-toggle")
 
-const modalDriver = (type, id = null) => {
-  driver.id = 0
-  driver.user = {
-    id: 0,
-    nama: "",
-    hp: "",
-    email: "",
-  }
-  driver.angkot = {
-    id: 0,
-    plat: "",
-    aktif: "",
-    trayek: {
-      id: 0,
-      kode: "",
-    },
-  }
-  driver.alamat = ""
+const angkotId = computed({
+  get() {
+    return selected.value.angkot ? selected.value.angkot.id : 0
+  },
+  set(id) {
+    selected.value.angkot = { id }
+  },
+})
 
-  if (type == "detail") {
-    modal.type = "Detail Driver"
+watch(selectedTrayek, async (newTrayek) => {
+  await loadAngkots(newTrayek)
+})
 
-    const selected = props.drivers.data.find((driver) => driver.id == id)
-    driver.id = selected.id
-    driver.user = {
-      id: selected.user.id,
-      nama: selected.user.nama,
-      hp: selected.user.no_hp,
-      email: selected.user.email,
-    }
-    if (selected.driver) {
-      driver.angkot = {
-        id: selected.angkot.id,
-        plat: selected.angkot.no_kendaraan,
-        trayek: {
-          id: selected.angkot.trayek.id,
-          kode: selected.angkot.trayek.kode,
-        },
-      }
-    }
-    driver.alamat = selected.alamat
-  } else if (type == "edit") {
-    modal.type = "Edit Driver"
-    const selected = props.drivers.data.find((driver) => driver.id == id)
-
-    driver.id = selected.id
-    driver.user = {
-      id: selected.user.id,
-      nama: selected.user.nama,
-      hp: selected.user.no_hp,
-      email: selected.user.email,
-    }
-    if (selected.driver) {
-      driver.angkot = {
-        id: selected.angkot.id,
-        plat: selected.angkot.no_kendaraan,
-        trayek: {
-          id: selected.angkot.trayek.id,
-          kode: selected.angkot.trayek.kode,
-        },
-      }
-    }
-    driver.alamat = selected.alamat
+const modalDriver = (type, driver = null) => {
+  if (selectedTrayek.value != driver.trayek.id) {
+    angkots.value = []
+    selectedTrayek.value = driver.trayek.id
   }
+  selectedAngkot.value = driver.angkot ? driver.angkot.id : 0
+  modal.value.type = type
+  selected.value = driver
+  console.log(props.drivers[0])
 
   toggleModal()
 }
@@ -219,6 +204,7 @@ const onShowing = (val) => {
   filters.show = val
   Inertia.get(route("admin.akun.driver.index"), filters, {
     preserveState: true,
+    preserveScroll: true,
   })
 }
 
@@ -228,8 +214,47 @@ const onSearching = (q) => {
     () =>
       Inertia.get(route("admin.akun.driver.index"), filters, {
         preserveState: true,
+        preserveScroll: true,
       }),
-    150
+    250
   )
+}
+
+const ubahAngkot = () => {
+  selected.value.angkot = null
+}
+
+const loadAngkots = async (trayek) => {
+  try {
+    const res = await fetch(route("admin.akun.driver.loadAngkot", trayek), {
+      headers: {
+        Accept: "application/json",
+      },
+    })
+    const data = await res.json()
+
+    if (data.angkots) {
+      angkots.value = data.angkots
+    }
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+const updateDriver = () => {
+  console.log({
+    angkot: selectedAngkot.value,
+    trayek: selectedTrayek.value,
+  })
+  /* Inertia.patch(
+    route("admin.akun.driver.update", selected.value.id),
+    {
+      angkot: selected.value.angkot,
+      trayek: selectedTrayek.value,
+    },
+    {
+      preserveScroll: true,
+    }
+  ) */
 }
 </script>

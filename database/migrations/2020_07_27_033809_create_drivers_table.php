@@ -15,6 +15,7 @@ return new class extends Migration {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('trayek_id');
             $table->unsignedBigInteger('angkot_id');
             $table->string('alamat');
             $table->string('nik', 16)->unique();

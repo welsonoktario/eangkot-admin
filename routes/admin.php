@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,8 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('driver/{id}/angkots', [DriverController::class, 'loadAngkot'])->name('admin.akun.driver.loadAngkot');
+
     Route::resources([
         'home' => Admin\HomeController::class,
         'angkot' => Admin\AngkotController::class,
