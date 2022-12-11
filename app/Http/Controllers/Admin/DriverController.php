@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Inertia\Inertia;
+use Log;
 use Throwable;
 
 class DriverController extends Controller
@@ -37,7 +38,7 @@ class DriverController extends Controller
                     )
             )
             ->paginate($request->show ?: 5)
-            ->appends($request->all())
+            ->withQueryString()
             ->through(
                 fn ($item) =>
                 [
@@ -117,9 +118,13 @@ class DriverController extends Controller
         DB::beginTransaction();
 
         try {
-            $driver->update($request->all());
+            $driver->update([
+                'trayek_id' => $request->trayek,
+                'angkot_id' => $request->angkot['id']
+            ]);
             DB::commit();
         } catch (Throwable $e) {
+            Log::error($e->getMessage());
             DB::rollBack();
         }
 

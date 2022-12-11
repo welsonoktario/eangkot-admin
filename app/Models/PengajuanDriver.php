@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class PengajuanDriver extends Model
 {
     protected $guarded = ['id'];
-    public $timestamps = false;
+    protected $casts = [
+        'tanggal' => 'datetime:d F Y, H:i:s'
+    ];
 
     public function user()
     {

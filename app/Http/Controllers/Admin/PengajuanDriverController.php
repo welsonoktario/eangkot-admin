@@ -37,7 +37,7 @@ class PengajuanDriverController extends Controller
                     )
             )
             ->paginate($request->show ?: 5)
-            ->appends($request->all())
+            ->withQueryString()
             ->through(fn ($item) => [
                     'id' => $item->id,
                     'tanggal' => $item->tanggal,

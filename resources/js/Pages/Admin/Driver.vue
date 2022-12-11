@@ -104,9 +104,9 @@
         >
           <option value="0" selected disabled>Pilih angkot...</option>
           <option
-            v-for="angkot in angkots"
+            v-for="angkot in angkots[selectedTrayek]"
             :key="angkot.no_kendaraan"
-            :value="angkot.id"
+            :value="angkot"
           >
             {{ angkot.no_kendaraan }}
           </option>
@@ -157,7 +157,7 @@ const props = defineProps({
   trayeks: Array,
 })
 
-const angkots = ref([])
+const angkots = ref({})
 const selected = ref({})
 const selectedTrayek = ref()
 const selectedAngkot = ref()
@@ -166,7 +166,7 @@ const modal = ref({
   isOpen: false,
 })
 const filters = ref({
-  show: 0,
+  show: 5,
   search: "",
 })
 
@@ -178,8 +178,8 @@ const angkotId = computed({
   get() {
     return selected.value.angkot ? selected.value.angkot.id : 0
   },
-  set(id) {
-    selected.value.angkot = { id }
+  set(angkot) {
+    selected.value.angkot = angkot
   },
 })
 
@@ -194,25 +194,24 @@ const modalDriver = (type, driver = null) => {
   }
   selectedAngkot.value = driver.angkot ? driver.angkot.id : 0
   modal.value.type = type
-  selected.value = driver
-  console.log(props.drivers[0])
+  selected.value = Object.assign({}, driver)
 
   toggleModal()
 }
 
 const onShowing = (val) => {
-  filters.show = val
-  Inertia.get(route("admin.akun.driver.index"), filters, {
+  filters.value.show = val
+  Inertia.get(route("admin.akun.driver.index"), filters.value, {
     preserveState: true,
     preserveScroll: true,
   })
 }
 
 const onSearching = (q) => {
-  filters.search = q
+  filters.value.search = q
   setTimeout(
     () =>
-      Inertia.get(route("admin.akun.driver.index"), filters, {
+      Inertia.get(route("admin.akun.driver.index"), filters.value, {
         preserveState: true,
         preserveScroll: true,
       }),
@@ -221,6 +220,14 @@ const onSearching = (q) => {
 }
 
 const ubahAngkot = () => {
+  if (
+    !angkots.value[selected.value.trayek.id].some(
+      (angkot) => angkot.no_kendaraan == selected.value.angkot.no_kendaraan
+    )
+  ) {
+    angkots.value[selected.value.trayek.id].push(selected.value.angkot)
+  }
+
   selected.value.angkot = null
 }
 
@@ -234,7 +241,7 @@ const loadAngkots = async (trayek) => {
     const data = await res.json()
 
     if (data.angkots) {
-      angkots.value = data.angkots
+      angkots.value[trayek] = data.angkots
     }
   } catch (e) {
     console.error(e)
@@ -242,11 +249,7 @@ const loadAngkots = async (trayek) => {
 }
 
 const updateDriver = () => {
-  console.log({
-    angkot: selectedAngkot.value,
-    trayek: selectedTrayek.value,
-  })
-  /* Inertia.patch(
+  Inertia.patch(
     route("admin.akun.driver.update", selected.value.id),
     {
       angkot: selected.value.angkot,
@@ -255,6 +258,8 @@ const updateDriver = () => {
     {
       preserveScroll: true,
     }
-  ) */
+  )
+
+  toggleModal()
 }
 </script>

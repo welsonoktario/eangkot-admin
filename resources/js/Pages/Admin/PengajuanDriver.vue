@@ -22,7 +22,7 @@
       class="text-gray-700 dark:text-gray-400"
     >
       <td class="px-4 py-3">{{ index + 1 }}</td>
-      <td class="px-4 py-3">{{ pengajuan.tanggal }}</td>
+      <td class="px-4 py-3">{{ formattedTanggal(pengajuan.tanggal) }}</td>
       <td class="px-4 py-3">{{ pengajuan.user.nama }}</td>
       <td class="px-4 py-3">{{ pengajuan.trayek.kode }}</td>
       <td class="px-4 py-3" :class="statusColor(pengajuan.status)">
@@ -94,6 +94,7 @@
 
     <template #footer>
       <button
+        v-if="selected.status == 'Pending'"
         type="button"
         class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-rose-500 transition-all duration-150 hover:bg-rose-700 hover:bg-opacity-30 hover:text-rose-900 hover:text-rose-200 focus:outline-none"
         @click="handlePengajuan(selected.id, 'Ditolak')"
@@ -109,6 +110,7 @@
         Batal
       </button>
       <button
+        v-if="selected.status != 'Diterima'"
         type="button"
         class="ml-2 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400 focus:outline-none"
         @click="handlePengajuan(selected.id, 'Diterima')"
@@ -134,10 +136,21 @@ const props = defineProps({
 })
 
 const filters = ref({
-  show: 0,
+  show: 5,
   search: "",
 })
 const selected = ref()
+
+const formattedTanggal = (tanggal) => {
+  const date = new Date(Date.parse(tanggal))
+
+  return date.toLocaleString("id-ID", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+}
 
 const onShowing = (val) => {
   filters.value.show = val
