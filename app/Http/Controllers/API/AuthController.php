@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Transaksi;
+use App\Models\Ulasan;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -18,17 +20,27 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $user = User::query()
-            ->when($request->driver, fn ($q) => $q->with('driver.angkot.trayek')->whereHas('driver'))
+            ->when(
+                $request->driver,
+                fn ($q) => $q->with('driver.angkot.trayek')->whereHas('driver')
+            )
             ->firstWhere('no_hp', $request->phone);
 
         if (!$user) {
             return $this->success('REGISTER');
         }
 
+        if ($request->driver) {
+            $rating = Ulasan::query()
+                ->whereHas('transaksi', fn ($q) => $q->where('driver_id',  $user->driver->id))
+                ->avg('rating');
+        }
+
         $token = $user->createToken($user->nama)->plainTextToken;
 
         return $this->success('REGISTERED', [
             'user' => new UserResource($user),
+            'rating' => (int) $rating ?: null,
             'token' => $token
         ]);
     }
