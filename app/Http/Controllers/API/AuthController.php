@@ -32,7 +32,7 @@ class AuthController extends Controller
 
         if ($request->driver) {
             $rating = Ulasan::query()
-                ->whereHas('transaksi', fn ($q) => $q->where('driver_id',  $user->driver->id))
+                ->whereHas('transaksi', fn ($q) => $q->where('driver_id', $user->driver->id))
                 ->avg('rating');
         }
 
@@ -40,7 +40,7 @@ class AuthController extends Controller
 
         return $this->success('REGISTERED', [
             'user' => new UserResource($user),
-            'rating' => (int) $rating ?: null,
+            'rating' => isset($rating) ? $rating : null,
             'token' => $token
         ]);
     }
