@@ -26,8 +26,7 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        Log::debug($request->all());
-        $user = $request->user();
+        $user = User::find($request->user);
 
         // kalo user not found
         if (!$user) {
