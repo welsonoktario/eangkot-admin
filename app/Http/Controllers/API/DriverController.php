@@ -12,8 +12,8 @@ use App\Http\Resources\UserResource;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Log;
 use Throwable;
 
 class DriverController extends Controller
@@ -26,8 +26,8 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::query()
-            ->find($request->user_id);
+        Log::debug($request->all());
+        $user = $request->user();
 
         // kalo user not found
         if (!$user) {
@@ -37,17 +37,19 @@ class DriverController extends Controller
         try {
             $pengajuan = $user->pengajuan()->create([
                 'trayek_id' => $request->trayek,
+                'alamat' => $request->alamat,
                 'status' => 'Pending',
                 'tanggal' => Carbon::now()
             ]);
-            $pengajuan->detail()->create([
-                'nik' => $request->nik,
-                'alamat' => $request->alamat,
-            ]);
 
             // Upload foto-foto dokumen untuk
-            $this->uploadImage($user, 'ktp', $request->file('foto_ktp'), $request->format_ktp);
-            $this->uploadImage($user, 'sim', $request->file('foto_sim'), $request->format_sim);
+            $ktp = $this->uploadImage($user, 'ktp', $request->file('ktp'), 'jpeg');
+            $sim = $this->uploadImage($user, 'sim', $request->file('sim'), 'jpeg');
+
+            $pengajuan->update([
+                'ktp' => $ktp,
+                'sim' => $sim
+            ]);
         } catch (Throwable $e) {
             return $this->fail('Terjadi kesalahan sistem', $e->getMessage());
         }
@@ -64,7 +66,7 @@ class DriverController extends Controller
     public function show($id)
     {
         $user = User::query()
-            ->with(['driver', 'driver.angkot'])
+            ->with(['driver.angkot.trayek', 'pengajuan'])
             ->find($id);
 
         if (!$user) {
@@ -128,5 +130,7 @@ class DriverController extends Controller
             "public/$jenis/$fileName",
             file_get_contents($foto)
         );
+
+        return "/storage/$jenis/$fileName";
     }
 }

@@ -22,7 +22,7 @@ class AuthController extends Controller
         $user = User::query()
             ->when(
                 $request->driver,
-                fn ($q) => $q->with('driver.angkot.trayek')->whereHas('driver')
+                fn ($q) => $q->with('driver.angkot.trayek')
             )
             ->firstWhere('no_hp', $request->phone);
 
@@ -30,10 +30,12 @@ class AuthController extends Controller
             return $this->success('REGISTER');
         }
 
-        if ($request->driver) {
+        if ($request->driver && $user->driver) {
             $rating = Ulasan::query()
                 ->whereHas('transaksi', fn ($q) => $q->where('driver_id', $user->driver->id))
                 ->avg('rating');
+        } else {
+            $rating = 0.0;
         }
 
         $token = $user->createToken($user->nama)->plainTextToken;
@@ -86,6 +88,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        Log::debug($request->all());
         try {
             $user = User::create([
                 'nama' => $request->nama,

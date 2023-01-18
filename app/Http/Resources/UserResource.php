@@ -20,8 +20,9 @@ class UserResource extends JsonResource
             'noHp' => $this->no_hp,
             'email' => $this->email,
             'hasPassword' => $this->has_password,
-            'roles' => $this->whenLoaded('roles', new RoleCollection($this->roles)),
-            'driver' => DriverResource::make($this->whenLoaded('driver'))
+            'roles' => RoleCollection::make($this->whenLoaded('roles')),
+            'driver' => DriverResource::make($this->whenLoaded('driver')),
+            'pengajuan' => PengajuanResource::make($this->whenLoaded('pengajuan'))
         ];
     }
 }
