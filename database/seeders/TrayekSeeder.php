@@ -43,6 +43,13 @@ class TrayekSeeder extends Seeder
                 'rute_kembali' => 'Kembali dengan rute yang sama',
                 'gambar' => 'https://www.surabaya.go.id/uploads/pictures/2017/2/25418/content_lyn_k.png'
             ],
+            [
+                'kode' => 'TEST',
+                'rute' => 'Test',
+                'rute_berangkat' => 'Test',
+                'rute_kembali' => 'Kembali dengan rute yang sama',
+                'gambar' => 'https://picsum.photos/300/200'
+            ],
         ];
 
         Trayek::insert($trayeks);
