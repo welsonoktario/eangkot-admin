@@ -18,7 +18,7 @@ class DriverSeeder extends Seeder
             ->create([
                 'user_id' => 2,
                 'angkot_id' => 1,
-                'nik' => '1234567890123456',
+                'trayek_id' => 7,
                 'alamat' => 'Jl. Keren No. 1',
             ]);
     }

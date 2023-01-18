@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->unsignedBigInteger('trayek_id');
             $table->unsignedBigInteger('angkot_id');
             $table->string('alamat');
-            $table->string('nik', 16)->unique();
             $table->timestamps();
             $table->softDeletes();
         });
