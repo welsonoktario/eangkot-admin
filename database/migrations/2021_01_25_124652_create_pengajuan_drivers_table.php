@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('trayek_id');
-            $table->string('nik', 16);
-            $table->string('sim', 16);
+            $table->string('ktp')->nullable();
+            $table->string('sim')->nullable();
             $table->string('alamat');
             $table->enum('status', ['Pending', 'Diterima', 'Ditolak'])->default('Pending');
             $table->dateTime('tanggal');
