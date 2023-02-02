@@ -18,7 +18,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('user_id');
             $table->integer('ongkos');
             $table->integer('durasi_perjalanan');
-            $table->decimal('jarak_perjalanan', 3, 2);
+            $table->decimal('jarak_perjalanan', 5, 2);
             $table->string('lokasi_jemput');
             $table->string('lokasi_tujuan');
             $table->timestamps();
