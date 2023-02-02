@@ -1,12 +1,26 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/home', 302);
+Route::redirect('/', '/admin/home', 302);
+
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+    ->middleware('guest')
+    ->name('login');
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+    ->middleware('guest');
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('driver/{id}/angkots', [DriverController::class, 'loadAngkot'])->name('admin.akun.driver.loadAngkot');
+
     Route::resources([
         'home' => Admin\HomeController::class,
         'angkot' => Admin\AngkotController::class,
@@ -25,16 +39,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ]);
     });
 
-    Route::resource('pengajuan/driver', Admin\PengajuanDriverController::class, ['as' => 'admin.pengajuan']);
+    Route::resource('pengajuan-driver', Admin\PengajuanDriverController::class, ['as' => 'admin']);
 });
-
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])
-    ->middleware('guest')
-    ->name('login');
-
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware('guest');
-
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');

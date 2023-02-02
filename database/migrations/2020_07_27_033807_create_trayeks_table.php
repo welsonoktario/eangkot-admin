@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('kode')->unique();
             $table->text('rute');
             $table->text('rute_berangkat');
-            $table->text('rute_pulang');
+            $table->text('rute_kembali');
             $table->string('gambar')->nullable();
         });
     }

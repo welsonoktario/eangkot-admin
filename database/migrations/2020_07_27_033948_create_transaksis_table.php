@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,13 +14,13 @@ return new class extends Migration {
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pesanan_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('driver_id');
+            $table->unsignedBigInteger('user_id');
             $table->integer('ongkos');
             $table->integer('durasi_perjalanan');
-            $table->decimal('jarak_perjalanan', 3, 2);
+            $table->decimal('jarak_perjalanan', 5, 2);
+            $table->string('lokasi_jemput');
+            $table->string('lokasi_tujuan');
             $table->timestamps();
         });
     }

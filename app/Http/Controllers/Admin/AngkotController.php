@@ -24,19 +24,14 @@ class AngkotController extends Controller
             ->get(['id', 'kode']);
         $angkots = Angkot::query()
             ->with('trayek')
-            ->exclude(['lokasi'])
             ->whereRaw('LOWER(no_kendaraan) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
             ->paginate($request->show ?: 5)
-            ->withQueryString()
-            ->through(
-                fn ($item) =>
-                [
+            ->appends($request->all())
+            ->through(fn ($item) => [
                     'id' => $item->id,
                     'trayek' => $item->trayek,
                     'no_kendaraan' => $item->no_kendaraan,
-                    'aktif' => $item->aktif
-                ]
-            );
+                ]);
 
         return Inertia::render('Admin/Angkot', ['angkots' => $angkots, 'trayeks' => $trayeks]);
     }
@@ -61,13 +56,17 @@ class AngkotController extends Controller
      */
     public function store(Request $request)
     {
-        Angkot::create([
-            'trayek_id' => $request->trayek['id'],
-            'no_kendaraan' => $request->plat,
-            'aktif' => $request->status ? true : false
-        ]);
+        try {
+            Angkot::create([
+                'trayek_id' => $request->trayek['id'],
+                'no_kendaraan' => $request->plat,
+                'aktif' => $request->status ? true : false
+            ]);
 
-        return Redirect::route('admin.angkot.index');
+            return Redirect::route('admin.angkot.index');
+        } catch (Throwable $e) {
+            return Redirect::back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -79,8 +78,6 @@ class AngkotController extends Controller
      */
     public function update(Request $request, Angkot $angkot)
     {
-        DB::beginTransaction();
-
         try {
             $angkot->query()
                 ->update([
@@ -88,14 +85,11 @@ class AngkotController extends Controller
                     'trayek_id' => $request->trayek['id'],
                     'aktif' => $request->status ? true : false
                 ]);
-            DB::commit();
-        } catch (Throwable $e) {
-            DB::rollBack();
 
+            return Redirect::route('admin.angkot.index');
+        } catch (Throwable $e) {
             return Redirect::back();
         }
-
-        return Redirect::route('admin.angkot.index');
     }
 
     /**
@@ -108,6 +102,6 @@ class AngkotController extends Controller
     {
         $angkot->delete();
 
-        return Redirect::route('admin.angkot.index');
+        return Redirect::back();
     }
 }

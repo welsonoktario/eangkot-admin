@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Angkot;
 use App\Models\Driver;
+use App\Models\Trayek;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Inertia\Inertia;
+use Log;
 use Throwable;
 
 class DriverController extends Controller
@@ -20,7 +23,20 @@ class DriverController extends Controller
      */
     public function index(Request $request)
     {
-        $drivers = Driver::with(['user', 'angkot.trayek'])->whereRaw('LOWER(alamat) LIKE ? ', ['%' . strtolower($request->search ?: '') . '%'])
+        $trayeks = Trayek::all();
+        $drivers = Driver::with(['user', 'trayek', 'angkot'])
+            ->when(
+                $request->search,
+                fn ($q) =>
+                    $q->whereHas(
+                        'user',
+                        fn ($q) =>
+                        $q->whereRaw(
+                            'LOWER(nama) LIKE ? ',
+                            ['%' . strtolower($request->search ?: '') . '%']
+                        )
+                    )
+            )
             ->paginate($request->show ?: 5)
             ->withQueryString()
             ->through(
@@ -28,12 +44,15 @@ class DriverController extends Controller
                 [
                     'id' => $item->id,
                     'user' => $item->user,
-                    'alamat' => $item->alamat,
+                    'trayek' => $item->trayek,
                     'angkot' => $item->angkot
                 ]
             );
 
-        return Inertia::render('Admin/Driver', ['drivers' => $drivers]);
+        return Inertia::render(
+            'Admin/Driver',
+            compact('drivers', 'trayeks')
+        );
     }
 
     /**
@@ -99,15 +118,17 @@ class DriverController extends Controller
         DB::beginTransaction();
 
         try {
-            $driver->update($request->all());
+            $driver->update([
+                'trayek_id' => $request->trayek,
+                'angkot_id' => $request->angkot['id']
+            ]);
             DB::commit();
         } catch (Throwable $e) {
+            Log::error($e->getMessage());
             DB::rollBack();
-
-            return Redirect::back();
         }
 
-        return Redirect::route('admin.akun.driver.index');
+        return Redirect::back();
     }
 
     /**
@@ -131,5 +152,15 @@ class DriverController extends Controller
         }
 
         return Redirect::route('admin.akun.driver.index');
+    }
+
+    public function loadAngkot(int $trayek)
+    {
+        $angkots = Angkot::query()
+            ->whereDoesntHave('driver')
+            ->where('trayek_id', $trayek)
+            ->get();
+
+        return Response::json(compact('angkots'));
     }
 }

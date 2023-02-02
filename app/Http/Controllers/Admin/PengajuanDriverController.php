@@ -7,6 +7,7 @@ use App\Models\PengajuanDriver;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -19,11 +20,39 @@ class PengajuanDriverController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pengajuans = PengajuanDriver::with('user')->get();
+        $pengajuans = PengajuanDriver::query()
+            ->with(['user', 'trayek'])
+            ->when(
+                $request->search,
+                fn ($q) =>
+                    $q->whereHas(
+                        'user',
+                        fn ($q) =>
+                        $q->whereRaw(
+                            'LOWER(nama) LIKE ? ',
+                            ['%' . strtolower($request->search ?: '') . '%']
+                        )
+                    )
+            )
+            ->paginate($request->show ?: 5)
+            ->withQueryString()
+            ->through(fn ($item) => [
+                    'id' => $item->id,
+                    'tanggal' => $item->tanggal,
+                    'alamat' => $item->alamat,
+                    'sim' => $item->sim,
+                    'nik' => $item->nik,
+                    'trayek' => $item->trayek,
+                    'user' => $item->user,
+                    'status' => $item->status
+                ]);
 
-        return Inertia::render('Admin/Pengajuan/Driver', ['pengajuans' => $pengajuans]);
+        return Inertia::render(
+            'Admin/PengajuanDriver',
+            ['pengajuans' => $pengajuans]
+        );
     }
 
     /**
@@ -87,17 +116,17 @@ class PengajuanDriverController extends Controller
                 $user = $pengajuanDriver->user;
                 $user->roles()->attach(3);
                 $user->driver()->create([
-                    'angkot_id' => $pengajuanDriver->angkot->angkot_id,
-                    'no_kendaraan' => $pengajuanDriver->detail->no_kendaraan,
-                    'status' => 0,
-                    'alamat' => $pengajuanDriver->detail->alamat,
-                    'nik' => $pengajuanDriver->detail->nik
+                    'trayek_id' => $pengajuanDriver->trayek_id,
+                    'alamat' => $pengajuanDriver->alamat,
                 ]);
             }
 
             DB::commit();
+
+            return Redirect::back();
         } catch (Throwable $e) {
             DB::rollBack();
+            Log::error($e->getMessage());
 
             return Redirect::back();
         }
@@ -130,7 +159,5 @@ class PengajuanDriverController extends Controller
                 'error' => $e
             ], 500);
         } */
-
-        return Redirect::route('admin.pengajuan.driver.index');
     }
 }

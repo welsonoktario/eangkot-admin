@@ -96,58 +96,6 @@
             </li>
           </ul>
         </li>
-        <li class="relative px-4 py-2">
-          <button
-            class="inline-flex w-full items-center justify-between p-2 font-semibold text-gray-700 hover:text-black focus:outline-none dark:text-gray-50 dark:hover:text-gray-300"
-            @click="pengajuanMenuOpen = !pengajuanMenuOpen"
-          >
-            <span class="inline-flex items-center">
-              <component :is="pengajuanRoute.icon" class="h-5 w-5"></component>
-              <span class="ml-4">Pengajuan</span>
-            </span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                v-if="akunMenuOpen"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              />
-              <path
-                v-else
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-          <ul
-            v-show="pengajuanMenuOpen"
-            class="mt-2 space-y-2 overflow-hidden rounded-md bg-gray-50 p-2 font-medium text-gray-700 dark:bg-gray-900 dark:text-gray-50"
-          >
-            <li v-for="route in pengajuanRoute.routes" :key="route.name">
-              <Link
-                as="button"
-                :href="route.url"
-                @click="navigation(route.name)"
-                class="w-full px-2 py-1 text-left transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                :class="{
-                  'rounded-md bg-indigo-600 text-gray-50 dark:bg-indigo-600':
-                    currentRoute === route.name,
-                }"
-              >
-                {{ route.label }}
-              </Link>
-            </li>
-          </ul>
-        </li>
       </ul>
     </aside>
   </transition>
@@ -163,7 +111,7 @@ import {
   MapIcon,
   TruckIcon,
   UsersIcon,
-} from "@heroicons/vue/outline"
+} from "@heroicons/vue/24/solid"
 
 const akunMenuOpen = ref(false)
 const pengajuanMenuOpen = ref(false)
@@ -189,6 +137,12 @@ const routes = [
     url: route("admin.trayek.index"),
     icon: MapIcon,
   },
+  {
+    name: "admin.pengajuan-driver.index",
+    label: "Pengajuan Driver",
+    url: route("admin.pengajuan-driver.index"),
+    icon: DocumentTextIcon
+  },
 ]
 const akunRoute = {
   icon: UsersIcon,
@@ -202,16 +156,6 @@ const akunRoute = {
       name: "admin.akun.user.index",
       label: "User",
       url: route("admin.akun.user.index"),
-    },
-  ],
-}
-const pengajuanRoute = {
-  icon: DocumentTextIcon,
-  routes: [
-    {
-      name: "admin.pengajuan.driver.index",
-      label: "Driver",
-      url: route("admin.pengajuan.driver.index"),
     },
   ],
 }

@@ -9,6 +9,7 @@ use App\Http\Resources\UlasanResource;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -23,8 +24,8 @@ class TransaksiController extends Controller
     public function index(Request $request)
     {
         $transaksis = Transaksi::query()
-            ->with(['pesanan.driver.user', 'pesanan.driver.angkot.trayek', 'ulasan'])
-            ->whereHas('pesanan', fn ($q) => $q->where('user_id', $request->user()->id))
+            ->with(['driver.user', 'driver.angkot.trayek', 'ulasan'])
+            ->where('user_id', $request->user()->id)
             ->get();
 
         if (!$transaksis) {
@@ -43,12 +44,16 @@ class TransaksiController extends Controller
     public function store(Request $request)
     {
         try {
-            $transaksi = Transaksi::create([
-                'pesanan_id' => $request->pesanan_id,
-                'tanggal' => Carbon::now(),
-                'durasi_perjalanan' => $request->durasi,
-                'jarak_perjalanan' => $request->jarak
-            ]);
+            $transaksi = Auth::user()->transaksis()
+                ->create([
+                    'driver_id' => $request->driver,
+                    'tanggal' => Carbon::now(),
+                    'ongkos' => $request->ongkos,
+                    'durasi_perjalanan' => $request->durasi_perjalanan,
+                    'jarak_perjalanan' => $request->jarak_perjalanan,
+                    'lokasi_jemput' => $request->lokasi_jemput,
+                    'lokasi_tujuan' => $request->lokasi_tujuan
+                ]);
         } catch (Throwable $e) {
             return $this->fail('Terjadi kesalahan menambah transaksi', $e->getMessage());
         }

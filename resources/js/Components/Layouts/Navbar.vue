@@ -37,14 +37,14 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import event from "@/eventBus"
 import { computed, ref } from "vue"
 import ProfileMenu from "@components/Layouts/ProfileMenu.vue"
 import { usePage } from "@inertiajs/inertia-vue3"
 
 const page = usePage()
-const user = computed(() => (page.props.value as any).auth.user)
+const user = computed(() => page.props.value.auth.user)
 
 const profileMenuOpen = ref(false)
 const toggleSidebar = () => event.$emit("sidebar-toggle")

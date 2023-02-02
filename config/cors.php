@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['http://eangkot.test/api/*', 'sanctum/csrf-cookie', 'http://eangkot.test/broadcasting/*'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'broadcasting/*'],
 
     'allowed_methods' => ['POST', 'GET', 'PATCH', 'PUT'],
 

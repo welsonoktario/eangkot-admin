@@ -21,11 +21,11 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { onMounted, ref } from "vue"
 import event from "@/eventBus"
-import Sidebar from "@components/Layouts/Sidebar"
-import Navbar from "@components/Layouts/Navbar"
+import Sidebar from "@components/Layouts/Sidebar.vue"
+import Navbar from "@components/Layouts/Navbar.vue"
 
 const sidebarOpen = ref(false)
 

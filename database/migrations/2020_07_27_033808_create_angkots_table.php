@@ -14,9 +14,7 @@ return new class extends Migration {
     {
         Schema::create('angkots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trayek_id')
-                ->constrained()
-                ->cascadeOnUpdate();
+            $table->unsignedBigInteger('trayek_id');
             $table->string('no_kendaraan', 10)->unique();
             $table->boolean('aktif')->default(false);
             $table->point('lokasi')->nullable();

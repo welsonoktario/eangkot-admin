@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FavoritResource extends JsonResource
+class PengajuanResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +16,9 @@ class FavoritResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'nama' => $this->nama,
-            'alamat' => $this->alamat,
-            'tujuan' => $this->tujuan,
+            'status' => $this->status,
+            'tanggal' => $this->tanggal,
+            'trayek' => TrayekResource::make($this->whenLoaded('trayek')),
         ];
     }
 }

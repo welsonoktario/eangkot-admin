@@ -10,16 +10,16 @@ class Driver extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
-    protected $hidden = ['bank_id', 'nik', 'rekening', 'alamat'];
+    protected $hidden = ['alamat'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function rekenings()
+    public function trayek()
     {
-        return $this->belongsToMany(Bank::class, 'driver_banks');
+        return $this->belongsTo(Trayek::class);
     }
 
     public function angkot()

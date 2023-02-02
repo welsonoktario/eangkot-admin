@@ -11,7 +11,10 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use SoftDeletes;
 
     protected $guarded = ['id'];
     /**
@@ -43,14 +46,9 @@ class User extends Authenticatable
         return $this->hasOne(Driver::class);
     }
 
-    public function pesanans()
+    public function transaksis()
     {
-        return $this->hasMany(Pesanan::class);
-    }
-
-    public function favorits()
-    {
-        return $this->hasMany(Favorit::class);
+        return $this->hasMany(Transaksi::class);
     }
 
     public function pengajuan()
