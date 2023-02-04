@@ -71,24 +71,20 @@
         />
       </label>
 
-      <label for="block">
+      <label class="block">
         <span class="dark:text-white">Foto KTP</span>
-        <div
-          class="mt-2 h-36 w-full rounded-lg bg-gray-100 bg-cover bg-top bg-no-repeat dark:bg-zinc-700"
-          :style="{
-            backgroundImage: `url(/storage/ktp/${selected.user.id}.jpeg)`,
-          }"
-        ></div>
+        <img
+          class="mt-2 w-full rounded-lg bg-gray-100 bg-cover bg-top bg-no-repeat dark:bg-zinc-700"
+          :src="`/storage/${selected.ktp}`"
+        />
       </label>
 
-      <label for="block">
+      <label class="block">
         <span class="dark:text-white">Foto SIM</span>
-        <div
-          class="mt-2 h-36 w-full rounded-lg bg-gray-100 bg-cover bg-top bg-no-repeat dark:bg-zinc-700"
-          :style="{
-            backgroundImage: `url(/storage/sim/${selected.user.id}.jpeg)`,
-          }"
-        ></div>
+        <img
+          class="mt-2 w-full rounded-lg bg-gray-100 bg-cover bg-top bg-no-repeat dark:bg-zinc-700"
+          :src="`/storage/${selected.sim}`"
+        />
       </label>
     </template>
 

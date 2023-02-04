@@ -43,7 +43,7 @@ class PengajuanDriverController extends Controller
                     'tanggal' => $item->tanggal,
                     'alamat' => $item->alamat,
                     'sim' => $item->sim,
-                    'nik' => $item->nik,
+                    'ktp' => $item->ktp,
                     'trayek' => $item->trayek,
                     'user' => $item->user,
                     'status' => $item->status

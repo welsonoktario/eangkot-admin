@@ -123,7 +123,7 @@ class DriverController extends Controller
     // Function upload file
     private function uploadImage($user, String $jenis, $foto, String $format)
     {
-        $fileName = "{$jenis}-{$user->id}-{$user->nama}.{$format}";
+        $fileName = "{$user->id}.{$format}";
 
         Storage::disk('local')->put(
             "public/$jenis/$fileName",
