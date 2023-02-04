@@ -18,6 +18,7 @@ class PengajuanResource extends JsonResource
             'id' => $this->id,
             'status' => $this->status,
             'tanggal' => $this->tanggal,
+            'alasan' => $this->alasan,
             'trayek' => TrayekResource::make($this->whenLoaded('trayek')),
         ];
     }

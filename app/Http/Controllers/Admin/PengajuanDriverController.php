@@ -46,7 +46,8 @@ class PengajuanDriverController extends Controller
                     'ktp' => $item->ktp,
                     'trayek' => $item->trayek,
                     'user' => $item->user,
-                    'status' => $item->status
+                    'status' => $item->status,
+                    'alasan' => $item->alasan
                 ]);
 
         return Inertia::render(
@@ -118,6 +119,10 @@ class PengajuanDriverController extends Controller
                 $user->driver()->create([
                     'trayek_id' => $pengajuanDriver->trayek_id,
                     'alamat' => $pengajuanDriver->alamat,
+                ]);
+            } elseif ($request->status === 'Ditolak') {
+                $pengajuanDriver->update([
+                    'alasan' => $request->alasan
                 ]);
             }
 

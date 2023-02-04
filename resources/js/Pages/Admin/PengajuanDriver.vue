@@ -41,7 +41,7 @@
     <template #title> Detail Pengajuan </template>
 
     <template #content>
-      <label for="block">
+      <label class="block">
         <span class="dark:text-white">Tanggal Pengajuan</span>
         <input
           class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
@@ -51,7 +51,7 @@
         />
       </label>
 
-      <label for="block">
+      <label class="block">
         <span class="dark:text-white">Nama</span>
         <input
           class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
@@ -61,12 +61,22 @@
         />
       </label>
 
-      <label for="block">
+      <label class="block">
         <span class="dark:text-white">Kode Trayek</span>
         <input
           class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
           type="text"
           :value="selected.trayek.kode"
+          readonly
+        />
+      </label>
+
+      <label v-if="selected.status === 'Ditolak'" class="block">
+        <span class="dark:text-white">Alasan Penolakan</span>
+        <input
+          class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
+          type="text"
+          :value="selected.alasan"
           readonly
         />
       </label>
@@ -93,7 +103,7 @@
         v-if="selected.status == 'Pending'"
         type="button"
         class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-rose-500 transition-all duration-150 hover:bg-rose-700 hover:bg-opacity-30 hover:text-rose-900 hover:text-rose-200 focus:outline-none"
-        @click="handlePengajuan(selected.id, 'Ditolak')"
+        @click="toggleModal('modal-toggle-alasan')"
       >
         Tolak
       </button>
@@ -101,7 +111,7 @@
       <button
         type="button"
         class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-zinc-900 transition-all duration-150 hover:bg-gray-700 hover:text-white focus:outline-none dark:text-white"
-        @click="toggleModal"
+        @click="toggleModal()"
       >
         Batal
       </button>
@@ -115,12 +125,47 @@
       </button>
     </template>
   </Dialog>
+
+  <DialogAlasan v-if="pengajuans.data.length" class="grid grid-cols-1">
+    <template #title> Alasan Penolakan Pengajuan </template>
+
+    <template #content>
+      <label class="block">
+        <span class="dark:text-white">Alasan</span>
+        <textarea
+          v-model="alasan"
+          class="form-input mt-2 block w-full rounded-md border-none bg-gray-100 dark:bg-gray-700 dark:text-white"
+          placeholder="Alasan penolakan"
+        ></textarea>
+      </label>
+    </template>
+
+    <template #footer>
+      <div class="flex-1"></div>
+      <button
+        type="button"
+        class="mr-2 inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-zinc-900 transition-all duration-150 hover:bg-gray-700 hover:text-white focus:outline-none dark:text-white"
+        @click="toggleModal('modal-toggle-alasan')"
+      >
+        Batal
+      </button>
+      <button
+        v-if="selected.status != 'Diterima'"
+        type="button"
+        class="ml-2 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400 focus:outline-none"
+        @click="handlePengajuan(selected.id, 'Ditolak')"
+      >
+        Kirim
+      </button>
+    </template>
+  </DialogAlasan>
 </template>
 
 <script setup>
 import DataTable from "@components/DataTable.vue"
 import { Head } from "@inertiajs/inertia-vue3"
 import Dialog from "@/Components/Dialog.vue"
+import DialogAlasan from "@/Components/DialogAlasan.vue"
 import { Inertia } from "@inertiajs/inertia"
 import eventBus from "@/eventBus"
 
@@ -136,6 +181,7 @@ const filters = ref({
   search: "",
 })
 const selected = ref()
+const alasan = ref()
 
 const formattedTanggal = (tanggal) => {
   const date = new Date(Date.parse(tanggal))
@@ -176,7 +222,14 @@ const statusColor = (status) => {
   return colors[status]
 }
 
-const toggleModal = () => eventBus.$emit("modal-toggle")
+const toggleModal = (type = "modal-toggle") => {
+  if (type == "modal-toggle-alasan") {
+    eventBus.$emit("modal-toggle")
+    eventBus.$emit(type)
+  } else {
+    eventBus.$emit(type)
+  }
+}
 
 const modalPengajuan = (id) => {
   selected.value = props.pengajuans.data.find((p) => p.id === id)
@@ -187,10 +240,17 @@ const modalPengajuan = (id) => {
 const handlePengajuan = (id, aksi) => {
   Inertia.patch(
     route("admin.pengajuan-driver.update", id),
-    { status: aksi },
+    { status: aksi, alasan: alasan.value },
     {
       preserveState: true,
-      onSuccess: () => toggleModal(),
+      onSuccess: () => {
+        if (aksi === "Diterima") {
+          toggleModal()
+        } else {
+          alasan.value = null
+          eventBus.$emit("modal-toggle-alasan")
+        }
+      },
     }
   )
 }

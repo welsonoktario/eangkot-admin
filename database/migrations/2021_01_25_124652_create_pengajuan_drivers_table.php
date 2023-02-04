@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class () extends Migration {
     /**
      * Run the migrations.
      *
@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('sim')->nullable();
             $table->string('alamat');
             $table->enum('status', ['Pending', 'Diterima', 'Ditolak'])->default('Pending');
+            $table->text('alasan')->nullable();
             $table->dateTime('tanggal');
             $table->timestamps();
         });
